@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.e4 c5 2.Nf3 – Kasparov with White</title>
+<style>
+:root{
+  --fs:21px;
+  --paper:#fbfaf7; --ink:#1d1f22; --muted:#5d6670; --line:#e2e0da; --side:#f2f0eb;
+  --main:#1f4fa3; --var:#2b2f36; --hl:#ffe08a; --hlink:#e8eefb;
+  --light:#dee3e6; --dark:#8ca2ad; --lm:rgba(155,199,0,.45);
+  --btn:#ffffff; --btnb:#cfd5db; --win:#2f6b3a; --loss:#a33a2a;
+}
+:root[data-theme="dark"]{
+  --paper:#16191d; --ink:#e4e6e9; --muted:#9aa3ad; --line:#2c3238; --side:#1d2126;
+  --main:#86b4ff; --var:#d5d9de; --hl:#6b5a1e; --hlink:#25324a;
+  --btn:#232930; --btnb:#3a434c; --win:#7fcf93; --loss:#f08a7a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
+body{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-size:var(--fs);line-height:1.6}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--side);border-bottom:1px solid var(--line);font-family:system-ui,"Segoe UI",sans-serif;font-size:15px}
+.top a.lib{color:var(--main);text-decoration:none;font-weight:600;white-space:nowrap}
+.top .t{font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+button,select,input{font:inherit;font-family:system-ui,"Segoe UI",sans-serif;background:var(--btn);color:var(--ink);border:1px solid var(--btnb);border-radius:7px;padding:6px 12px}
+button{cursor:pointer;min-width:40px}
+button:hover{border-color:var(--main)}
+button:disabled{opacity:.35;cursor:default}
+.wrap{display:grid;grid-template-columns:240px minmax(0,1fr) auto;align-items:start}
+nav.toc{position:sticky;top:49px;height:calc(100vh - 49px);overflow:auto;padding:18px 12px;border-right:1px solid var(--line);background:var(--side);font-family:system-ui,"Segoe UI",sans-serif;font-size:14px}
+nav.toc .h{font-weight:700;color:var(--muted);text-transform:uppercase;font-size:12px;letter-spacing:.06em;margin-bottom:8px}
+nav.toc a{display:block;padding:5px 8px;border-radius:6px;color:var(--ink);text-decoration:none;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav.toc a:hover,nav.toc a.on{background:var(--hlink);color:var(--main)}
+nav.toc a .r{color:var(--muted);font-size:12px}
+main{padding:28px 40px 120px;max-width:44em;margin:0 auto;width:100%}
+aside.bp{position:sticky;top:49px;padding:16px 20px;border-left:1px solid var(--line);height:calc(100vh - 49px);overflow:auto;width:calc(var(--bw) + 70px)}
+:root{--bw:min(44vw, calc(100vh - 290px), 680px)}
+.kicker{font-family:system-ui,"Segoe UI",sans-serif;font-size:.7em;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+h1{font-family:system-ui,"Segoe UI",sans-serif;font-size:2.3em;line-height:1.1;margin:.2em 0 .15em}
+.dek{color:var(--main);font-size:1.15em;margin:.2em 0}
+.stats{font-family:system-ui,"Segoe UI",sans-serif;font-size:.78em;color:var(--muted);margin:.5em 0 1em}
+.stats b{color:var(--ink)}
+h2{font-family:system-ui,"Segoe UI",sans-serif;font-size:1.25em;margin:1.8em 0 .3em;padding-top:.5em;border-top:2px solid var(--line);cursor:pointer}
+h2:hover{color:var(--main)}
+p{margin:.65em 0}
+.gamehead{font-size:.88em;line-height:1.5;margin:.15em 0;color:var(--muted)}
+.gamehead b{color:var(--ink)}
+.opn{font-family:system-ui,"Segoe UI",sans-serif;font-size:.72em;font-weight:600;color:var(--muted);margin:.3em 0 0}
+a.mv{cursor:pointer;border-radius:4px;padding:0 2px;color:var(--var);text-decoration:none}
+a.mv:hover{background:var(--hlink)}
+a.mv.cur{background:var(--hl)}
+p.ml{font-weight:700;font-size:1.08em;margin:.7em 0 .3em}
+p.ml a.mv{color:var(--main)}
+.res{font-family:system-ui,"Segoe UI",sans-serif;font-weight:700;font-size:.85em;color:var(--muted)}
+.tree{display:block;margin:.8em 0 .3em}
+.tree img{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;object-position:top;border-radius:10px;box-shadow:0 0 0 5px #3b2416;background:#fff}
+.tree span{font-family:system-ui,"Segoe UI",sans-serif;font-size:.7em;color:var(--main);font-weight:600}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin:.8em 0 .4em;font-family:system-ui,"Segoe UI",sans-serif;font-size:15px}
+.tools input{flex:1;min-width:12em}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:.6em 0;font-family:system-ui,"Segoe UI",sans-serif;font-size:14px}
+.chips button{border-radius:999px;padding:4px 12px}
+.chips button.on{background:var(--main);border-color:var(--main);color:#fff}
+.chips small{opacity:.7}
+.more{display:block;margin:2em auto;font-size:16px;padding:10px 22px}
+.empty{color:var(--muted);font-style:italic}
+/* board */
+.bwrap{display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr auto;width:max-content}
+.bd{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);aspect-ratio:1;border:2px solid #5b6f79;user-select:none}
+.sq{position:relative}
+.sq.l{background:var(--light)} .sq.d{background:var(--dark)}
+.sq.lm::after{content:"";position:absolute;inset:0;background:var(--lm)}
+.pc{position:absolute;inset:0;background-size:100% 100%;z-index:1}
+.rk{display:grid;grid-template-rows:repeat(8,minmax(0,1fr));line-height:1;font-family:system-ui,sans-serif;color:var(--muted);text-align:center;padding-right:5px}
+.fl{grid-column:2;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));line-height:1.4;font-family:system-ui,sans-serif;color:var(--muted);text-align:center}
+.rk span{display:flex;align-items:center}
+#live .bd{width:var(--bw)} #live .rk,#live .fl{font-size:14px}
+.bhead{font-family:system-ui,"Segoe UI",sans-serif;font-size:15px;color:var(--muted);margin-bottom:8px;min-height:1.4em;display:flex;justify-content:space-between;gap:10px}
+.bhead b{color:var(--ink);font-size:17px;white-space:nowrap}
+.ctrls{display:flex;gap:6px;margin:12px 0 0 22px;flex-wrap:wrap}
+.ctrls button{font-size:18px;padding:5px 12px}
+.gnav{display:flex;gap:6px;margin:8px 0 0 22px;font-size:14px}
+.gnav button{font-size:14px;padding:4px 10px}
+.msg{margin:8px 0 0 22px;font-family:system-ui,"Segoe UI",sans-serif;font-size:14px;color:var(--muted)}
+.tog{display:none}
+@media (max-width:1100px){
+  .top{height:49px;padding:0 10px;gap:6px}
+  .top button{padding:5px 9px;min-width:0}
+  .tog{display:inline-block}
+  .wrap{grid-template-columns:1fr}
+  nav.toc{display:none}
+  aside.bp{order:-1;position:sticky;top:49px;z-index:10;height:auto;width:auto;border-left:0;border-bottom:1px solid var(--line);background:var(--paper);padding:8px 12px 10px}
+  :root{--bw:min(calc(100vw - 56px), 38vh, 560px);--bw:min(calc(100vw - 56px), 38svh, 560px)}
+  .bhead{font-size:13px;margin-bottom:4px;align-items:baseline}
+  .bhead #who{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .bhead b{font-size:15px}
+  #live{display:flex;justify-content:center}
+  #live .rk,#live .fl{font-size:11px}
+  .ctrls,.gnav,.msg{margin-left:0;justify-content:center;text-align:center}
+  .ctrls{margin-top:8px}
+  .ctrls button{font-size:17px;padding:4px 0;flex:1;max-width:64px}
+  .gnav{margin-top:4px}
+  .msg{margin-top:4px;font-size:12px}
+  main{padding:16px 16px 80px}
+  body.hideb #live,body.hideb .bhead,body.hideb .gnav{display:none}
+}
+@media (max-width:480px){ .top .t{display:none} .top a.lib{flex:1} }
+</style>
+<style>.pc.wP{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PHBhdGggZD0iTTIyLjUgOWMtMi4yMSAwLTQgMS43OS00IDQgMCAuODkuMjkgMS43MS43OCAyLjM4QzE3LjMzIDE2LjUgMTYgMTguNTkgMTYgMjFjMCAyLjAzLjk0IDMuODQgMi40MSA1LjAzLTMgMS4wNi03LjQxIDUuNTUtNy40MSAxMy40N2gyM2MwLTcuOTItNC40MS0xMi40MS03LjQxLTEzLjQ3IDEuNDctMS4xOSAyLjQxLTMgMi40MS01LjAzIDAtMi40MS0xLjMzLTQuNS0zLjI4LTUuNjIuNDktLjY3Ljc4LTEuNDkuNzgtMi4zOCAwLTIuMjEtMS43OS00LTQtNHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==')}
+.pc.wB{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxnIGZpbGw9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJidXR0Ij48cGF0aCBkPSJNOSAzNmMzLjM5LS45NyAxMC4xMS40MyAxMy41LTIgMy4zOSAyLjQzIDEwLjExIDEuMDMgMTMuNSAyIDAgMCAxLjY1LjU0IDMgMi0uNjguOTctMS42NS45OS0zIC41LTMuMzktLjk3LTEwLjExLjQ2LTEzLjUtMS0zLjM5IDEuNDYtMTAuMTEuMDMtMTMuNSAxLTEuMzU0LjQ5LTIuMzIzLjQ3LTMtLjUgMS4zNTQtMS45NCAzLTIgMy0yeiIvPjxwYXRoIGQ9Ik0xNSAzMmMyLjUgMi41IDEyLjUgMi41IDE1IDAgLjUtMS41IDAtMiAwLTIgMC0yLjUtMi41LTQtMi41LTQgNS41LTEuNSA2LTExLjUtNS0xNS41LTExIDQtMTAuNSAxNC01IDE1LjUgMCAwLTIuNSAxLjUtMi41IDQgMCAwLS41LjUgMCAyeiIvPjxwYXRoIGQ9Ik0yNSA4YTIuNSAyLjUgMCAxIDEtNSAwIDIuNSAyLjUgMCAxIDEgNSAweiIvPjwvZz48cGF0aCBkPSJNMTcuNSAyNmgxME0xNSAzMGgxNW0tNy41LTE0LjV2NU0yMCAxOGg1IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PC9nPjwvc3ZnPg==')}
+.pc.wN{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5SDE1YzAtOSAxMC02LjUgOC0yMSIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0yNCAxOGMuMzggMi45MS01LjU1IDcuMzctOCA5LTMgMi0yLjgyIDQuMzQtNSA0LTEuMDQyLS45NCAxLjQxLTMuMDQgMC0zLTEgMCAuMTkgMS4yMy0xIDItMSAwLTQuMDAzIDEtNC00IDAtMiA2LTEyIDYtMTJzMS44OS0xLjkgMi0zLjVjLS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMnMuNzgtMS45OTIgMi41LTNjMSAwIDEgMyAxIDMiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNOS41IDI1LjVhLjUuNSAwIDEgMS0xIDAgLjUuNSAwIDEgMSAxIDB6bTUuNDMzLTkuNzVhLjUgMS41IDMwIDEgMS0uODY2LS41LjUgMS41IDMwIDEgMSAuODY2LjV6IiBmaWxsPSIjMDAwIi8+PC9nPjwvc3ZnPg==')}
+.pc.wR{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05IDM5aDI3di0zSDl2M3ptMy0zdi00aDIxdjRIMTJ6bS0xLTIyVjloNHYyaDVWOWg1djJoNVY5aDR2NSIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiLz48cGF0aCBkPSJNMzQgMTRsLTMgM0gxNGwtMy0zIi8+PHBhdGggZD0iTTMxIDE3djEyLjVIMTRWMTciIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PHBhdGggZD0iTTMxIDI5LjVsMS41IDIuNWgtMjBsMS41LTIuNSIvPjxwYXRoIGQ9Ik0xMSAxNGgyMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvZz48L3N2Zz4=')}
+.pc.wQ{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik04IDEyYTIgMiAwIDEgMS00IDAgMiAyIDAgMSAxIDQgMHptMTYuNS00LjVhMiAyIDAgMSAxLTQgMCAyIDIgMCAxIDEgNCAwek00MSAxMmEyIDIgMCAxIDEtNCAwIDIgMiAwIDEgMSA0IDB6TTE2IDguNWEyIDIgMCAxIDEtNCAwIDIgMiAwIDEgMSA0IDB6TTMzIDlhMiAyIDAgMSAxLTQgMCAyIDIgMCAxIDEgNCAweiIvPjxwYXRoIGQ9Ik05IDI2YzguNS0xLjUgMjEtMS41IDI3IDBsMi0xMi03IDExVjExbC01LjUgMTMuNS0zLTE1LTMgMTUtNS41LTE0VjI1TDcgMTRsMiAxMnoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTkgMjZjMCAyIDEuNSAyIDIuNSA0IDEgMS41IDEgMSAuNSAzLjUtMS41IDEtMS41IDIuNS0xLjUgMi41LTEuNSAxLjUuNSAyLjUuNSAyLjUgNi41IDEgMTYuNSAxIDIzIDAgMCAwIDEuNS0xIDAtMi41IDAgMCAuNS0xLjUtMS0yLjUtLjUtMi41LS41LTIgLjUtMy41IDEtMiAyLjUtMiAyLjUtNC04LjUtMS41LTE4LjUtMS41LTI3IDB6IiBzdHJva2UtbGluZWNhcD0iYnV0dCIvPjxwYXRoIGQ9Ik0xMS41IDMwYzMuNS0xIDE4LjUtMSAyMiAwTTEyIDMzLjVjNi0xIDE1LTEgMjEgMCIgZmlsbD0ibm9uZSIvPjwvZz48L3N2Zz4=')}
+.pc.wK{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMi41IDExLjYzVjZNMjAgOGg1IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PHBhdGggZD0iTTIyLjUgMjVzNC41LTcuNSAzLTEwLjVjMCAwLTEtMi41LTMtMi41cy0zIDIuNS0zIDIuNWMtMS41IDMgMyAxMC41IDMgMTAuNSIgZmlsbD0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48cGF0aCBkPSJNMTEuNSAzN2M1LjUgMy41IDE1LjUgMy41IDIxIDB2LTdzOS00LjUgNi0xMC41Yy00LTYuNS0xMy41LTMuNS0xNiA0VjI3di0zLjVjLTMuNS03LjUtMTMtMTAuNS0xNi00LTMgNiA1IDEwIDUgMTBWMzd6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTExLjUgMzBjNS41LTMgMTUuNS0zIDIxIDBtLTIxIDMuNWM1LjUtMyAxNS41LTMgMjEgMG0tMjEgMy41YzUuNS0zIDE1LjUtMyAyMSAwIi8+PC9nPjwvc3ZnPg==')}
+.pc.bP{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PHBhdGggZD0iTTIyLjUgOWMtMi4yMSAwLTQgMS43OS00IDQgMCAuODkuMjkgMS43MS43OCAyLjM4QzE3LjMzIDE2LjUgMTYgMTguNTkgMTYgMjFjMCAyLjAzLjk0IDMuODQgMi40MSA1LjAzLTMgMS4wNi03LjQxIDUuNTUtNy40MSAxMy40N2gyM2MwLTcuOTItNC40MS0xMi40MS03LjQxLTEzLjQ3IDEuNDctMS4xOSAyLjQxLTMgMi40MS01LjAzIDAtMi40MS0xLjMzLTQuNS0zLjI4LTUuNjIuNDktLjY3Ljc4LTEuNDkuNzgtMi4zOCAwLTIuMjEtMS43OS00LTQtNHoiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==')}
+.pc.bB{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxnIGZpbGw9IiMwMDAiIHN0cm9rZS1saW5lY2FwPSJidXR0Ij48cGF0aCBkPSJNOSAzNmMzLjM5LS45NyAxMC4xMS40MyAxMy41LTIgMy4zOSAyLjQzIDEwLjExIDEuMDMgMTMuNSAyIDAgMCAxLjY1LjU0IDMgMi0uNjguOTctMS42NS45OS0zIC41LTMuMzktLjk3LTEwLjExLjQ2LTEzLjUtMS0zLjM5IDEuNDYtMTAuMTEuMDMtMTMuNSAxLTEuMzU0LjQ5LTIuMzIzLjQ3LTMtLjUgMS4zNTQtMS45NCAzLTIgMy0yeiIvPjxwYXRoIGQ9Ik0xNSAzMmMyLjUgMi41IDEyLjUgMi41IDE1IDAgLjUtMS41IDAtMiAwLTIgMC0yLjUtMi41LTQtMi41LTQgNS41LTEuNSA2LTExLjUtNS0xNS41LTExIDQtMTAuNSAxNC01IDE1LjUgMCAwLTIuNSAxLjUtMi41IDQgMCAwLS41LjUgMCAyeiIvPjxwYXRoIGQ9Ik0yNSA4YTIuNSAyLjUgMCAxIDEtNSAwIDIuNSAyLjUgMCAxIDEgNSAweiIvPjwvZz48cGF0aCBkPSJNMTcuNSAyNmgxME0xNSAzMGgxNW0tNy41LTE0LjV2NU0yMCAxOGg1IiBzdHJva2U9IiNlY2VjZWMiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48L2c+PC9zdmc+')}
+.pc.bN{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5SDE1YzAtOSAxMC02LjUgOC0yMSIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik0yNCAxOGMuMzggMi45MS01LjU1IDcuMzctOCA5LTMgMi0yLjgyIDQuMzQtNSA0LTEuMDQyLS45NCAxLjQxLTMuMDQgMC0zLTEgMCAuMTkgMS4yMy0xIDItMSAwLTQuMDAzIDEtNC00IDAtMiA2LTEyIDYtMTJzMS44OS0xLjkgMi0zLjVjLS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMnMuNzgtMS45OTIgMi41LTNjMSAwIDEgMyAxIDMiIGZpbGw9IiMwMDAiLz48cGF0aCBkPSJNOS41IDI1LjVhLjUuNSAwIDEgMS0xIDAgLjUuNSAwIDEgMSAxIDB6bTUuNDMzLTkuNzVhLjUgMS41IDMwIDEgMS0uODY2LS41LjUgMS41IDMwIDEgMSAuODY2LjV6IiBmaWxsPSIjZWNlY2VjIiBzdHJva2U9IiNlY2VjZWMiLz48cGF0aCBkPSJNMjQuNTUgMTAuNGwtLjQ1IDEuNDUuNS4xNWMzLjE1IDEgNS42NSAyLjQ5IDcuOSA2Ljc1UzM1Ljc1IDI5LjA2IDM1LjI1IDM5bC0uMDUuNWgyLjI1bC4wNS0uNWMuNS0xMC4wNi0uODgtMTYuODUtMy4yNS0yMS4zNC0yLjM3LTQuNDktNS43OS02LjY0LTkuMTktNy4xNmwtLjUxLS4xeiIgZmlsbD0iI2VjZWNlYyIgc3Ryb2tlPSJub25lIi8+PC9nPjwvc3ZnPg==')}
+.pc.bR{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05IDM5aDI3di0zSDl2M3ptMy41LTdsMS41LTIuNWgxN2wxLjUgMi41aC0yMHptLS41IDR2LTRoMjF2NEgxMnoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTE0IDI5LjV2LTEzaDE3djEzSDE0eiIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48cGF0aCBkPSJNMTQgMTYuNUwxMSAxNGgyM2wtMyAyLjVIMTR6TTExIDE0VjloNHYyaDVWOWg1djJoNVY5aDR2NUgxMXoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTEyIDM1LjVoMjFtLTIwLTRoMTltLTE4LTJoMTdtLTE3LTEzaDE3TTExIDE0aDIzIiBmaWxsPSJub25lIiBzdHJva2U9IiNlY2VjZWMiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvZz48L3N2Zz4=')}
+.pc.bQ{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxnIHN0cm9rZT0ibm9uZSI+PGNpcmNsZSBjeD0iNiIgY3k9IjEyIiByPSIyLjc1Ii8+PGNpcmNsZSBjeD0iMTQiIGN5PSI5IiByPSIyLjc1Ii8+PGNpcmNsZSBjeD0iMjIuNSIgY3k9IjgiIHI9IjIuNzUiLz48Y2lyY2xlIGN4PSIzMSIgY3k9IjkiIHI9IjIuNzUiLz48Y2lyY2xlIGN4PSIzOSIgY3k9IjEyIiByPSIyLjc1Ii8+PC9nPjxwYXRoIGQ9Ik05IDI2YzguNS0xLjUgMjEtMS41IDI3IDBsMi41LTEyLjVMMzEgMjVsLS4zLTE0LjEtNS4yIDEzLjYtMy0xNC41LTMgMTQuNS01LjItMTMuNkwxNCAyNSA2LjUgMTMuNSA5IDI2eiIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiLz48cGF0aCBkPSJNOSAyNmMwIDIgMS41IDIgMi41IDQgMSAxLjUgMSAxIC41IDMuNS0xLjUgMS0xLjUgMi41LTEuNSAyLjUtMS41IDEuNS41IDIuNS41IDIuNSA2LjUgMSAxNi41IDEgMjMgMCAwIDAgMS41LTEgMC0yLjUgMCAwIC41LTEuNS0xLTIuNS0uNS0yLjUtLjUtMiAuNS0zLjUgMS0yIDIuNS0yIDIuNS00LTguNS0xLjUtMTguNS0xLjUtMjcgMHoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTExIDM4LjVhMzUgMzUgMSAwIDAgMjMgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiLz48cGF0aCBkPSJNMTEgMjlhMzUgMzUgMSAwIDEgMjMgMG0tMjEuNSAyLjVoMjBtLTIxIDNhMzUgMzUgMSAwIDAgMjIgMG0tMjMgM2EzNSAzNSAxIDAgMCAyNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlY2VjZWMiLz48L2c+PC9zdmc+')}
+.pc.bK{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMi41IDExLjYzVjYiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48cGF0aCBkPSJNMjIuNSAyNXM0LjUtNy41IDMtMTAuNWMwIDAtMS0yLjUtMy0yLjVzLTMgMi41LTMgMi41Yy0xLjUgMyAzIDEwLjUgMyAxMC41IiBmaWxsPSIjMDAwIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjxwYXRoIGQ9Ik0xMS41IDM3YzUuNSAzLjUgMTUuNSAzLjUgMjEgMHYtN3M5LTQuNSA2LTEwLjVjLTQtNi41LTEzLjUtMy41LTE2IDRWMjd2LTMuNWMtMy41LTcuNS0xMy0xMC41LTE2LTQtMyA2IDUgMTAgNSAxMFYzN3oiIGZpbGw9IiMwMDAiLz48cGF0aCBkPSJNMjAgOGg1IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PHBhdGggZD0iTTMyIDI5LjVzOC41LTQgNi4wMy05LjY1QzM0LjE1IDE0IDI1IDE4IDIyLjUgMjQuNWwuMDEgMi4xLS4wMS0yLjFDMjAgMTggOS45MDYgMTQgNi45OTcgMTkuODVjLTIuNDk3IDUuNjUgNC44NTMgOSA0Ljg1MyA5IiBzdHJva2U9IiNlY2VjZWMiLz48cGF0aCBkPSJNMTEuNSAzMGM1LjUtMyAxNS41LTMgMjEgMG0tMjEgMy41YzUuNS0zIDE1LjUtMyAyMSAwbS0yMSAzLjVjNS41LTMgMTUuNS0zIDIxIDAiIHN0cm9rZT0iI2VjZWNlYyIvPjwvZz48L3N2Zz4=')}
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="lib" href="../../../#white-1e4" title="Back to the repertoire">&larr; Repertoire</a>
+  <span class="t">1.e4 c5 2.Nf3 — Kasparov with White</span>
+  <button id="fminus" title="Smaller text">A−</button>
+  <button id="fplus" title="Larger text">A+</button>
+  <button id="dark" title="Dark mode">Dark</button>
+  <button id="bTog" class="tog" title="Show or hide the board">Hide board</button>
+</div>
+<div class="wrap">
+  <nav class="toc">
+    <div class="h">Games <span id="tocn"></span></div>
+    <div id="toc"></div>
+  </nav>
+  <main>
+    <div class="kicker">Kasparov with White · 1.e4</div>
+    <h1>1.e4 c5 2.Nf3</h1>
+    <div class="dek">Mostly Sicilian Defense (196)</div>
+    <div class="stats" id="stats"></div>
+    <a class="tree" id="treeLink" href="../../trees/e4-c5-nf3/"><img id="treeImg" src="../../trees/e4-c5-nf3/preview.jpg" alt="Opening tree for 1.e4 c5 2.Nf3"><span id="treeCap">Open the zoomable tree &rarr;</span></a>
+    <div class="stats" id="treeNote"></div>
+
+    <div class="chips" id="chips"></div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search opponent, event, year, opening…" aria-label="Search games">
+      <select id="sort" aria-label="Sort games">
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+        <option value="elo">Strongest opponent first</option>
+        <option value="long">Longest games first</option>
+      </select>
+    </div>
+    <p class="stats">Click any move to see the position on the board. Use ← → to step through a game, Home / End to jump, [ and ] for the previous or next game, F to flip the board.</p>
+    <div id="games"></div>
+    <button class="more" id="more" hidden>Show more games</button>
+  </main>
+  <aside class="bp">
+    <div class="bhead"><span id="who"></span><b id="cur"></b></div>
+    <div id="live"></div>
+    <div class="ctrls">
+      <button id="bStart" title="Start (Home)">⏮</button>
+      <button id="bPrev" title="Back (←)">◀</button>
+      <button id="bNext" title="Forward (→)">▶</button>
+      <button id="bEnd" title="End of game (End)">⏭</button>
+      <button id="bFlip" title="Flip board (F)">⇅</button>
+    </div>
+    <div class="gnav"><button id="gPrev" title="Previous game ([)">◀ game</button><button id="gNext" title="Next game (])">game ▶</button></div>
+    <div class="msg" id="msg"></div>
+  </aside>
+</div>
+<script>/*
+ * Copyright (c) 2020, Jeff Hlywa (jhlywa@gmail.com)
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ *----------------------------------------------------------------------------*/
+
+/* minified license below  */
+
+/* @license
+ * Copyright (c) 2018, Jeff Hlywa (jhlywa@gmail.com)
+ * Released under the BSD license
+ * https://github.com/jhlywa/chess.js/blob/master/LICENSE
+ */
+
+var Chess = function(fen) {
+  var BLACK = 'b'
+  var WHITE = 'w'
+
+  var EMPTY = -1
+
+  var PAWN = 'p'
+  var KNIGHT = 'n'
+  var BISHOP = 'b'
+  var ROOK = 'r'
+  var QUEEN = 'q'
+  var KING = 'k'
+
+  var SYMBOLS = 'pnbrqkPNBRQK'
+
+  var DEFAULT_POSITION =
+    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+
+  var POSSIBLE_RESULTS = ['1-0', '0-1', '1/2-1/2', '*']
+
+  var PAWN_OFFSETS = {
+    b: [16, 32, 17, 15],
+    w: [-16, -32, -17, -15]
+  }
+
+  var PIECE_OFFSETS = {
+    n: [-18, -33, -31, -14, 18, 33, 31, 14],
+    b: [-17, -15, 17, 15],
+    r: [-16, 1, 16, -1],
+    q: [-17, -16, -15, 1, 17, 16, 15, -1],
+    k: [-17, -16, -15, 1, 17, 16, 15, -1]
+  }
+
+  // prettier-ignore
+  var ATTACKS = [
+    20, 0, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0, 0,20, 0,
+     0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
+     0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
+     0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
+     0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
+    24,24,24,24,24,24,56,  0, 56,24,24,24,24,24,24, 0,
+     0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
+     0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
+     0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
+     0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
+    20, 0, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0, 0,20
+  ];
+
+  // prettier-ignore
+  var RAYS = [
+     17,  0,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0,  0, 15, 0,
+      0, 17,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0, 15,  0, 0,
+      0,  0, 17,  0,  0,  0,  0, 16,  0,  0,  0,  0, 15,  0,  0, 0,
+      0,  0,  0, 17,  0,  0,  0, 16,  0,  0,  0, 15,  0,  0,  0, 0,
+      0,  0,  0,  0, 17,  0,  0, 16,  0,  0, 15,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,  0, 17,  0, 16,  0, 15,  0,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,  0,  0, 17, 16, 15,  0,  0,  0,  0,  0,  0, 0,
+      1,  1,  1,  1,  1,  1,  1,  0, -1, -1,  -1,-1, -1, -1, -1, 0,
+      0,  0,  0,  0,  0,  0,-15,-16,-17,  0,  0,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,  0,-15,  0,-16,  0,-17,  0,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,-15,  0,  0,-16,  0,  0,-17,  0,  0,  0,  0, 0,
+      0,  0,  0,-15,  0,  0,  0,-16,  0,  0,  0,-17,  0,  0,  0, 0,
+      0,  0,-15,  0,  0,  0,  0,-16,  0,  0,  0,  0,-17,  0,  0, 0,
+      0,-15,  0,  0,  0,  0,  0,-16,  0,  0,  0,  0,  0,-17,  0, 0,
+    -15,  0,  0,  0,  0,  0,  0,-16,  0,  0,  0,  0,  0,  0,-17
+  ];
+
+  var SHIFTS = { p: 0, n: 1, b: 2, r: 3, q: 4, k: 5 }
+
+  var FLAGS = {
+    NORMAL: 'n',
+    CAPTURE: 'c',
+    BIG_PAWN: 'b',
+    EP_CAPTURE: 'e',
+    PROMOTION: 'p',
+    KSIDE_CASTLE: 'k',
+    QSIDE_CASTLE: 'q'
+  }
+
+  var BITS = {
+    NORMAL: 1,
+    CAPTURE: 2,
+    BIG_PAWN: 4,
+    EP_CAPTURE: 8,
+    PROMOTION: 16,
+    KSIDE_CASTLE: 32,
+    QSIDE_CASTLE: 64
+  }
+
+  var RANK_1 = 7
+  var RANK_2 = 6
+  var RANK_3 = 5
+  var RANK_4 = 4
+  var RANK_5 = 3
+  var RANK_6 = 2
+  var RANK_7 = 1
+  var RANK_8 = 0
+
+  // prettier-ignore
+  var SQUARES = {
+    a8:   0, b8:   1, c8:   2, d8:   3, e8:   4, f8:   5, g8:   6, h8:   7,
+    a7:  16, b7:  17, c7:  18, d7:  19, e7:  20, f7:  21, g7:  22, h7:  23,
+    a6:  32, b6:  33, c6:  34, d6:  35, e6:  36, f6:  37, g6:  38, h6:  39,
+    a5:  48, b5:  49, c5:  50, d5:  51, e5:  52, f5:  53, g5:  54, h5:  55,
+    a4:  64, b4:  65, c4:  66, d4:  67, e4:  68, f4:  69, g4:  70, h4:  71,
+    a3:  80, b3:  81, c3:  82, d3:  83, e3:  84, f3:  85, g3:  86, h3:  87,
+    a2:  96, b2:  97, c2:  98, d2:  99, e2: 100, f2: 101, g2: 102, h2: 103,
+    a1: 112, b1: 113, c1: 114, d1: 115, e1: 116, f1: 117, g1: 118, h1: 119
+  };
+
+  var ROOKS = {
+    w: [
+      { square: SQUARES.a1, flag: BITS.QSIDE_CASTLE },
+      { square: SQUARES.h1, flag: BITS.KSIDE_CASTLE }
+    ],
+    b: [
+      { square: SQUARES.a8, flag: BITS.QSIDE_CASTLE },
+      { square: SQUARES.h8, flag: BITS.KSIDE_CASTLE }
+    ]
+  }
+
+  var board = new Array(128)
+  var kings = { w: EMPTY, b: EMPTY }
+  var turn = WHITE
+  var castling = { w: 0, b: 0 }
+  var ep_square = EMPTY
+  var half_moves = 0
+  var move_number = 1
+  var history = []
+  var header = {}
+
+  /* if the user passes in a fen string, load it, else default to
+   * starting position
+   */
+  if (typeof fen === 'undefined') {
+    load(DEFAULT_POSITION)
+  } else {
+    load(fen)
+  }
+
+  function clear(keep_headers) {
+    if (typeof keep_headers === 'undefined') {
+      keep_headers = false
+    }
+
+    board = new Array(128)
+    kings = { w: EMPTY, b: EMPTY }
+    turn = WHITE
+    castling = { w: 0, b: 0 }
+    ep_square = EMPTY
+    half_moves = 0
+    move_number = 1
+    history = []
+    if (!keep_headers) header = {}
+    update_setup(generate_fen())
+  }
+
+  function reset() {
+    load(DEFAULT_POSITION)
+  }
+
+  function load(fen, keep_headers) {
+    if (typeof keep_headers === 'undefined') {
+      keep_headers = false
+    }
+
+    var tokens = fen.split(/\s+/)
+    var position = tokens[0]
+    var square = 0
+
+    if (!validate_fen(fen).valid) {
+      return false
+    }
+
+    clear(keep_headers)
+
+    for (var i = 0; i < position.length; i++) {
+      var piece = position.charAt(i)
+
+      if (piece === '/') {
+        square += 8
+      } else if (is_digit(piece)) {
+        square += parseInt(piece, 10)
+      } else {
+        var color = piece < 'a' ? WHITE : BLACK
+        put({ type: piece.toLowerCase(), color: color }, algebraic(square))
+        square++
+      }
+    }
+
+    turn = tokens[1]
+
+    if (tokens[2].indexOf('K') > -1) {
+      castling.w |= BITS.KSIDE_CASTLE
+    }
+    if (tokens[2].indexOf('Q') > -1) {
+      castling.w |= BITS.QSIDE_CASTLE
+    }
+    if (tokens[2].indexOf('k') > -1) {
+      castling.b |= BITS.KSIDE_CASTLE
+    }
+    if (tokens[2].indexOf('q') > -1) {
+      castling.b |= BITS.QSIDE_CASTLE
+    }
+
+    ep_square = tokens[3] === '-' ? EMPTY : SQUARES[tokens[3]]
+    half_moves = parseInt(tokens[4], 10)
+    move_number = parseInt(tokens[5], 10)
+
+    update_setup(generate_fen())
+
+    return true
+  }
+
+  /* TODO: this function is pretty much crap - it validates structure but
+   * completely ignores content (e.g. doesn't verify that each side has a king)
+   * ... we should rewrite this, and ditch the silly error_number field while
+   * we're at it
+   */
+  function validate_fen(fen) {
+    var errors = {
+      0: 'No errors.',
+      1: 'FEN string must contain six space-delimited fields.',
+      2: '6th field (move number) must be a positive integer.',
+      3: '5th field (half move counter) must be a non-negative integer.',
+      4: '4th field (en-passant square) is invalid.',
+      5: '3rd field (castling availability) is invalid.',
+      6: '2nd field (side to move) is invalid.',
+      7: "1st field (piece positions) does not contain 8 '/'-delimited rows.",
+      8: '1st field (piece positions) is invalid [consecutive numbers].',
+      9: '1st field (piece positions) is invalid [invalid piece].',
+      10: '1st field (piece positions) is invalid [row too large].',
+      11: 'Illegal en-passant square'
+    }
+
+    /* 1st criterion: 6 space-seperated fields? */
+    var tokens = fen.split(/\s+/)
+    if (tokens.length !== 6) {
+      return { valid: false, error_number: 1, error: errors[1] }
+    }
+
+    /* 2nd criterion: move number field is a integer value > 0? */
+    if (isNaN(tokens[5]) || parseInt(tokens[5], 10) <= 0) {
+      return { valid: false, error_number: 2, error: errors[2] }
+    }
+
+    /* 3rd criterion: half move counter is an integer >= 0? */
+    if (isNaN(tokens[4]) || parseInt(tokens[4], 10) < 0) {
+      return { valid: false, error_number: 3, error: errors[3] }
+    }
+
+    /* 4th criterion: 4th field is a valid e.p.-string? */
+    if (!/^(-|[abcdefgh][36])$/.test(tokens[3])) {
+      return { valid: false, error_number: 4, error: errors[4] }
+    }
+
+    /* 5th criterion: 3th field is a valid castle-string? */
+    if (!/^(KQ?k?q?|Qk?q?|kq?|q|-)$/.test(tokens[2])) {
+      return { valid: false, error_number: 5, error: errors[5] }
+    }
+
+    /* 6th criterion: 2nd field is "w" (white) or "b" (black)? */
+    if (!/^(w|b)$/.test(tokens[1])) {
+      return { valid: false, error_number: 6, error: errors[6] }
+    }
+
+    /* 7th criterion: 1st field contains 8 rows? */
+    var rows = tokens[0].split('/')
+    if (rows.length !== 8) {
+      return { valid: false, error_number: 7, error: errors[7] }
+    }
+
+    /* 8th criterion: every row is valid? */
+    for (var i = 0; i < rows.length; i++) {
+      /* check for right sum of fields AND not two numbers in succession */
+      var sum_fields = 0
+      var previous_was_number = false
+
+      for (var k = 0; k < rows[i].length; k++) {
+        if (!isNaN(rows[i][k])) {
+          if (previous_was_number) {
+            return { valid: false, error_number: 8, error: errors[8] }
+          }
+          sum_fields += parseInt(rows[i][k], 10)
+          previous_was_number = true
+        } else {
+          if (!/^[prnbqkPRNBQK]$/.test(rows[i][k])) {
+            return { valid: false, error_number: 9, error: errors[9] }
+          }
+          sum_fields += 1
+          previous_was_number = false
+        }
+      }
+      if (sum_fields !== 8) {
+        return { valid: false, error_number: 10, error: errors[10] }
+      }
+    }
+
+    if (
+      (tokens[3][1] == '3' && tokens[1] == 'w') ||
+      (tokens[3][1] == '6' && tokens[1] == 'b')
+    ) {
+      return { valid: false, error_number: 11, error: errors[11] }
+    }
+
+    /* everything's okay! */
+    return { valid: true, error_number: 0, error: errors[0] }
+  }
+
+  function generate_fen() {
+    var empty = 0
+    var fen = ''
+
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      if (board[i] == null) {
+        empty++
+      } else {
+        if (empty > 0) {
+          fen += empty
+          empty = 0
+        }
+        var color = board[i].color
+        var piece = board[i].type
+
+        fen += color === WHITE ? piece.toUpperCase() : piece.toLowerCase()
+      }
+
+      if ((i + 1) & 0x88) {
+        if (empty > 0) {
+          fen += empty
+        }
+
+        if (i !== SQUARES.h1) {
+          fen += '/'
+        }
+
+        empty = 0
+        i += 8
+      }
+    }
+
+    var cflags = ''
+    if (castling[WHITE] & BITS.KSIDE_CASTLE) {
+      cflags += 'K'
+    }
+    if (castling[WHITE] & BITS.QSIDE_CASTLE) {
+      cflags += 'Q'
+    }
+    if (castling[BLACK] & BITS.KSIDE_CASTLE) {
+      cflags += 'k'
+    }
+    if (castling[BLACK] & BITS.QSIDE_CASTLE) {
+      cflags += 'q'
+    }
+
+    /* do we have an empty castling flag? */
+    cflags = cflags || '-'
+    var epflags = ep_square === EMPTY ? '-' : algebraic(ep_square)
+
+    return [fen, turn, cflags, epflags, half_moves, move_number].join(' ')
+  }
+
+  function set_header(args) {
+    for (var i = 0; i < args.length; i += 2) {
+      if (typeof args[i] === 'string' && typeof args[i + 1] === 'string') {
+        header[args[i]] = args[i + 1]
+      }
+    }
+    return header
+  }
+
+  /* called when the initial board setup is changed with put() or remove().
+   * modifies the SetUp and FEN properties of the header object.  if the FEN is
+   * equal to the default position, the SetUp and FEN are deleted
+   * the setup is only updated if history.length is zero, ie moves haven't been
+   * made.
+   */
+  function update_setup(fen) {
+    if (history.length > 0) return
+
+    if (fen !== DEFAULT_POSITION) {
+      header['SetUp'] = '1'
+      header['FEN'] = fen
+    } else {
+      delete header['SetUp']
+      delete header['FEN']
+    }
+  }
+
+  function get(square) {
+    var piece = board[SQUARES[square]]
+    return piece ? { type: piece.type, color: piece.color } : null
+  }
+
+  function put(piece, square) {
+    /* check for valid piece object */
+    if (!('type' in piece && 'color' in piece)) {
+      return false
+    }
+
+    /* check for piece */
+    if (SYMBOLS.indexOf(piece.type.toLowerCase()) === -1) {
+      return false
+    }
+
+    /* check for valid square */
+    if (!(square in SQUARES)) {
+      return false
+    }
+
+    var sq = SQUARES[square]
+
+    /* don't let the user place more than one king */
+    if (
+      piece.type == KING &&
+      !(kings[piece.color] == EMPTY || kings[piece.color] == sq)
+    ) {
+      return false
+    }
+
+    board[sq] = { type: piece.type, color: piece.color }
+    if (piece.type === KING) {
+      kings[piece.color] = sq
+    }
+
+    update_setup(generate_fen())
+
+    return true
+  }
+
+  function remove(square) {
+    var piece = get(square)
+    board[SQUARES[square]] = null
+    if (piece && piece.type === KING) {
+      kings[piece.color] = EMPTY
+    }
+
+    update_setup(generate_fen())
+
+    return piece
+  }
+
+  function build_move(board, from, to, flags, promotion) {
+    var move = {
+      color: turn,
+      from: from,
+      to: to,
+      flags: flags,
+      piece: board[from].type
+    }
+
+    if (promotion) {
+      move.flags |= BITS.PROMOTION
+      move.promotion = promotion
+    }
+
+    if (board[to]) {
+      move.captured = board[to].type
+    } else if (flags & BITS.EP_CAPTURE) {
+      move.captured = PAWN
+    }
+    return move
+  }
+
+  function generate_moves(options) {
+    function add_move(board, moves, from, to, flags) {
+      /* if pawn promotion */
+      if (
+        board[from].type === PAWN &&
+        (rank(to) === RANK_8 || rank(to) === RANK_1)
+      ) {
+        var pieces = [QUEEN, ROOK, BISHOP, KNIGHT]
+        for (var i = 0, len = pieces.length; i < len; i++) {
+          moves.push(build_move(board, from, to, flags, pieces[i]))
+        }
+      } else {
+        moves.push(build_move(board, from, to, flags))
+      }
+    }
+
+    var moves = []
+    var us = turn
+    var them = swap_color(us)
+    var second_rank = { b: RANK_7, w: RANK_2 }
+
+    var first_sq = SQUARES.a8
+    var last_sq = SQUARES.h1
+    var single_square = false
+
+    /* do we want legal moves? */
+    var legal =
+      typeof options !== 'undefined' && 'legal' in options
+        ? options.legal
+        : true
+
+    /* are we generating moves for a single square? */
+    if (typeof options !== 'undefined' && 'square' in options) {
+      if (options.square in SQUARES) {
+        first_sq = last_sq = SQUARES[options.square]
+        single_square = true
+      } else {
+        /* invalid square */
+        return []
+      }
+    }
+
+    for (var i = first_sq; i <= last_sq; i++) {
+      /* did we run off the end of the board */
+      if (i & 0x88) {
+        i += 7
+        continue
+      }
+
+      var piece = board[i]
+      if (piece == null || piece.color !== us) {
+        continue
+      }
+
+      if (piece.type === PAWN) {
+        /* single square, non-capturing */
+        var square = i + PAWN_OFFSETS[us][0]
+        if (board[square] == null) {
+          add_move(board, moves, i, square, BITS.NORMAL)
+
+          /* double square */
+          var square = i + PAWN_OFFSETS[us][1]
+          if (second_rank[us] === rank(i) && board[square] == null) {
+            add_move(board, moves, i, square, BITS.BIG_PAWN)
+          }
+        }
+
+        /* pawn captures */
+        for (j = 2; j < 4; j++) {
+          var square = i + PAWN_OFFSETS[us][j]
+          if (square & 0x88) continue
+
+          if (board[square] != null && board[square].color === them) {
+            add_move(board, moves, i, square, BITS.CAPTURE)
+          } else if (square === ep_square) {
+            add_move(board, moves, i, ep_square, BITS.EP_CAPTURE)
+          }
+        }
+      } else {
+        for (var j = 0, len = PIECE_OFFSETS[piece.type].length; j < len; j++) {
+          var offset = PIECE_OFFSETS[piece.type][j]
+          var square = i
+
+          while (true) {
+            square += offset
+            if (square & 0x88) break
+
+            if (board[square] == null) {
+              add_move(board, moves, i, square, BITS.NORMAL)
+            } else {
+              if (board[square].color === us) break
+              add_move(board, moves, i, square, BITS.CAPTURE)
+              break
+            }
+
+            /* break, if knight or king */
+            if (piece.type === 'n' || piece.type === 'k') break
+          }
+        }
+      }
+    }
+
+    /* check for castling if: a) we're generating all moves, or b) we're doing
+     * single square move generation on the king's square
+     */
+    if (!single_square || last_sq === kings[us]) {
+      /* king-side castling */
+      if (castling[us] & BITS.KSIDE_CASTLE) {
+        var castling_from = kings[us]
+        var castling_to = castling_from + 2
+
+        if (
+          board[castling_from + 1] == null &&
+          board[castling_to] == null &&
+          !attacked(them, kings[us]) &&
+          !attacked(them, castling_from + 1) &&
+          !attacked(them, castling_to)
+        ) {
+          add_move(board, moves, kings[us], castling_to, BITS.KSIDE_CASTLE)
+        }
+      }
+
+      /* queen-side castling */
+      if (castling[us] & BITS.QSIDE_CASTLE) {
+        var castling_from = kings[us]
+        var castling_to = castling_from - 2
+
+        if (
+          board[castling_from - 1] == null &&
+          board[castling_from - 2] == null &&
+          board[castling_from - 3] == null &&
+          !attacked(them, kings[us]) &&
+          !attacked(them, castling_from - 1) &&
+          !attacked(them, castling_to)
+        ) {
+          add_move(board, moves, kings[us], castling_to, BITS.QSIDE_CASTLE)
+        }
+      }
+    }
+
+    /* return all pseudo-legal moves (this includes moves that allow the king
+     * to be captured)
+     */
+    if (!legal) {
+      return moves
+    }
+
+    /* filter out illegal moves */
+    var legal_moves = []
+    for (var i = 0, len = moves.length; i < len; i++) {
+      make_move(moves[i])
+      if (!king_attacked(us)) {
+        legal_moves.push(moves[i])
+      }
+      undo_move()
+    }
+
+    return legal_moves
+  }
+
+  /* convert a move from 0x88 coordinates to Standard Algebraic Notation
+   * (SAN)
+   *
+   * @param {boolean} sloppy Use the sloppy SAN generator to work around over
+   * disambiguation bugs in Fritz and Chessbase.  See below:
+   *
+   * r1bqkbnr/ppp2ppp/2n5/1B1pP3/4P3/8/PPPP2PP/RNBQK1NR b KQkq - 2 4
+   * 4. ... Nge7 is overly disambiguated because the knight on c6 is pinned
+   * 4. ... Ne7 is technically the valid SAN
+   */
+  function move_to_san(move, sloppy) {
+    var output = ''
+
+    if (move.flags & BITS.KSIDE_CASTLE) {
+      output = 'O-O'
+    } else if (move.flags & BITS.QSIDE_CASTLE) {
+      output = 'O-O-O'
+    } else {
+      var disambiguator = get_disambiguator(move, sloppy)
+
+      if (move.piece !== PAWN) {
+        output += move.piece.toUpperCase() + disambiguator
+      }
+
+      if (move.flags & (BITS.CAPTURE | BITS.EP_CAPTURE)) {
+        if (move.piece === PAWN) {
+          output += algebraic(move.from)[0]
+        }
+        output += 'x'
+      }
+
+      output += algebraic(move.to)
+
+      if (move.flags & BITS.PROMOTION) {
+        output += '=' + move.promotion.toUpperCase()
+      }
+    }
+
+    make_move(move)
+    if (in_check()) {
+      if (in_checkmate()) {
+        output += '#'
+      } else {
+        output += '+'
+      }
+    }
+    undo_move()
+
+    return output
+  }
+
+  // parses all of the decorators out of a SAN string
+  function stripped_san(move) {
+    return move.replace(/=/, '').replace(/[+#]?[?!]*$/, '')
+  }
+
+  function attacked(color, square) {
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      /* did we run off the end of the board */
+      if (i & 0x88) {
+        i += 7
+        continue
+      }
+
+      /* if empty square or wrong color */
+      if (board[i] == null || board[i].color !== color) continue
+
+      var piece = board[i]
+      var difference = i - square
+      var index = difference + 119
+
+      if (ATTACKS[index] & (1 << SHIFTS[piece.type])) {
+        if (piece.type === PAWN) {
+          if (difference > 0) {
+            if (piece.color === WHITE) return true
+          } else {
+            if (piece.color === BLACK) return true
+          }
+          continue
+        }
+
+        /* if the piece is a knight or a king */
+        if (piece.type === 'n' || piece.type === 'k') return true
+
+        var offset = RAYS[index]
+        var j = i + offset
+
+        var blocked = false
+        while (j !== square) {
+          if (board[j] != null) {
+            blocked = true
+            break
+          }
+          j += offset
+        }
+
+        if (!blocked) return true
+      }
+    }
+
+    return false
+  }
+
+  function king_attacked(color) {
+    return attacked(swap_color(color), kings[color])
+  }
+
+  function in_check() {
+    return king_attacked(turn)
+  }
+
+  function in_checkmate() {
+    return in_check() && generate_moves().length === 0
+  }
+
+  function in_stalemate() {
+    return !in_check() && generate_moves().length === 0
+  }
+
+  function insufficient_material() {
+    var pieces = {}
+    var bishops = []
+    var num_pieces = 0
+    var sq_color = 0
+
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      sq_color = (sq_color + 1) % 2
+      if (i & 0x88) {
+        i += 7
+        continue
+      }
+
+      var piece = board[i]
+      if (piece) {
+        pieces[piece.type] = piece.type in pieces ? pieces[piece.type] + 1 : 1
+        if (piece.type === BISHOP) {
+          bishops.push(sq_color)
+        }
+        num_pieces++
+      }
+    }
+
+    /* k vs. k */
+    if (num_pieces === 2) {
+      return true
+    } else if (
+      /* k vs. kn .... or .... k vs. kb */
+      num_pieces === 3 &&
+      (pieces[BISHOP] === 1 || pieces[KNIGHT] === 1)
+    ) {
+      return true
+    } else if (num_pieces === pieces[BISHOP] + 2) {
+      /* kb vs. kb where any number of bishops are all on the same color */
+      var sum = 0
+      var len = bishops.length
+      for (var i = 0; i < len; i++) {
+        sum += bishops[i]
+      }
+      if (sum === 0 || sum === len) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  function in_threefold_repetition() {
+    /* TODO: while this function is fine for casual use, a better
+     * implementation would use a Zobrist key (instead of FEN). the
+     * Zobrist key would be maintained in the make_move/undo_move functions,
+     * avoiding the costly that we do below.
+     */
+    var moves = []
+    var positions = {}
+    var repetition = false
+
+    while (true) {
+      var move = undo_move()
+      if (!move) break
+      moves.push(move)
+    }
+
+    while (true) {
+      /* remove the last two fields in the FEN string, they're not needed
+       * when checking for draw by rep */
+      var fen = generate_fen()
+        .split(' ')
+        .slice(0, 4)
+        .join(' ')
+
+      /* has the position occurred three or move times */
+      positions[fen] = fen in positions ? positions[fen] + 1 : 1
+      if (positions[fen] >= 3) {
+        repetition = true
+      }
+
+      if (!moves.length) {
+        break
+      }
+      make_move(moves.pop())
+    }
+
+    return repetition
+  }
+
+  function push(move) {
+    history.push({
+      move: move,
+      kings: { b: kings.b, w: kings.w },
+      turn: turn,
+      castling: { b: castling.b, w: castling.w },
+      ep_square: ep_square,
+      half_moves: half_moves,
+      move_number: move_number
+    })
+  }
+
+  function make_move(move) {
+    var us = turn
+    var them = swap_color(us)
+    push(move)
+
+    board[move.to] = board[move.from]
+    board[move.from] = null
+
+    /* if ep capture, remove the captured pawn */
+    if (move.flags & BITS.EP_CAPTURE) {
+      if (turn === BLACK) {
+        board[move.to - 16] = null
+      } else {
+        board[move.to + 16] = null
+      }
+    }
+
+    /* if pawn promotion, replace with new piece */
+    if (move.flags & BITS.PROMOTION) {
+      board[move.to] = { type: move.promotion, color: us }
+    }
+
+    /* if we moved the king */
+    if (board[move.to].type === KING) {
+      kings[board[move.to].color] = move.to
+
+      /* if we castled, move the rook next to the king */
+      if (move.flags & BITS.KSIDE_CASTLE) {
+        var castling_to = move.to - 1
+        var castling_from = move.to + 1
+        board[castling_to] = board[castling_from]
+        board[castling_from] = null
+      } else if (move.flags & BITS.QSIDE_CASTLE) {
+        var castling_to = move.to + 1
+        var castling_from = move.to - 2
+        board[castling_to] = board[castling_from]
+        board[castling_from] = null
+      }
+
+      /* turn off castling */
+      castling[us] = ''
+    }
+
+    /* turn off castling if we move a rook */
+    if (castling[us]) {
+      for (var i = 0, len = ROOKS[us].length; i < len; i++) {
+        if (
+          move.from === ROOKS[us][i].square &&
+          castling[us] & ROOKS[us][i].flag
+        ) {
+          castling[us] ^= ROOKS[us][i].flag
+          break
+        }
+      }
+    }
+
+    /* turn off castling if we capture a rook */
+    if (castling[them]) {
+      for (var i = 0, len = ROOKS[them].length; i < len; i++) {
+        if (
+          move.to === ROOKS[them][i].square &&
+          castling[them] & ROOKS[them][i].flag
+        ) {
+          castling[them] ^= ROOKS[them][i].flag
+          break
+        }
+      }
+    }
+
+    /* if big pawn move, update the en passant square */
+    if (move.flags & BITS.BIG_PAWN) {
+      if (turn === 'b') {
+        ep_square = move.to - 16
+      } else {
+        ep_square = move.to + 16
+      }
+    } else {
+      ep_square = EMPTY
+    }
+
+    /* reset the 50 move counter if a pawn is moved or a piece is captured */
+    if (move.piece === PAWN) {
+      half_moves = 0
+    } else if (move.flags & (BITS.CAPTURE | BITS.EP_CAPTURE)) {
+      half_moves = 0
+    } else {
+      half_moves++
+    }
+
+    if (turn === BLACK) {
+      move_number++
+    }
+    turn = swap_color(turn)
+  }
+
+  function undo_move() {
+    var old = history.pop()
+    if (old == null) {
+      return null
+    }
+
+    var move = old.move
+    kings = old.kings
+    turn = old.turn
+    castling = old.castling
+    ep_square = old.ep_square
+    half_moves = old.half_moves
+    move_number = old.move_number
+
+    var us = turn
+    var them = swap_color(turn)
+
+    board[move.from] = board[move.to]
+    board[move.from].type = move.piece // to undo any promotions
+    board[move.to] = null
+
+    if (move.flags & BITS.CAPTURE) {
+      board[move.to] = { type: move.captured, color: them }
+    } else if (move.flags & BITS.EP_CAPTURE) {
+      var index
+      if (us === BLACK) {
+        index = move.to - 16
+      } else {
+        index = move.to + 16
+      }
+      board[index] = { type: PAWN, color: them }
+    }
+
+    if (move.flags & (BITS.KSIDE_CASTLE | BITS.QSIDE_CASTLE)) {
+      var castling_to, castling_from
+      if (move.flags & BITS.KSIDE_CASTLE) {
+        castling_to = move.to + 1
+        castling_from = move.to - 1
+      } else if (move.flags & BITS.QSIDE_CASTLE) {
+        castling_to = move.to - 2
+        castling_from = move.to + 1
+      }
+
+      board[castling_to] = board[castling_from]
+      board[castling_from] = null
+    }
+
+    return move
+  }
+
+  /* this function is used to uniquely identify ambiguous moves */
+  function get_disambiguator(move, sloppy) {
+    var moves = generate_moves({ legal: !sloppy })
+
+    var from = move.from
+    var to = move.to
+    var piece = move.piece
+
+    var ambiguities = 0
+    var same_rank = 0
+    var same_file = 0
+
+    for (var i = 0, len = moves.length; i < len; i++) {
+      var ambig_from = moves[i].from
+      var ambig_to = moves[i].to
+      var ambig_piece = moves[i].piece
+
+      /* if a move of the same piece type ends on the same to square, we'll
+       * need to add a disambiguator to the algebraic notation
+       */
+      if (piece === ambig_piece && from !== ambig_from && to === ambig_to) {
+        ambiguities++
+
+        if (rank(from) === rank(ambig_from)) {
+          same_rank++
+        }
+
+        if (file(from) === file(ambig_from)) {
+          same_file++
+        }
+      }
+    }
+
+    if (ambiguities > 0) {
+      /* if there exists a similar moving piece on the same rank and file as
+       * the move in question, use the square as the disambiguator
+       */
+      if (same_rank > 0 && same_file > 0) {
+        return algebraic(from)
+      } else if (same_file > 0) {
+        /* if the moving piece rests on the same file, use the rank symbol as the
+         * disambiguator
+         */
+        return algebraic(from).charAt(1)
+      } else {
+        /* else use the file symbol */
+        return algebraic(from).charAt(0)
+      }
+    }
+
+    return ''
+  }
+
+  function ascii() {
+    var s = '   +------------------------+\n'
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      /* display the rank */
+      if (file(i) === 0) {
+        s += ' ' + '87654321'[rank(i)] + ' |'
+      }
+
+      /* empty piece */
+      if (board[i] == null) {
+        s += ' . '
+      } else {
+        var piece = board[i].type
+        var color = board[i].color
+        var symbol = color === WHITE ? piece.toUpperCase() : piece.toLowerCase()
+        s += ' ' + symbol + ' '
+      }
+
+      if ((i + 1) & 0x88) {
+        s += '|\n'
+        i += 8
+      }
+    }
+    s += '   +------------------------+\n'
+    s += '     a  b  c  d  e  f  g  h\n'
+
+    return s
+  }
+
+  // convert a move from Standard Algebraic Notation (SAN) to 0x88 coordinates
+  function move_from_san(move, sloppy) {
+    // strip off any move decorations: e.g Nf3+?!
+    var clean_move = stripped_san(move)
+
+    // if we're using the sloppy parser run a regex to grab piece, to, and from
+    // this should parse invalid SAN like: Pe2-e4, Rc1c4, Qf3xf7
+    if (sloppy) {
+      var matches = clean_move.match(
+        /([pnbrqkPNBRQK])?([a-h][1-8])x?-?([a-h][1-8])([qrbnQRBN])?/
+      )
+      if (matches) {
+        var piece = matches[1]
+        var from = matches[2]
+        var to = matches[3]
+        var promotion = matches[4]
+      }
+    }
+
+    var moves = generate_moves()
+    for (var i = 0, len = moves.length; i < len; i++) {
+      // try the strict parser first, then the sloppy parser if requested
+      // by the user
+      if (
+        clean_move === stripped_san(move_to_san(moves[i])) ||
+        (sloppy && clean_move === stripped_san(move_to_san(moves[i], true)))
+      ) {
+        return moves[i]
+      } else {
+        if (
+          matches &&
+          (!piece || piece.toLowerCase() == moves[i].piece) &&
+          SQUARES[from] == moves[i].from &&
+          SQUARES[to] == moves[i].to &&
+          (!promotion || promotion.toLowerCase() == moves[i].promotion)
+        ) {
+          return moves[i]
+        }
+      }
+    }
+
+    return null
+  }
+
+  /*****************************************************************************
+   * UTILITY FUNCTIONS
+   ****************************************************************************/
+  function rank(i) {
+    return i >> 4
+  }
+
+  function file(i) {
+    return i & 15
+  }
+
+  function algebraic(i) {
+    var f = file(i),
+      r = rank(i)
+    return 'abcdefgh'.substring(f, f + 1) + '87654321'.substring(r, r + 1)
+  }
+
+  function swap_color(c) {
+    return c === WHITE ? BLACK : WHITE
+  }
+
+  function is_digit(c) {
+    return '0123456789'.indexOf(c) !== -1
+  }
+
+  /* pretty = external move object */
+  function make_pretty(ugly_move) {
+    var move = clone(ugly_move)
+    move.san = move_to_san(move, false)
+    move.to = algebraic(move.to)
+    move.from = algebraic(move.from)
+
+    var flags = ''
+
+    for (var flag in BITS) {
+      if (BITS[flag] & move.flags) {
+        flags += FLAGS[flag]
+      }
+    }
+    move.flags = flags
+
+    return move
+  }
+
+  function clone(obj) {
+    var dupe = obj instanceof Array ? [] : {}
+
+    for (var property in obj) {
+      if (typeof property === 'object') {
+        dupe[property] = clone(obj[property])
+      } else {
+        dupe[property] = obj[property]
+      }
+    }
+
+    return dupe
+  }
+
+  function trim(str) {
+    return str.replace(/^\s+|\s+$/g, '')
+  }
+
+  /*****************************************************************************
+   * DEBUGGING UTILITIES
+   ****************************************************************************/
+  function perft(depth) {
+    var moves = generate_moves({ legal: false })
+    var nodes = 0
+    var color = turn
+
+    for (var i = 0, len = moves.length; i < len; i++) {
+      make_move(moves[i])
+      if (!king_attacked(color)) {
+        if (depth - 1 > 0) {
+          var child_nodes = perft(depth - 1)
+          nodes += child_nodes
+        } else {
+          nodes++
+        }
+      }
+      undo_move()
+    }
+
+    return nodes
+  }
+
+  return {
+    /***************************************************************************
+     * PUBLIC CONSTANTS (is there a better way to do this?)
+     **************************************************************************/
+    WHITE: WHITE,
+    BLACK: BLACK,
+    PAWN: PAWN,
+    KNIGHT: KNIGHT,
+    BISHOP: BISHOP,
+    ROOK: ROOK,
+    QUEEN: QUEEN,
+    KING: KING,
+    SQUARES: (function() {
+      /* from the ECMA-262 spec (section 12.6.4):
+       * "The mechanics of enumerating the properties ... is
+       * implementation dependent"
+       * so: for (var sq in SQUARES) { keys.push(sq); } might not be
+       * ordered correctly
+       */
+      var keys = []
+      for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+        if (i & 0x88) {
+          i += 7
+          continue
+        }
+        keys.push(algebraic(i))
+      }
+      return keys
+    })(),
+    FLAGS: FLAGS,
+
+    /***************************************************************************
+     * PUBLIC API
+     **************************************************************************/
+    load: function(fen) {
+      return load(fen)
+    },
+
+    reset: function() {
+      return reset()
+    },
+
+    moves: function(options) {
+      /* The internal representation of a chess move is in 0x88 format, and
+       * not meant to be human-readable.  The code below converts the 0x88
+       * square coordinates to algebraic coordinates.  It also prunes an
+       * unnecessary move keys resulting from a verbose call.
+       */
+
+      var ugly_moves = generate_moves(options)
+      var moves = []
+
+      for (var i = 0, len = ugly_moves.length; i < len; i++) {
+        /* does the user want a full move object (most likely not), or just
+         * SAN
+         */
+        if (
+          typeof options !== 'undefined' &&
+          'verbose' in options &&
+          options.verbose
+        ) {
+          moves.push(make_pretty(ugly_moves[i]))
+        } else {
+          moves.push(move_to_san(ugly_moves[i], false))
+        }
+      }
+
+      return moves
+    },
+
+    in_check: function() {
+      return in_check()
+    },
+
+    in_checkmate: function() {
+      return in_checkmate()
+    },
+
+    in_stalemate: function() {
+      return in_stalemate()
+    },
+
+    in_draw: function() {
+      return (
+        half_moves >= 100 ||
+        in_stalemate() ||
+        insufficient_material() ||
+        in_threefold_repetition()
+      )
+    },
+
+    insufficient_material: function() {
+      return insufficient_material()
+    },
+
+    in_threefold_repetition: function() {
+      return in_threefold_repetition()
+    },
+
+    game_over: function() {
+      return (
+        half_moves >= 100 ||
+        in_checkmate() ||
+        in_stalemate() ||
+        insufficient_material() ||
+        in_threefold_repetition()
+      )
+    },
+
+    validate_fen: function(fen) {
+      return validate_fen(fen)
+    },
+
+    fen: function() {
+      return generate_fen()
+    },
+
+    board: function() {
+      var output = [],
+        row = []
+
+      for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+        if (board[i] == null) {
+          row.push(null)
+        } else {
+          row.push({ type: board[i].type, color: board[i].color })
+        }
+        if ((i + 1) & 0x88) {
+          output.push(row)
+          row = []
+          i += 8
+        }
+      }
+
+      return output
+    },
+
+    pgn: function(options) {
+      /* using the specification from http://www.chessclub.com/help/PGN-spec
+       * example for html usage: .pgn({ max_width: 72, newline_char: "<br />" })
+       */
+      var newline =
+        typeof options === 'object' && typeof options.newline_char === 'string'
+          ? options.newline_char
+          : '\n'
+      var max_width =
+        typeof options === 'object' && typeof options.max_width === 'number'
+          ? options.max_width
+          : 0
+      var result = []
+      var header_exists = false
+
+      /* add the PGN header headerrmation */
+      for (var i in header) {
+        /* TODO: order of enumerated properties in header object is not
+         * guaranteed, see ECMA-262 spec (section 12.6.4)
+         */
+        result.push('[' + i + ' "' + header[i] + '"]' + newline)
+        header_exists = true
+      }
+
+      if (header_exists && history.length) {
+        result.push(newline)
+      }
+
+      /* pop all of history onto reversed_history */
+      var reversed_history = []
+      while (history.length > 0) {
+        reversed_history.push(undo_move())
+      }
+
+      var moves = []
+      var move_string = ''
+
+      /* build the list of moves.  a move_string looks like: "3. e3 e6" */
+      while (reversed_history.length > 0) {
+        var move = reversed_history.pop()
+
+        /* if the position started with black to move, start PGN with 1. ... */
+        if (!history.length && move.color === 'b') {
+          move_string = move_number + '. ...'
+        } else if (move.color === 'w') {
+          /* store the previous generated move_string if we have one */
+          if (move_string.length) {
+            moves.push(move_string)
+          }
+          move_string = move_number + '.'
+        }
+
+        move_string = move_string + ' ' + move_to_san(move, false)
+        make_move(move)
+      }
+
+      /* are there any other leftover moves? */
+      if (move_string.length) {
+        moves.push(move_string)
+      }
+
+      /* is there a result? */
+      if (typeof header.Result !== 'undefined') {
+        moves.push(header.Result)
+      }
+
+      /* history should be back to what is was before we started generating PGN,
+       * so join together moves
+       */
+      if (max_width === 0) {
+        return result.join('') + moves.join(' ')
+      }
+
+      /* wrap the PGN output at max_width */
+      var current_width = 0
+      for (var i = 0; i < moves.length; i++) {
+        /* if the current move will push past max_width */
+        if (current_width + moves[i].length > max_width && i !== 0) {
+          /* don't end the line with whitespace */
+          if (result[result.length - 1] === ' ') {
+            result.pop()
+          }
+
+          result.push(newline)
+          current_width = 0
+        } else if (i !== 0) {
+          result.push(' ')
+          current_width++
+        }
+        result.push(moves[i])
+        current_width += moves[i].length
+      }
+
+      return result.join('')
+    },
+
+    load_pgn: function(pgn, options) {
+      // allow the user to specify the sloppy move parser to work around over
+      // disambiguation bugs in Fritz and Chessbase
+      var sloppy =
+        typeof options !== 'undefined' && 'sloppy' in options
+          ? options.sloppy
+          : false
+
+      function mask(str) {
+        return str.replace(/\\/g, '\\')
+      }
+
+      function has_keys(object) {
+        for (var key in object) {
+          return true
+        }
+        return false
+      }
+
+      function parse_pgn_header(header, options) {
+        var newline_char =
+          typeof options === 'object' &&
+          typeof options.newline_char === 'string'
+            ? options.newline_char
+            : '\r?\n'
+        var header_obj = {}
+        var headers = header.split(new RegExp(mask(newline_char)))
+        var key = ''
+        var value = ''
+
+        for (var i = 0; i < headers.length; i++) {
+          key = headers[i].replace(/^\[([A-Z][A-Za-z]*)\s.*\]$/, '$1')
+          value = headers[i].replace(/^\[[A-Za-z]+\s"(.*)"\]$/, '$1')
+          if (trim(key).length > 0) {
+            header_obj[key] = value
+          }
+        }
+
+        return header_obj
+      }
+
+      var newline_char =
+        typeof options === 'object' && typeof options.newline_char === 'string'
+          ? options.newline_char
+          : '\r?\n'
+
+      // RegExp to split header. Takes advantage of the fact that header and movetext
+      // will always have a blank line between them (ie, two newline_char's).
+      // With default newline_char, will equal: /^(\[((?:\r?\n)|.)*\])(?:\r?\n){2}/
+      var header_regex = new RegExp(
+        '^(\\[((?:' +
+          mask(newline_char) +
+          ')|.)*\\])' +
+          '(?:' +
+          mask(newline_char) +
+          '){2}'
+      )
+
+      // If no header given, begin with moves.
+      var header_string = header_regex.test(pgn)
+        ? header_regex.exec(pgn)[1]
+        : ''
+
+      // Put the board in the starting position
+      reset()
+
+      /* parse PGN header */
+      var headers = parse_pgn_header(header_string, options)
+      for (var key in headers) {
+        set_header([key, headers[key]])
+      }
+
+      /* load the starting position indicated by [Setup '1'] and
+       * [FEN position] */
+      if (headers['SetUp'] === '1') {
+        if (!('FEN' in headers && load(headers['FEN'], true))) {
+          // second argument to load: don't clear the headers
+          return false
+        }
+      }
+
+      /* delete header to get the moves */
+      var ms = pgn
+        .replace(header_string, '')
+        .replace(new RegExp(mask(newline_char), 'g'), ' ')
+
+      /* delete comments */
+      ms = ms.replace(/(\{[^}]+\})+?/g, '')
+
+      /* delete recursive annotation variations */
+      var rav_regex = /(\([^\(\)]+\))+?/g
+      while (rav_regex.test(ms)) {
+        ms = ms.replace(rav_regex, '')
+      }
+
+      /* delete move numbers */
+      ms = ms.replace(/\d+\.(\.\.)?/g, '')
+
+      /* delete ... indicating black to move */
+      ms = ms.replace(/\.\.\./g, '')
+
+      /* delete numeric annotation glyphs */
+      ms = ms.replace(/\$\d+/g, '')
+
+      /* trim and get array of moves */
+      var moves = trim(ms).split(new RegExp(/\s+/))
+
+      /* delete empty entries */
+      moves = moves
+        .join(',')
+        .replace(/,,+/g, ',')
+        .split(',')
+      var move = ''
+
+      for (var half_move = 0; half_move < moves.length - 1; half_move++) {
+        move = move_from_san(moves[half_move], sloppy)
+
+        /* move not possible! (don't clear the board to examine to show the
+         * latest valid position)
+         */
+        if (move == null) {
+          return false
+        } else {
+          make_move(move)
+        }
+      }
+
+      /* examine last move */
+      move = moves[moves.length - 1]
+      if (POSSIBLE_RESULTS.indexOf(move) > -1) {
+        if (has_keys(header) && typeof header.Result === 'undefined') {
+          set_header(['Result', move])
+        }
+      } else {
+        move = move_from_san(move, sloppy)
+        if (move == null) {
+          return false
+        } else {
+          make_move(move)
+        }
+      }
+      return true
+    },
+
+    header: function() {
+      return set_header(arguments)
+    },
+
+    ascii: function() {
+      return ascii()
+    },
+
+    turn: function() {
+      return turn
+    },
+
+    move: function(move, options) {
+      /* The move function can be called with in the following parameters:
+       *
+       * .move('Nxb7')      <- where 'move' is a case-sensitive SAN string
+       *
+       * .move({ from: 'h7', <- where the 'move' is a move object (additional
+       *         to :'h8',      fields are ignored)
+       *         promotion: 'q',
+       *      })
+       */
+
+      // allow the user to specify the sloppy move parser to work around over
+      // disambiguation bugs in Fritz and Chessbase
+      var sloppy =
+        typeof options !== 'undefined' && 'sloppy' in options
+          ? options.sloppy
+          : false
+
+      var move_obj = null
+
+      if (typeof move === 'string') {
+        move_obj = move_from_san(move, sloppy)
+      } else if (typeof move === 'object') {
+        var moves = generate_moves()
+
+        /* convert the pretty move object to an ugly move object */
+        for (var i = 0, len = moves.length; i < len; i++) {
+          if (
+            move.from === algebraic(moves[i].from) &&
+            move.to === algebraic(moves[i].to) &&
+            (!('promotion' in moves[i]) ||
+              move.promotion === moves[i].promotion)
+          ) {
+            move_obj = moves[i]
+            break
+          }
+        }
+      }
+
+      /* failed to find move */
+      if (!move_obj) {
+        return null
+      }
+
+      /* need to make a copy of move because we can't generate SAN after the
+       * move is made
+       */
+      var pretty_move = make_pretty(move_obj)
+
+      make_move(move_obj)
+
+      return pretty_move
+    },
+
+    undo: function() {
+      var move = undo_move()
+      return move ? make_pretty(move) : null
+    },
+
+    clear: function() {
+      return clear()
+    },
+
+    put: function(piece, square) {
+      return put(piece, square)
+    },
+
+    get: function(square) {
+      return get(square)
+    },
+
+    remove: function(square) {
+      return remove(square)
+    },
+
+    perft: function(depth) {
+      return perft(depth)
+    },
+
+    square_color: function(square) {
+      if (square in SQUARES) {
+        var sq_0x88 = SQUARES[square]
+        return (rank(sq_0x88) + file(sq_0x88)) % 2 === 0 ? 'light' : 'dark'
+      }
+
+      return null
+    },
+
+    history: function(options) {
+      var reversed_history = []
+      var move_history = []
+      var verbose =
+        typeof options !== 'undefined' &&
+        'verbose' in options &&
+        options.verbose
+
+      while (history.length > 0) {
+        reversed_history.push(undo_move())
+      }
+
+      while (reversed_history.length > 0) {
+        var move = reversed_history.pop()
+        if (verbose) {
+          move_history.push(make_pretty(move))
+        } else {
+          move_history.push(move_to_san(move))
+        }
+        make_move(move)
+      }
+
+      return move_history
+    }
+  }
+}
+
+/* export Chess object if using node or any other CommonJS compatible
+ * environment */
+if (typeof exports !== 'undefined') exports.Chess = Chess
+/* export Chess object for any RequireJS compatible environment */
+if (typeof define !== 'undefined')
+  define(function() {
+    return Chess
+  })
+</script>
+<script>
+const DATA = {"games":[["2021.07.11","GCT Blitz Croatia 2021","Zagreb CRO","12.5","Duda, Jan Krzysztof","2812","2738","0-1","B92","Sicilian Defense: Najdorf Variation, Opocensky Variation, Traditional Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Kh1 Be6 f4 exf4 Bxf4 Nc6 Qe1 Qc7 Qg3 Kh8 Rad1 Rad8 Nd5 Bxd5 exd5 Ne5 Nd4 Ne4 Qe3 Nc5 Bxe5 dxe5 Nf5 Bf6 b4 Na4 c4 e4 d6 Qd7 c5 g6 Nd4 Bg7 Bc4 Nb2 Rc1 Nxc4 Rxc4 f5 Ne2 h6 h3 g5 Rc2 Rde8 Nd4 f4 Qd2 f3","Najdorf Variation"],["2017.08.18","Saint Louis Blitz 2017","Saint Louis USA","11.2","Nepomniachtchi, Ian","2812","2751","1/2-1/2","B51","Sicilian Defense: Moscow Variation","e4 c5 Nf3 d6 Bb5+ Nd7 d4 cxd4 Qxd4 Nf6 Nc3 e5 Qd3 h6 Be3 a6 Bc4 Be7 a4 Qc7 O-O O-O Nd2 Nb6 Bxb6 Qxb6 a5 Qc7 Nd5 Nxd5 Bxd5 Be6 Nc4 Kh8 c3 Rad8 Rfd1 Bg5 Nb6 Bg4 f3 Be6 g3 h5 h4 Bh6 Nc4 Bc8 Nb6 Be6 Nc4 Bc8 Nb6","Moscow Variation"],["2016.04.28","Ultimate Blitz Challenge","Saint Louis USA","7.2","So, Wesley","2812","2773","0-1","B40","Sicilian Defense: French Variation, Westerinen Attack","e4 c5 Nf3 e6 b3 b6 Bd3 Bb7 O-O Nf6 e5 Nd5 Be4 Qc7 Re1 Be7 Bb2 b5 Na3 a6 c4 bxc4 Nxc4 O-O d4 Nf4 Qd2 Bxe4 Rxe4 Nd5 dxc5 Qxc5 Rg4 Kh8 Ng5 Nc6 Ne4 Qa7 Rd1 a5 Nf6 Nxe5 Nxd5 Nxg4 Nxe7 f6 Nd6 a4 h3 Nh6 b4 Qb6 Rc1 a3 Ba1 Rab8 Rc4 Qd8 Nec8 Nf5 Qc2 Nxd6 Nxd6 Qe7 Qd3 e5 b5 Qe6 Qxa3 Qd5 Rc1 Ra8 Qb4 Rxa2 Bc3 h6 b6 Ra6 Rb1 Rb8 b7 Qxd6","French Variation"],["2012.03.22","Kasparov Khaylitsha Simul 2012","Cape Town RSA","1","Barrish, Daniel","2812","1742","1/2-1/2","B52","Sicilian Defense: Moscow Variation, Main Line","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 O-O Nf6 Qe2 g6 c3 Bg7 d4 cxd4 cxd4 O-O Nc3 Nc6 Rd1 d5 e5 Ne8 Qb5 Nc7 Qb3 b6 Be3 Na5 Qc2 Nc4 Rac1 Nxe3 fxe3 Bh6 Qe2 Rac8 Rc2 Nb5 Rdc1 Nxc3 Rxc3 Rxc3 Rxc3 Rc8 Kf2 Rxc3 bxc3 Qc6 Qb2 Qc4 g4 e6 Qc2 Bf8 Nd2 Qc6 Qb3 b5 Kf3 a5 e4 Bh6 exd5 Qxd5+ Qxd5 exd5 Nb3 a4 Nc5 Bd2 Ke2 Bxc3 Kd3 Ba5 Nd7 b4 Nf6+ Kf8 Nxd5 b3 axb3 axb3 h3 h5 gxh5 gxh5 Nf4 h4 Ng2 b2 Kc2","Moscow Variation"],["2011.09.17","Kasparov in Clichy","Clichy FRA","1","Vachier Lagrave, Maxime","2812","2715","1-0","B51","Sicilian Defense: Moscow Variation","e4 c5 Nf3 d6 Bb5+ Nc6 O-O Bd7 c3 Nf6 Re1 a6 Bf1 Bg4 h3 Bxf3 Qxf3 g6 d3 Bg7 Be3 Nd7 Nd2 O-O Qd1 Rc8 f4 e5 f5 gxf5 exf5 d5 g4 e4 Bf4 Nde5 dxe4 d4 g5 Re8 Qh5 dxc3 bxc3 Nd3 Bxd3 Qxd3 f6 Bf8 Qf3 c4 Qxd3 cxd3 e5 Nd8 Ne4 Ne6 Be3 Red8 Rad1 Rd5 Bd4 Nxd4 cxd4 Rxd4 Kf2 Re8 Ng3 Rd5 h4 Bb4 Re4 Bc3 Nf5 Kf8 Ne7 Rd4 Kf3 Red8 Rxd4 Rxd4 Nf5 Rd5 Ne3 Rd4 Nf5 Rd5 Ne3 Rd4 Rc1 Ba5 Rc8+ Bd8 h5 Ke8 e6 d2 e7 d1=Q+ Nxd1 Rxd1 h6 Rd6 Kg2 Rd2+ Kf3 Rd6 Ke2 Re6+ Kd3 Rd6+ Ke4 b5 g6 fxg6 exd8=Q+ Rxd8 f7+","Moscow Variation"],["2009.08.23","Champions Simul","Zuerich SUI","1","Gaehwiler, Gabriel","2812","2247","1-0","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 Nf6 Nc3 Nc6 O-O g6 d4 cxd4 Nxd4 Bg7 Nde2 Qe6 Nd5 Rc8 f3 O-O Rb1 Qd7 Ndc3 Rfd8 Kh1 e6 Bg5 Ne7 Qd3 h6 Bh4 g5 Bf2 Nc6 Qd2 d5 cxd5 exd5 Rfd1 dxe4 Qxd7 Rxd7 Rxd7 Nxd7 Nxe4 Nb4 N2c3 Nd3 Bxa7 Nxb2 Rxb2 Bxc3 Rxb7 Ba5 Be3 Ne5 h4 gxh4 Rb5 Nc4 Bxh6 Rd8 Nf6+ Kh8 Rh5","Moscow Variation"],["2008.10.26","Corse Simul","Bastia FRA","1","Massoni, Michael","2812","2244","1-0","B40","Sicilian Defense: French Variation","e4 c5 Nf3 e6 g3 Nc6 Bg2 d6 d4 cxd4 Nxd4 Nf6 O-O e5 Ne2 Be6 Nbc3 Be7 b3 Rc8 Be3 O-O h3 Ne8 Qd2 Qa5 Rfd1 Nd4 Bxd4 exd4 Nd5 Qd8 Nxe7+ Qxe7 Nxd4 Bd7 c4 Nf6 Re1 Rfe8 Rad1 Rcd8 Qa5 Bc6 e5 dxe5 Bxc6 bxc6 Nxc6","French Variation"],["2005.03.03","Linares 22nd","Linares","8","Leko, Peter","2804","2749","1/2-1/2","B30","Sicilian Defense: Closed, Anti-Sveshnikov Variation, Kharlov-Kramnik Line","e4 c5 Nf3 Nc6 Nc3 e5 Bc4 d6 d3 Be7 Nd2 Bg5 h4 Bxd2+",""],["2004.02.20","Linares 21st","Linares","2","Radjabov, Teimour","2831","2656","1/2-1/2","B30","Sicilian Defense: Closed, Anti-Sveshnikov Variation, with Nf6","e4 c5 Nf3 Nc6 Nc3 e5 Bc4 Be7 d3 Nf6 Nd2 d6 Nf1 Nd7 Ne3 Nb6 Ned5 O-O O-O Nxd5 Nxd5 Rb8 a4 Be6 f4 exf4 Bxf4 Bg5 b3 Bxd5 Bxg5 Qxg5 Bxd5 Nb4 Bc4 d5 exd5 Nxd5 Qf3 Qe3+ Rf2 Qxf3 Rxf3 Nb6 Bb5 a6 a5 axb5 axb6 Rfc8 Ra5 c4 Rxb5 cxd3 c4 Rd8 Rd5 Rxd5 cxd5 Rd8 Rxd3 Rd6 Kf2 Kf8 Ke3 Rxb6 Kd4 Ke7 Kc5 Rh6 h3 Rg6 g4 Rg5 b4 h5 Rd4 hxg4 hxg4 f5 gxf5 Rxf5 b5 Rf6",""],["2004.02.29","Linares 21st","Linares","10","Leko, Peter","2831","2722","1/2-1/2","B30","Sicilian Defense: Closed, Anti-Sveshnikov Variation, Kharlov-Kramnik Line","e4 c5 Nf3 Nc6 Nc3 e5 Bc4 d6 d3 Be7 Nd2 Bg5 h4 Bxd2+ Bxd2 Nf6 Bg5 h6 Bxf6 Qxf6 Nd5 Qd8 Ne3 Qf6 c3 Be6 Qe2 Rb8 a4 a6 g3 Ne7 O-O O-O Qh5 Bh3 Rfd1 b5",""],["2004.03.17","Reykjavik Blitz","Reykjavik","14","Petursson, Margeir","2831","2540","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 Nf6 c3 a6 Bf1 Bg4 h3 Bxf3 Qxf3 g6 d3 Bg7 Be3 Nd7 Nd2 O-O Qd1 b5 a3 Rb8 f4 e6 Nf3 d5 e5 f6 d4 Bh6 g3 Qe7 h4 fxe5 dxe5 Rbd8 Bh3 d4 cxd4 cxd4 Bf2 Nc5 Rc1 a5 Nxd4 Bxf4","Nyezhmetdinov-Rossolimo Attack"],["2004.08.21","Sao Paulo 450 anniv simul","Sao Paulo","?","Gambale, Eduardo","2817","0","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 e5 a3 Ne7 Be3 Qd6 Nbd2 Be6 O-O h6 Nc4 Bxc4 dxc4 Qe6 Qd2 b6 b4 cxb4 axb4 O-O Ra6 Qc8 Rfa1 Qb7 c3 Rfd8 Qa2 Nc8 h4 Rb8 c5 Qd7 h5 g5 Qc4 Rb7 cxb6 axb6 Ra8 Ne7 Qb3 Bf6 Nd2 b5 Nf1 Qe8 Rxd8 Qxd8 Ng3 Rd7 Bc5 Rd2 Be3 Rd7","Nyezhmetdinov-Rossolimo Attack"],["2004.08.21","Sao Paulo 450 anniv simul","Sao Paulo","?","Jukemura, Rodrigo","2817","2081","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 Nf6 Nc3 e5 Be3 Qe7 Qd2 O-O Bh6 Rd8 Bxg7 Kxg7 Qe3 b6 g4 Ba6 O-O-O b5 Ne2 c4 dxc4 bxc4 Ng3 Rxd1+ Rxd1 Rb8 Qg5 Qb4 Qxe5 c3 Qxc3 Qxc3 bxc3 Nxe4 Nxe4 Be2 Rd7 Bxf3 Nd6 Bd5 c4 Be6 Rxa7 c5 a4 Rb6 Ne8+ Kf8 Nf6 Bxc4 Nd7+","Nyezhmetdinov-Rossolimo Attack"],["2004.08.21","Sao Paulo 450 anniv simul","Sao Paulo","?","Yamamoto, Paulo de Carvalho","2817","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Qc7 O-O e6 d4 Be7 d5 exd5 exd5 Ne5 Nxe5 dxe5 c4 O-O Nc3 a6 Bg5 Rd8 Re1 Bg4 Qd3 g6 Qg3 Qd7 Qxe5 Re8 Bxf6 Bxf6 Qxf6 Qc7 h3 Bd7 d6 Qd8 Re7 Rxe7 dxe7 Qc7 Nd5 Qc6 Qc3 f5 Re1 Qc8 e8=R+ Bxe8 Ne7+","Delayed Alapin Variation"],["2003.10.20","London Belzberg sim","London","?","Hogarth, Mark","2830","0","1-0","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 e5 Nc3 Be7 a3 Nc6 Rb1 f5 d3 f4 b4 g5 h3 h5 Nd5 Nd4 bxc5 Nxf3+ Qxf3 dxc5 Bb2 Bd6 Qd1 O-O-O h4 Qg4 Kf1 gxh4 f3 Qg5 Bc3 Nf6 Be1 Nxd5 cxd5 Rdg8 Rb2 h3 Rxh3 h4 Qa4 Bb8 Qb5 Qe7 Bxh4 Qd7 Qxd7+ Kxd7 Rxb7+","Moscow Variation"],["2003.03.05","Linares 20th","Linares","10","Leko, Peter","2847","2736","1/2-1/2","B30","Sicilian Defense: Old Sicilian","e4 c5 Nf3 Nc6 Nc3 Nf6 Bb5 Qc7 O-O Nd4 Re1 a6 Bc4 d6 Nd5 Nxd5 exd5 g6 Nxd4 cxd4 d3 h6 b4 Bg7 Qe2 Bf6 Qf3 Kf8 Bb2 Qb6 a3 h5 h3 h4 Qf4 Bf5 Rab1 Rh5 a4 Be5 Qf3 Rc8 a5 Qd8 Re2 Rc7 Rbe1 Qc8 Rxe5 dxe5 Rxe5 Rxc4 dxc4 Qxc4 Re2 Bxc2 d6 exd6 Rd2 d3 Qxb7 Rf5 Qd7 f6 Qxd6+ Kf7",""],["2003.10.20","London Belzberg sim","London","?","Hogarth, Mark J","2830","0","1-0","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 e5 Nc3 Be7 a3 Nc6 Rb1 f5 d3 f4 b4 g5 h3 h5 Nd5 Nd4 bxc5 Nxf3+ Qxf3 dxc5 Bb2 Bd6 Qd1 O-O-O h4 Qg4 Kf1 gxh4 f3 Qg5 Bc3 Nf6 Be1 Nxd5 cxd5 Rdg8 Rb2 h3 Rxh3 h4 Qa4 Bb8 Qb5 Qe7 Bxh4 Qd7 Qxd7+ Kxd7 Rxb7+","Moscow Variation"],["2002.02.25","Linares 19th","Linares","3","Anand, Viswanathan","2838","2757","1/2-1/2","B47","Sicilian Defense: Taimanov Variation, Bastrikov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be2 a6 O-O Nf6 Be3 Bb4 Na4 Be7 Nxc6 bxc6 Nb6 Rb8 Nxc8 Qxc8 Bd4 O-O e5 Nd5 c4 Nf4 Bf3 Qc7 Re1 Ng6 c5 f6 exf6 Bxf6 Be4 Nf4 Bxf6 Rxf6 Qc2 h6 Rad1 Nd5 g3 a5 a3 Rff8 Re2 Qd8 Rd4 Rb7 Bh7+ Kh8 Bd3 Qf6 Ra4 Ra8 Qd2 Qd8 Bb1 Rb5 Rh4 Qe7 Rxh6+ Kg8 Rh4 Rab8 Bh7+ Kf7 Qd3 Qg5 Qd4 Rxb2 Bg6+ Kg8 Bh7+ Kf7 Bg6+ Kg8 Bh7+","Taimanov Variation"],["2002.03.02","Linares 19th","Linares","7","Shirov, Alexei","2838","2715","1/2-1/2","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 c3 Nf6 Re1 O-O d4 cxd4 cxd4 d5 e5 Ne4 Nc3 Bf5 Nh4 Be6 Bxc6 bxc6 Na4 g5 Nf3 f6 Be3 g4 Nd2 fxe5 Nxe4 dxe4 Nc5 Bf5 dxe5 Qxd1 Raxd1 Bxe5 Nd7 Bxd7 Rxd7 Bxb2 Rxe7 Rfe8 Rc7 Rec8 Re7 Re8 Rc7","Nyezhmetdinov-Rossolimo Attack"],["2002.03.03","Linares 19th","Linares","8","Vallejo Pons, Francisco","2838","2629","1-0","B41","Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Nf6 Nc3 Qc7 a3 b6 Be3 Bb7 f3 Nc6 Be2 Rb8 b4 Be7 O-O O-O Rc1 Ne5 f4 Ng6 Bd3 Ba8 Qe2 Kh8 e5 Ng8 Qh5 a5 Ndb5 Qc6 Rc2 axb4 axb4 Bxb4 Ne4 f5 Ng5 Nh6 Kh1 Bc5 Bc1 Qc8 h3 Kg8 Kh2 Ne7 Nd6 Bxd6 exd6 Nc6 Bb2 Nb4 Rd2 b5 Rc1 Qe8 Qe2 Nxd3 Rxd3 Nf7 Rg3 Nxg5 Rxg5 Rf7 Qe5 Qf8 cxb5 h6 Rg3 Kh7 Bd4 Bd5 b6 Rf6 Rcc3 Rf7 Rc7 Be4 Rb3 Bd5 Rb5 Bb7 Ra5 Qd8 Ra7 Be4 Qxe6 Qh4 Qxf7 Qxf4+ Kg1","Kan Variation"],["2002.03.07","Linares 19th","Linares","11","Ivanchuk, Vassily","2838","2717","1/2-1/2","B41","Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Nf6 Nc3 Qc7 a3 Be7 Be3 O-O Rc1 Nc6 Be2 Nxd4 Qxd4 d6 O-O Rb8 Qb6 Qxb6 Bxb6 Bd7 Rfd1 Rfc8 b4 Be8 Ba7 Ra8 Be3 Nd7 Na4 Rc6 f3 Kf8 Kf2 h6 g3 Rc7 Bf4 Rc6 Be3 Rc7 Bf4 Rc6 h4 Ra7 Nc3 Ra8 Na4 Ra7 Nc3 Ra8","Kan Variation"],["2002.04.30","Eurotel Trophy","Prague","2.2","Polgar, Judit","2838","2677","1-0","B51","Sicilian Defense: Moscow Variation","e4 c5 Nf3 d6 Bb5+ Nc6 Bxc6+ bxc6 O-O e5 c3 g5 d4 g4 Nfd2 cxd4 cxd4 exd4 Nc4 c5 Re1 Be6 Nba3 Be7 e5 d5 Nd6+ Kf8 Bf4 h5 b4 c4 Qxd4 h4 Nab5 Rh5 Qe3 Qd7 Nd4 Bd8 Qd2 Ne7 b5 Ng6 Nc6 c3 Qc1 g3 fxg3 hxg3 Bxg3 Bb6+ Kh1 Kg7 Qxc3 Rah8 Rf1 Kg8 Rae1 f5 exf6 Qh7 f7+ Bxf7 Qxh8+ Nxh8 Ne7+ Kf8 Nec8 Qd3 Rf3 Qc2 Nxf7 Nxf7 Nd6 Qg6 Rxf7+ Qxf7 Nxf7 Kxf7 Re5 Rxe5 Bxe5 d4 Kg1 Ke6 Bb8 Kd5 Kf1 Kc4 Ke2 d3+ Kd1 Kxb5 h4 a5 Be5 Bf2 h5 Be3 Bg7","Moscow Variation"],["2002.05.01","Eurotel Trophy","Prague","3.1","Ivanchuk, Vassily","2838","2711","1/2-1/2","B34","Sicilian Defense: Accelerated Dragon, Modern Variation","e4 c5 Nf3 Nc6 Nc3 g6 d4 cxd4 Nxd4 Bg7 Be3 Nf6 Nxc6 bxc6 e5 Ng8 f4 f6 Bd4 Qa5 Qd2 fxe5 fxe5 c5 Be3 Bxe5 Bc4 Nf6 O-O Ba6 Bxa6 Qxa6 Bxc5 d6 Rae1 O-O Bd4 Bxd4+ Qxd4 e5 Qd3 Qxd3 cxd3 Rab8 b3 Kg7 Rc1 Rfc8 h3 a5 g4 h6 Kg2 Rxc3 Rxc3 Nd5 Rc6 Ne3+ Kf2 Nxf1 Kxf1 a4 bxa4 Rb1+ Ke2 Rb2+ Ke3 Rxa2 Rxd6 Rxa4 Re6 Ra2",""],["2002.06.02","FIDE GP","Moscow","2.2","Lautier, Joel","2838","2675","1-0","B32","Sicilian Defense: Kalashnikov Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 N1c3 a6 Na3 b5 Nd5 Nge7 c4 Nxd5 cxd5 Ne7 Nc2 Bd7 Bd3 g6 O-O Bg7 Be3 O-O Rc1 f5 f3 f4 Bf2 g5 Nb4 Ng6 Be2 h5 Kh1 Rf7 a4 bxa4 Nxa6 Nf8 Rc6 Rf6 Qxa4 Rg6 Qb4 Qf6 Nb8 Rxb8 Qxb8 g4 Rc7 gxf3 Bxf3 Bg4 Qe8 Qg5 Rg1 h4 h3 Bh5 Qf7+ Kh8 Rc8",""],["2002.09.08","RUS-The World","Moscow","2","Leko, Peter","2838","2722","1/2-1/2","B30","Sicilian Defense: Closed, Anti-Sveshnikov Variation, Kharlov-Kramnik Line","e4 c5 Nf3 Nc6 Nc3 e5 Bc4 d6 d3 Be7 Nd2 Bg5 h4 Bxd2+ Bxd2 Nf6 Bg5 h6 Bxf6 Qxf6 Nd5 Qd8 Ne3 Be6 Bxe6 fxe6 Qh5+ Kd7 c3 Rf8 a3 Qf6 Qe2 Rf7 b4 b6 Ra2 Ke8 Rh3 Kf8 Qh5 Qe7 Rg3 Rd8 bxc5 dxc5 Nc4 Rf4 Rh3 Qf6 a4 Kg8 Re2 Rf8 Ree3 Kh7 Ref3 g6 Qg5 Rxf3 gxf3 hxg5 hxg5+ Kg7 gxf6+ Rxf6 Ke2 Rf8 Ke3 g5 Rh5 Kg8 Rh1 Rb8 Rb1 Kf7 Ke2 Ne7 Ne3 Ng6 Ng4 Kg7 Ke3 a6 d4 a5 Rh1 Rh8 Rxh8",""],["2002.10.29","Bled ol (Men)","Bled","4","Mchedlishvili, Mikheil","2838","2551","1-0","B63","Sicilian Defense: Richter-Rauzer Variation, Ivanov Variation","e4 c5 Nf3 d6 d4 Nf6 Nc3 cxd4 Nxd4 Nc6 Bg5 e6 Qd2 Qb6 O-O-O Qxd4 Qxd4 Nxd4 Rxd4 a6 f3 Bd7 Na4 Bc6 Nb6 Rd8 Nc4 Be7 Na5 Rc8 Rb4 d5 Nxc6 bxc6 Rb7 Nd7 Bd2 Ra8 Rc7 Ne5 Bc3 Bd6 Bxe5 Bxe5 Rxc6 dxe4 Rxa6 Rxa6 Bxa6 exf3 gxf3 Ke7 a4 Rd8 h3 Rd4 Bb5 Rf4 Rd1 Rxf3 a5 Rf5 Rd7+ Kf6 Rb7 Bf4+ Kb1 Be3 a6 Rd5 b4 Rd8 c4","Richter-Rauzer Variation"],["2002.11.05","Bled ol (Men)","Bled","10","Ye, Jiangchuan","2838","2667","1-0","B48","Sicilian Defense: Taimanov Variation, Bastrikov Variation, English Attack","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Qd2 Nf6 O-O-O Bb4 f3 Ne5 Nb3 b5 Bd4 Be7 Qf2 d6 Kb1 O-O g4 Nfd7 Rg1 Bb7 g5 Rfc8 a3 Nc4 Bxc4 bxc4 Nc1 Rab8 N1e2 Bc6 Ka1 Qa5 Na2 e5 Bc3 Qc7 Ng3 g6 Nf1 Nc5 Ne3 a5 Qd2 Rb5 h4 Ne6 Rb1 Rc5 Nc1 Rd8 Ng4 d5 Bxe5 dxe4 Qc3 Rxe5 Qxe5 Qxe5 Nxe5 Ba4 c3 exf3 Rf1 Bc2 Nxc4 Bxb1 Kxb1 a4 Ne5 h6 Rxf3 hxg5 Rxf7 Bd6 Rf6 Bxe5 Rxe6 Bf4 Ne2 Rd1+ Ka2 Kf7 Ra6 Re1 Nxf4 gxf4 Rxa4 Rf1 c4 Ke6 c5 Kd5 Ra6 Ke5 Rxg6 f3 Rg8 Rc1 Rf8 Ke4 b4 Ke3 Kb2 Rc4 Kb3 Rc1 h5 f2 h6 f1=Q Rxf1 Rxf1 Kc4 Ke4 c6 Rh1 Kc5 Rh5+ Kb6 Rxh6 Kb7","Taimanov Variation"],["2002.11.13","Munich ZMD m 5'","Munich","2","Paehtz, Elisabeth","2838","2349","1-0","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 Nc6 Nc3 g6 d4 cxd4 Nxd4 Bg7 Be3 Nf6 f3 O-O O-O Rac8 b3 Rfd8 Qd2 e6 Rad1 Ne8 Nde2 Qe7 Bg5 Bf6 Bxf6 Nxf6 Kh1 a6 Ng3 Na7 Qg5 Rd7 e5 Ne8 Qxe7 Rxe7 exd6 Rd7 Nge4 b5 Rfe1 bxc4 b4 Nb5 Na4 Nbxd6 Nb6 Rcc7 Nxd7 Rxd7 Rxd6 Rxd6 Nxd6 Nxd6 Rd1 Nb5 a4 Na3 Rc1 Kf8 Rc3","Moscow Variation"],["2001.01.21","Corus","Wijk aan Zee","7","Topalov, Veselin","2849","2718","1-0","B90","Sicilian Defense: Scheveningen Variation, English Attack, with f3","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e6 f3 b5 g4 h6 Qd2 Nbd7 O-O-O Bb7 h4 b4 Na4 Qa5 b3 Nc5 a3 Nxa4 axb4 Qc7 bxa4 d5 e5 Nd7 f4 Nb6 Rh3 Nc4 Qc3 Rc8 Bd2 Be7 Be1 Rb8 f5 Bc8 Bxc4 dxc4 Qf3 Bd7 fxe6 fxe6 g5 hxg5 hxg5 Rxh3 Qxh3 Qxe5 Qh5+ Kf8 Nf3 Qe3+ Kb2 Be8 Qh8+ Kf7 Bc3","Scheveningen Variation"],["2001.02.24","Linares 18th","Linares","2","Polgar, Judit","2849","2676","1/2-1/2","B90","Sicilian Defense: Najdorf Variation, English Attack, Anti-English","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 Ng4 Bg5 h6 Bh4 g5 Bg3 Bg7 h3 Ne5 f3 Nbc6 Bf2 Be6 Qd2 Nxd4 Bxd4 Qa5 a3 Rg8 h4 Rc8 hxg5 hxg5 O-O-O Nc4 Bxc4 Bxd4 Qxd4 Rxc4 Qa7 Qc7 Kb1 Rc5 Nd5 Bxd5 exd5 Kf8 Rd2 Kg7 b4 b5 Qxa6 Rc3","Najdorf Variation"],["2001.03.06","Linares 18th","Linares","10","Grischuk, Alexander","2849","2663","1-0","B45","Sicilian Defense: Four Knights Variation, Exchange Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e6 Nxc6 bxc6 e5 Nd5 Ne4 Bb7 Be2 c5 O-O Qc7 Nd6+ Bxd6 exd6 Qc6 f3 c4 Qd4 O-O Bxc4 Rfc8 Bxd5 Qxd5 Qxd5 Bxd5 Rf2 Rc6 Bf4 Rac8 Rc1 Ra6 a3 f6 Be3 Ra4 Ra1 e5 b3 Ra6 c4 Be6 Rd2 Rb8 Rd3 Rb7 g4 h5 h3 hxg4 hxg4 f5 Bc5 Rc6 b4 fxg4 fxg4 Rc8 Re1 Bxc4 Rc3 Bb5 Rxe5 Rf8 Bxa7 Bc6 Be3 Rbb8 Bg5 Rb5 Rcc5 Rb6 b5 Bf3 Be7 Ra8 Rg5 Rxa3 Bf6 Kf7 Bb2",""],["2001.03.21","World Cup of Rapid Chess-A","Cannes","2","Grischuk, Alexander","2849","2663","1/2-1/2","B45","Sicilian Defense: Four Knights Variation, Exchange Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e6 Nxc6 bxc6 e5 Nd5 Ne4 Bb7 Be2 c5 O-O Qc7 Nd6+ Bxd6 exd6 Qc6 f3 c4 Qd4 O-O Bxc4 Rfc8 b3 Qxd6 Bb2 Qb6 Rf2 Qxd4 Bxd4 Nb4 c3 Nc6 Be3 d5 Bf1 a5 a4 Ne7 Rc1 f6 Bb5 Nf5 Bd2 Rc7 Bd3 Nd6 Be1 Ba6 Bc2 Kf7 Rd1 Nb7 b4 Bc4 g4 Nd6 b5 Nb7 Rfd2 Nc5 Rb1 Rac8 Bf2 Rb7 h4 g6 Kg2 e5 h5 Ne6 hxg6+ hxg6 Rh1 Nf4+ Kg3 Kg7 Be3 Ne2+ Kf2 Nxc3 Rh6 d4 Rxg6+ Kf7 Bh6 Rg8 Rxg8",""],["2001.03.21","World Cup of Rapid Chess-A","Cannes","4","Lautier, Joel","2849","2658","1-0","B47","Sicilian Defense: Taimanov Variation, Bastrikov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be2 a6 O-O Nf6 Be3 Bb4 Na4 Be7 Nxc6 bxc6 Nb6 Rb8 Nxc8 Qxc8 Bd4 c5 Be5 Rb6 Qd3 d6 Bc3 O-O b3 d5 e5 Nd7 f4 f5 exf6 Bxf6 Bxf6 Nxf6 Bf3 Kh8 Rae1 a5 Re2 Rd8 Rfe1 a4 bxa4 Qa6 Qxa6 Rxa6 Rxe6 Rxa4 Rc6 c4 g4 Ra3 Kg2 Rxa2 Re2 Ra4 g5 Ng8 Rce6 Ra7 Re8 Rad7 Bg4 Rd6 R2e7","Taimanov Variation"],["2001.03.22","World Cup of Rapid Chess-A","Cannes","6","Svidler, Peter","2849","2695","1/2-1/2","B45","Sicilian Defense: Taimanov Variation","e4 c5 Nf3 Nc6 Nc3 e6 d4 cxd4 Nxd4 d6 g4 a6 Be3 Nge7 f4 b5 Nf3 b4 Na4 Rb8 Qd2 Bd7 b3 h5 g5 d5 Bd3 dxe4 Bxe4 Rb5 c4 bxc3 Nxc3 Rb8 Rd1 Nf5 Bxf5 exf5 g6 fxg6 Qg2 Bb4 Qxg6+ Kf8 Rd3 Qe8 Rg1 Qxg6 Rxg6 Ne7 Rgd6 Bxd6 Rxd6 Ke8 Ne5 Bc8 Bc5 Rb7 Nc4 Rd7 Rb6 Nd5 Nxd5 Rxd5 b4 Rh6 Rb8 Rc6 h4 Rcxc5 bxc5 Rxc5 Ne5 Ke7 Rb6 Rc1+ Kd2 Ra1 Rg6 Rxa2+ Kc3 Ra4 Rxg7+ Kd6 Nc4+ Ke6 Rg6+ Kf7 Rb6 Be6 Ne5+ Ke7 Ng6+ Kf7 Ne5+","Taimanov Variation"],["2001.03.24","World Cup of Rapid Chess KO","Cannes","2.2","Grischuk, Alexander","2849","2663","1/2-1/2","B45","Sicilian Defense: Four Knights Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e6 Ndb5 Bb4 a3 Bxc3+ Nxc3 d5 exd5 exd5 Bd3 O-O O-O d4 Ne2 Bg4 Bg5 Qd6 Re1 Rfe8 Qd2 Bxe2 Bf4 Qd7 Rxe2 Rxe2 Qxe2 Re8 Qf1 Qe6 h3 h6 Rd1 Nd5 Bg3 Nf6 Bf4 Nd5 Bd2 Ne3 fxe3 dxe3 Qe2 exd2 Qxe6 Rxe6 Rxd2 Kf8 Bc4 Re7 Kf2 Rc7 Be2 Ke7 c3 Ne5 Rd4 Rc6 a4 Rb6 b4 Rc6 Re4 f6 c4 b6 Ke3 Rd6 c5 bxc5 bxc5 Rd5 Rb4 Rxc5 Rb7+ Kd6 Rxa7 Rc3+ Kf2 g5 Ra6+ Rc6 Ke3 Rxa6 Bxa6 f5 Bc8 Nc4+ Kf3 Nb6 Bxf5 Nxa4 Kg4 Ke5 Bc2 Nc5 Kh5 Kf6 Kxh6 Ne6 g3 Nd4 Bd3 Nf3 Be2 Ne5 Kh5 Ng6",""],["2001.04.28","Zuerich Kortschnoj-A","Zuerich","2","Piket, Jeroen","2827","2628","1-0","B30","Sicilian Defense: Closed, Anti-Sveshnikov Variation, with d6","e4 c5 Nf3 Nc6 Nc3 e5 Bc4 Be7 d3 d6 Nd2 Nf6 Nf1 Na5 Ne3 Nxc4 dxc4 O-O Qf3 g6 g4 Be6 h4 Qd7 Rg1 Kh8 a4 Rg8 b3 Raf8 Bb2 h5 g5 Nh7 Qg3 f6 f4 fxg5 fxg5 Rg7 O-O-O a6 Ncd5 Bd8 Rd3 Qf7 Rf1 Qe8 Nf6 Qc6 Rfd1 Bc7 Nfd5 Bb8 a5 Kg8 Bc3 Rgf7 Kb2 Rf4 Ne7+",""],["2001.07.22","Patras sim","Patras","?","Mourouti, Paraskevi","2838","0","1-0","B30","Sicilian Defense: Old Sicilian","e4 c5 Nf3 Nc6 Nc3 g6 Bb5 Bg7 O-O d6 e5 dxe5 Bxc6+ bxc6 Re1 Qc7 b3 Bf5 Ba3 Qa5 Qc1 Nf6 Nxe5 Nd5 Nxc6 Qc7 Nxd5 Qxc6 Nxe7",""],["2001.07.22","Patras sim","Patras","?","Papaioannou, Hristos","2838","0","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 Nf6 Nc3 O-O Be3 b6 Qd2 a5 Bh6 a4 Bxg7 Kxg7 a3 Qc7 O-O Rd8 Qe3 Nh5 e5 Kg8 Qh6 f6 Ne4 Bf5 Rae1 Bxe4 Rxe4 fxe5 Rxe5 Nf6 Rfe1 Rd7 Ng5 e6 Rxe6 Rf8","Nyezhmetdinov-Rossolimo Attack"],["2001.07.22","Patras sim","Patras","?","Pashos, Alexandros","2838","0","1-0","B40","Sicilian Defense: Delayed Alapin Variation, with e6","e4 c5 Nf3 e6 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 Nc6 Bd3 d6 a3 Be7 O-O O-O Qe2 Nb6 Nc3 d5 Bf4 Bd7 Rad1 Rc8 Bb1 Re8 h4 Nc4 Ng5 g6 Qg4 Nxb2 h5 Bxg5 Bxg5 Re7 Rd2 Nc4 Rd3 N6xe5 dxe5 Nxe5 Qh4 Nxd3 Bxe7 Qe8 Bf6 Nc5 Be5 Qd8 Qf4 b6 Re1 Qe7 Bf6 Qf8 Qg5 Qe8 Nxd5","Delayed Alapin Variation"],["2001.07.22","Patras sim","Patras","?","Polizou, Christina","2838","0","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 e6 c3 Ne5 Bxd7+ Qxd7 d4 Nxf3+ Qxf3 Nf6 Nd2 Be7 dxc5 dxc5 e5 Nd5 Ne4 Qc7 Qg3 Bf8 Bd2 O-O-O c4 Nb6 b3 Rd7 Bc3 Qd8 Qf3 Qe8 a4 Be7 a5 Na8 a6 b6 Nxc5","Nyezhmetdinov-Rossolimo Attack"],["2001.07.22","Patras sim","Patras","?","Polizou, Dionisia","2838","0","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 c3 e6 d4 cxd4 cxd4 d5 e5 Qa5+ Nc3 Bb4 Bd2 Bd7 Be2 Bxc3 Bxc3 Qb6 O-O Nge7 Qd2 O-O Bd3 Ng6 h4 Nge7 h5 Nf5 Rfe1 Qd8 g3 Nh6 Qc2 Nf5 Kg2 Rc8 Qd2 h6 Re2 a6 Rh1 Kh8 g4 Nfe7 Nh4 Be8 Bb1 Ng8 Qd3 f5 exf6 Nxf6 Rxe6 Kg8 Rhe1","Nyezhmetdinov-Rossolimo Attack"],["2001.07.22","Patras sim","Patras","?","Vayenas, ","2838","0","1-0","B46","Sicilian Defense: Taimanov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 a6 Nxc6 bxc6 e5 Qc7 f4 d6 exd6 Bxd6 Ne4 Be7 Qf3 Nf6 Bd3 Bb7 O-O O-O f5 e5 Nxf6+ Bxf6 Be4 Rfd8 Be3 Rab8 b4 Ba8 Bc5 a5 a3 h6 Rad1 Rxd1 Rxd1 Rd8 Rxd8+ Qxd8 Qd3 Qxd3 cxd3 axb4 axb4 Bb7 b5 Bd8 g4 Bc7 Kg2 g6 f6 Bc8 b6 Bb8 Kf3 Bb7 h4 Ba8 g5 hxg5 hxg5","Taimanov Variation"],["2001.07.23","Patras m","Patras","1","Banikas, Hristos","2838","2531","1/2-1/2","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 Nf6 h3 Ne5 Nxe5 Bxb5 Nc3 dxe5 Nxb5 Qd7 a4 g6 d3 Bg7 Be3 b6 Na3 O-O Nc4 Nh5 Qd2 Qc7 g3 Rad8 Qe2 Nf6 Reb1 a5 Kg2 Nd7 h4 h5 f3 Nb8 c3 Nc6 Rd1 Rd7 Rd2 Rfd8 g4 hxg4 fxg4 Rf8 Rf1 Nd8 h5 Ne6 g5 Nf4+ Bxf4 exf4 Qg4 gxh5 Qxh5 Qc6 Rxf4 Qe6 Ne3 Rfd8 Nd5 Rxd5 exd5 Rxd5 Qg4 Qg6 Qc8+ Bf8 Qh3 Rxg5+ Kf1 Bh6 Rh2 Rg3 Qxh6 Qxd3+ Re2 Qd1+ Re1 Qd3+ Kf2 Rg6 Re2 Qd5 Qh3 Qd8 Rh4","Nyezhmetdinov-Rossolimo Attack"],["2001.07.23","Patras m","Patras","3","Banikas, Hristos","2838","2531","1-0","B40","Sicilian Defense: French Variation, Westerinen Attack","e4 c5 Nf3 e6 b3 b6 d4 cxd4 Nxd4 a6 Bd3 Bb7 O-O Qc7 c4 Nf6 Re1 Bd6 Nf3 Nc6 Nc3 Ne5 h3 b5 Bb2 bxc4 Bxc4 O-O Nxe5 Bxe5 Rc1 Bc6 Qe2 h5 Bxa6 Qa7 Bd3 d6 a4 Rfc8 Nb5 Bxb5 Bxb5 Rxc1 Rxc1 Bxb2 Qxb2 Rd8 Bc6 d5 exd5 exd5 Bb5 Qb6 Rc6 Qb8 Qd4 Re8 Rc1 Re4 Qd2 g6 Bd3 Re8 b4 d4 b5 Nd5 Bc4 Nf4 Qxd4 Rc8 Qe4 Kg7 Re1 Rc5 Bf1 Rf5 Qd4+ Kh7 a5 Ne6 Qe3 Ng5 a6 Ne6 b6 Ra5 b7 Qc7 Rc1 Qd6 Rc8 Ra1","French Variation"],["2001.07.23","Patras m","Patras","5","Banikas, Hristos","2838","2531","1-0","B40","Sicilian Defense: French Variation, Westerinen Attack","e4 c5 Nf3 e6 b3 b6 d4 cxd4 Nxd4 a6 Bd3 Bb7 O-O Qc7 c4 Nf6 Nd2 Bd6 N4f3 Ng4 h3 Ne5 Nxe5 Bxe5 Rb1 Nc6 Nf3 Bf4 Bb2 Ne5 Bc2 Nxf3+ Qxf3 O-O Rbd1 Bc6 Qd3 g6 g3 Be5 Ba3 Rfe8 f4 Bg7 Bd6 Qb7 Qe3 f5 e5 Bg2 Rf2 Bxh3 Rd4 Bf8 Bd3 Bg4 Bf1 Rac8 Bg2 Qa7 Qd3 b5 Bxf8 Rxf8 Rxd7 Qc5 Qd6","French Variation"],["2001.09.19","EUR-ASIA m 30'","Batumi","10","Ye, Jiangchuan","2838","2677","1/2-1/2","B43","Sicilian Defense: Kan Variation, Knight Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 b5 O-O Bb7 Re1 Nc6 Nxc6 dxc6 e5 Ne7 Bd3 Ng6 Qh5 c5 Bg5 Be7 Ne4 Bxe4 Bxe4 Rd8 Bxe7 Nxe7 Re3 Ng6 Bxg6 fxg6 Qg4 Qe7 Qf3 Qc7 a4 b4 c3 a5 Rc1 Qd7 cxb4 cxb4 Qg4 O-O","Kan Variation"],["2001.09.19","EUR-ASIA m 30'","Batumi","11","Kasimdzhanov, Rustam","2838","2704","1-0","B36","Sicilian Defense: Accelerated Dragon, Maróczy Bind","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Nf6 Nc3 d6 f3 Nxd4 Qxd4 Bg7 Be3 O-O Qd2 Be6 Rc1 Qa5 Bd3 Rfc8 b3 a6 Ne2 Qxd2+ Kxd2 Nd7 Nf4 Nc5 Be2 a5 h4 Na6 Rb1 Nb4 a3 Nc6 Nxe6 fxe6 f4 Kf7 h5 Nd4 Bd3 e5 f5 g5 h6 Bf6 g4 Nf3+ Ke2 Nd4+ Kf2 e6 Rh5 Rc7 a4 Rg8 Rhh1 Re8 Rhd1 Ra8 Bd2 Rc6 Bc3 Rb6 Bxd4 exd4 e5 Bxe5 fxe6+ Ke7 Ke2 Rf8 Rf1 Bf4 Bf5 Rh8 Kd3 Be5 Be4 Bf4 Bf5 Be5 Kc2 Bf4 Rbd1 Be3 Be4 Kxe6 Bd5+ Kd7 Rf7+ Kc8 Rg7 Bf4 Rxd4 Be5 Rd3 Rf8 Rxh7 Rf2+ Rd2 Rxd2+ Kxd2 Rxb3 Re7 Rh3 h7 b6 Be4 Kd8 Rb7 Bd4 Bf5 Ke8 Rd7 Be5 Rb7 Bd4 Bg6+ Kd8 Bh5 Ra3 Rxb6 Kc7 Rb5 Rxa4 Rxg5 Rb4 Kd3 Bb2 Rxa5 Kd7 Ra8",""],["2001.10.18","Eurotel Trophy Simul","Prague","1","Babula, Vlastimil","2838","2566","1-0","B30","Sicilian Defense: Closed, Anti-Sveshnikov Variation, with d6","e4 c5 Nf3 Nc6 Nc3 e5 Bc4 d6 d3 Be7 Nd2 Nf6 Nf1 Bg4 f3 Be6 Ne3 O-O O-O Nd7 Ned5 Nb6 Nxb6 Qxb6 Nd5 Bxd5 Bxd5 Nb4 Bc4 Rad8 f4 exf4 Rxf4 d5 exd5 Nxd5 Rf5 Nc7 Qf3 Qg6 a4 Ne8 Be3 b6 Bb3 Nd6 Rd5 Qf6 Rf1 Qxf3 Rxf3 Bf6 c3 Nc8 g4 Rxd5 Bxd5 Rd8 Bc4 Nd6 Ba2 h6 Bf4 g5 Bg3 Kg7 Kf1 a6 Bf2 Rc8 Bg3 Rd8 Ke2 b5 a5 b4 Bxd6 Rxd6 Kd2 Rd7 Rf5 Rb7 Kc2 bxc3 bxc3 Rb5 Bc4 Rxa5 d4 Kg6 dxc5 Be7 c6 Bd8 Bxf7+ Kg7 Bd5 Rc5 c4 Bf6 Kd3 Bb2 Rf2 Ba1 Ke4 Kh7 Ra2",""],["2001.10.18","Eurotel Trophy Simul","Prague","1","Movsesian, Sergei","2838","2631","1-0","B43","Sicilian Defense: Kan Variation, Knight Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nc6 Nxc6 bxc6 O-O Nf6 Qe2 Bd6 f4 e5 Kh1 h6 Bd2 O-O f5 Re8 Bc4 a5 Rf3 Bb4 Rg3 Kf8 Qe3 Ng8 f6 gxf6 Rf1 Bxc3 Rxg8+ Kxg8 Qg3+ Kf8 Rxf6 d5 Bxh6+ Ke7 Rxf7+ Kd6 Qg6+ Be6 Rxc7 Kxc7 exd5 cxd5 Bb5 Reb8 a4 Bd7 bxc3 Bxb5 axb5 Rxb5 h4 a4 Bg7 d4 Qf7+ Kb6 Qe6+ Kb7 Bxe5 Rxe5 Qxe5 a3 Qd5+ Kb8 cxd4 a2 Qb3+ Kc7 Qc3+ Kd7 Qa1 Kd6 c4","Kan Variation"],["2001.12.02","Botvinnik mem m","Moscow","2","Kramnik, Vladimir","2838","2802","1/2-1/2","B41","Sicilian Defense: Kan Variation, Maróczy Bind, Réti Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Nf6 Nc3 Qc7 a3 d6 Be3 b6 Rc1 Nbd7 Be2 Bb7 f3 Be7 O-O O-O Kh1 Rac8 b4 Qb8 Qd2 Bd8 Rc2 Re8 Na4 Bc7 Bg1 Rcd8 Rb1 Ba8 Qc1 h6 Nb2 Nf8 Nd3 Ng6 a4 Qc8 b5 a5 Nc6 Bxc6 bxc6 e5 Bxb6 Ne7 c5 d5 Bxc7 Qxc7 Rb7 Qxc6 Rb5 Ng6 exd5 Nxd5 Nf2 Ngf4 Bf1 Ne6 Rxa5 Qc7 Rb5 Nd4 Rc4 Nxb5 axb5 Rb8 b6 Nxb6 cxb6 Qxb6 Qe1 Rec8 Rxc8+ Rxc8 Ng4 Re8 Bd3 Qd4 Be4 f5 Bxf5 Ra8 Bb1 Qb2 h4 Ra1 Kh2 Qxb1 Qxe5 Qh1+ Kg3 Qe1+ Qxe1 Rxe1 Kf4 Re2 Ne3 g6 g4 Kf7 h5 g5+ Ke4 Ke6 f4 Rf2 Nd5 gxf4 Nxf4+ Kf6 Ke3 Ra2 Nd3 Ra3 Ke4 Ra1 Kf4 Ra4+ Kf3 Ra3 Ke4 Rb3 Nc5 Rb4+ Kf3 Rb5 Ne4+ Ke5 g5 Rb4 Nf2 Rf4+ Kg3","Kan Variation"],["2000.01.18","Corus","Wijk aan Zee","3","Van Wely, Loek","2851","2646","1-0","B90","Sicilian Defense: Scheveningen Variation, English Attack, with f3","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e6 f3 b5 g4 h6 Qd2 Nbd7 O-O-O Bb7 h4 b4 Na4 d5 Bh3 g5 Bg2 gxh4 Rxh4 dxe4 g5 Nd5 Rxe4 hxg5 Bxg5 Qa5 f4 Rh2 Nxe6 fxe6 Rxe6+ Kf7 Qd3 Bg7 Qf5+ Kg8 Rxd5 Qxa4 Re7","Scheveningen Variation"],["2000.01.28","Corus","Wijk aan Zee","11","Leko, Peter","2851","2725","1/2-1/2","B33","Sicilian Defense: Lasker-Pelikan Variation, Sveshnikov Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 f5 c3 Bg7 exf5 Bxf5 Nc2 Be6 a4 O-O axb5 axb5 Rxa8 Qxa8 Nce3 Qb7 g4 Ne7 Bg2 Nxd5 Bxd5 Qe7 h4 Rc8 g5 Rc5 Be4 d5 Nxd5 Bxd5 Bxd5 e4 Ke2 Qe5 Bb3 Qc7 Qg1 b4 g6 hxg6 Qxg6 Kf8 Qg3 Qxg3 fxg3 bxc3 bxc3 Rxc3 Bd5 Rxg3","Lasker-Pelikan Variation"],["2000.01.30","Corus","Wijk aan Zee","13","Polgar, Judit","2851","2658","1-0","B90","Sicilian Defense: Najdorf Variation, English Attack, Anti-English","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 Ng4 Bg5 h6 Bh4 g5 Bg3 Bg7 h3 Nf6 Bc4 Qb6 O-O O-O Nde2 Qxb2 Bb3 Qa3 f4 Nc6 Kh1 Be6 Qd3 Rac8 fxg5 hxg5 Nd5 Rfe8 Rad1 Nb4 Qf3 Nbxd5 exd5 Bd7 c3 a5 Qd3 a4 Bc2 Qc5 Rxf6 exf6 Qh7+ Kf8 Nd4 Re5 Bxe5 fxe5 Ne6+ Bxe6 dxe6 Rc7 Bxa4 d5 Qf5 Qc4 Bd7 Qf4 Qb1 fxe6 Bxe6 Ke7 Bxd5 Rd7 c4 Qe3 Qh7 Kd8 Rb1 Qf4 Be6 Re7 Bg4 Rf7 Qd3+ Qd4 Qg6","Najdorf Variation"],["2000.02.13","KasparovChess GP g/60","Internet","2.1","Van Wely, Loek","2851","2646","1/2-1/2","B90","Sicilian Defense: Scheveningen Variation, English Attack, with f3","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e6 f3 b5 g4 h6 Qd2 Nbd7 O-O-O Bb7 h4 b4 Na4 Qa5 b3 Be7 Kb1 Nc5 Nxc5 dxc5 Ne2 Rd8 Qc1 Nd7 Ng3 Ne5 Be2 Rxd1 Qxd1 Qc7 Bf4 Bd6 Nh5 g6 Nf6+ Ke7 g5 h5 Be3 Nc6 f4 Rd8 Qf1 Nd4 Bd3 Kf8 Rg1 Kg7 Bxd4 cxd4 e5 Be7 Qe2 a5 f5 exf5 Bxf5 d3 Bxd3 Bc5 e6 Bxg1 e7 Bc6 Qe5","Scheveningen Variation"],["2000.03.14","Kasparov Chess sim","New York","17","Kascak, Milos","2851","0","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 Nf6 Nc3 O-O Be3 b6 Qd2 e5 Bh6 Qd6 g4 Be6 O-O-O Rad8 Bxg7 Kxg7 Kb1 Rfe8 Qg5 Qc7 Rdg1 Qe7 Qe3 Qd6 Ne2 c4 dxc4 Bxc4 Ng3 Ba6 Nh4 Bc8 g5 Ng8 Ng2 Qd2 h4 Qxe3 Nxe3 Be6 h5 Ne7 Ne2 Nc8 Kc1 Nd6 f3 Nc4 Nxc4 Bxc4 Nc3 Rd7 b3 Ba6 Rh2 Red8 Nd1 f6 gxf6+ Kxf6 hxg6 hxg6 Ne3 Bb7 Rhg2 Rg7 Ng4+ Ke6 Nf2 Ba6 Rxg6+ Rxg6 Rxg6+ Kd7 Ng4 Re8","Nyezhmetdinov-Rossolimo Attack"],["2000.04.01","Chess@iceland-A","Kopavogur","5","Petursson, Margeir","2851","2544","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 c3 Nf6 Qe2 e5 d4 exd4 cxd4 a6 e5 Nd5 exd6+ Be6 Bxc6+ bxc6 dxc5 Qa5+ Bd2 Qxc5 O-O Kd7 Na3 Bxd6 Rab1 Bf5 Rbc1 Rhe8 Qd1 Qa7 Nc4 Bc7 Bc3 f6 Nd4 Be6 Nxc6 Kxc6 Bd4 Qb8 Qa4+","Nyezhmetdinov-Rossolimo Attack"],["2000.04.02","Chess@iceland rap sf1","Kopavogur","2","Wojtkiewicz, Aleksander","2851","2563","1-0","B90","Sicilian Defense: Scheveningen Variation, English Attack, with f3","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e6 f3 b5 g4 Nbd7 Qd2 h6 O-O-O Bb7 h4 b4 Na4 d5 Bh3 g5 hxg5 hxg5 e5 Nxe5 Bxg5 Rg8 Nb6 Nc4 Nxc4 dxc4 Bxf6 Qxf6 Nxe6 Bh6 g5 fxe6 Qd7+ Kf8 gxh6 Bd5 Qd6+ Qe7 Qf4+ Qf7 Qe5","Scheveningen Variation"],["2000.05.27","Sarajevo Bosnia","Sarajevo","10","Georgiev, Kiril","2850","2675","1-0","B90","Sicilian Defense: Najdorf Variation, English Attack","e4 c5 Nf3 d6 d4 Nf6 Nc3 cxd4 Nxd4 a6 Be3 Nbd7 f3 g6 Qd2 b5 a4 bxa4 Nxa4 Bg7 Be2 Bb7 c4 O-O O-O Nc5 b4 e5 bxc5 exd4 Bg5 Re8 cxd6 Qxd6 c5 Qc6 Bc4 Bc8 Nb6 Ra7 Rfc1 Nd7 Bd5 Qc7 Nc4 Qxc5 Na5 Qf8 Nc6 h6 Bh4 Rc7 Be7 Rxc6 Bxf8 Rxc1+ Rxc1 Nxf8 Qf4 Be6 Rc7 Bxd5 exd5 f5 d6 Rd8 Qh4","Najdorf Variation"],["2000.06.19","Frankfurt sim1","Frankfurt","?","Busche, Markus","2851","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Be2 Nc6 d4 Qa5 d5 Nb8 Nbd2 b5 a4 a6 O-O Bg4 b4 cxb4 cxb4 Qxb4 axb5 Bxf3 Nxf3 Qxe4 bxa6 Qxd5 Qa4+ Nbd7 Bg5 Ne4 Bb5 Nc5 Bxd7+ Nxd7 Rfb1 f6 Be3 e5 Rb7 Qe6 Qc6","Delayed Alapin Variation"],["2000.06.19","Frankfurt sim1","Frankfurt","?","Niebling, Ferdinand","2851","2191","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 Nf6 Nc3 O-O Be3 Qa5 Qd2 Rd8 O-O Bd7 Bh6 Qc7 Bxg7 Kxg7 Qe3 b6 Nh2 Rf8 f4 Rad8 Rae1 Bc8 f5 e5 Rf2 Qd6 Ref1 h6 b3 Qd4 Qe1 b5 Ne2 Qd6 Ng3 c4 dxc4 bxc4 Qa5 cxb3 axb3 Rd7 Nf3 c5 Qc3 Re7 Ra1 Rfe8 Ra5 Rc7 Qe3 Qb6 Ra4 Bb7 Qc3 Nd7 Ra1 c4 b4 f6 fxg6 Kxg6 Nh4+ Kh7 Qf3 Qe6 Rxa7 Rg8 Nhf5","Nyezhmetdinov-Rossolimo Attack"],["2000.06.19","Frankfurt sim1","Frankfurt","?","Rahn, Vincenzo","2851","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 e6 Bc2 Be7 d4 O-O O-O a6 dxc5 dxc5 Qe2 Nc6 e5 Nd7 Nbd2 Qc7 Re1 Rd8 Nf1 b5 Ng3 Bb7 Bf4 Nf8 Ne4 Ng6 Bg3 Ncxe5 Nxe5 Nxe5 Qh5 f5 Ng5 Bxg5 Qxg5 Nf7 Bxc7 Nxg5 Bxd8 Rxd8 Rad1 Rc8 f3 Bxf3 gxf3 Nxf3+ Kf2 Nxe1 Kxe1 Rc6 Rd7 h6 a4 Kh7 a5 Kg6 Rb7 e5 Rb6 Rf6 c4 b4 Ba4 Kg5 Rxf6 Kxf6 Bb5 Ke7 Bxa6 Kd8 Bb5 Kc7 Kf2 g5 Be8 Kb7 Bg6 f4 Kf3 Ka6 Ke4 g4 Bh5","Delayed Alapin Variation"],["2000.06.19","Frankfurt sim1","Frankfurt","?","Ringel, Andreas","2851","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Be2 Nc6 d4 cxd4 cxd4 e6 Nc3 Be7 O-O O-O Bd3 a6 a3 b5 e5 dxe5 dxe5 Nd7 Qc2 g6 Bh6 Re8 Rad1 Bb7 Rfe1 Rc8 Qe2 Qc7 Bb1 Red8 h4 Nc5 h5 Rxd1 Rxd1 Rd8 Rxd8+ Qxd8 Be3 Qc7 Bf4 Nb3 Qd1 Nc5 Ne4 Nxe4 Bxe4 Na5 Bxb7 Nxb7 h6 Nc5 Bg5 Ne4 Bxe7 Qxe7 Qc2 Nc5 b4 Nd7 Qc7 Qe8 Ng5 Nf8 Ne4 Nd7 Qxd7","Delayed Alapin Variation"],["2000.06.22","Fujitsu Siemens Giants","Frankfurt","1","Anand, Viswanathan","2851","2769","1/2-1/2","B32","Sicilian Defense: Flohr Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Qc7 Be2 Nf6 Nc3 e6 O-O a6 Be3 Bb4 Na4 Be7 Nxc6 bxc6 Nb6 Rb8 Nxc8 Qxc8 Bd4 c5 Be5 Rb6 Qd3 d6 Bc3 O-O b3 d5 exd5 Nxd5 Bd2 Nb4 Qc4 Rd6 Bxb4 cxb4 Qxb4 Qxc2 Bxa6 Rxa6 Qxe7 Rxa2 Rxa2 Qxa2 b4 h6 h3 Qb3 Rc1 Rb8 Rc7 Qb1+ Kh2 Qf5 Qd6 Ra8 Qc5 Qxc5 bxc5 Ra2",""],["2000.06.25","Fujitsu Siemens Giants","Frankfurt","9","Kramnik, Vladimir","2851","2758","1/2-1/2","B33","Sicilian Defense: Lasker-Pelikan Variation, Sveshnikov Variation, Chelyabinsk Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bg5 Nc2 Rb8 a3 a5 Bd3 Ne7 Nxe7 Qxe7 Qe2 O-O O-O Bd7 b4 axb4 Nxb4 Rfc8 c4 bxc4 Bxc4 Be6 Bd5 Qd7 Qa6 Rc3 Rfd1 Bg4 Rdb1 Rbc8 a4 h5 a5 Bh4 Qb7 R3c7 a6 Bh3 gxh3 Qxh3 Qb6 Bg5 Nd3 Qg4+ Kf1 Qh3+ Kg1 Qg4+ Kf1 Qh3+","Lasker-Pelikan Variation"],["2000.08.21","Kasparov simul ACE","Deurne","?","Deurne, ","2849","0","1-0","B28","Sicilian Defense: O'Kelly Variation, Venice System","e4 c5 Nf3 a6 c3 d5 exd5 Qxd5 d4 e6 Be2 Nf6 O-O Be7 Ne5 Nc6 Bf3 Qd6 Nxc6 bxc6 dxc5 Qxc5 Be3 Qb5 c4 Qb7 Nc3 Bd7 Na4 O-O Qc2 Qc7 Nc5 Rfd8 Rfd1 Be8 Qc3 Bd6 g3 a5 Na4 Rab8 Bb6 Rxb6 Nxb6 Qxb6 Rxd6 Rxd6 c5 Qb4 Qxb4 axb4 cxd6 Nd5 a4",""],["1999.01.17","Hoogovens","Wijk aan Zee","2","Van Wely, Loek","2812","2636","1-0","B33","Sicilian Defense: Lasker-Pelikan Variation, Sveshnikov Variation, Chelyabinsk Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5 a4 bxa4 Rxa4 a5 Bb5 Bb7 Nce3 Bxe3 Nxe3 Ne7 O-O Rb8 Qd3 Qb6 Bc4 Bc6 Ra2 Rfd8 b3 Qc5 Rfa1 Ra8 h4 h6 h5 Bb7 Rd1 Bc6 Rda1 Bb7 Bd5 Bxd5 exd5 Rdc8 b4 Qxc3 Qxc3 Rxc3 Rxa5 Rb8 Ra7 Kf8 Rd7 Nc8 Rd8+ Ke7 Rg8 Rxb4 Ra8 Kd7 Rxg7 Rc1+ Kh2 Rf4 Ng4 Ne7 Ra7+ Ke8 g3 Rf5 Rh7","Lasker-Pelikan Variation"],["1999.01.18","Hoogovens 5'","Wijk aan Zee","10","Bosboom, Manuel","2812","2490","0-1","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 Bg4 Bc2 g6 h3 Bxf3 Qxf3 Bg7 O-O O-O Qd1 Nc6 d3 Rb8 Nd2 b5 a3 Nd7 Nf3 Nde5 Nxe5 Bxe5 Be3 Qb6 Kh1 Bg7 f4 a5 Qc1 b4 Ba4 Rfc8 Rb1 Qa6 c4 Nd4 Qd2 Rb6 f5 Qb7 Bxd4 Bxd4 Bb5 e6 f6 Kh8 Qg5 Qc7 Rbe1 Qd8 Re2 Qf8 a4 Rd8 b3 h6 Qh4 Kh7 Rf3 d5 e5 dxc4 Bxc4 Bc3 Re4 Rd4 Rff4 Rb8 Rxd4 Bxd4 Re4 Rd8 Qf4 Bc3 h4 h5 g4 hxg4 Qxg4 Qh6 Kg2 Rd4 h5 Qd2+ Qe2 Qg5+ Kf1 gxh5 Rxd4 Bxd4 Qe4+ Kh6 Qa8 Qg1+ Ke2 Qe3+ Kd1 Qg1+ Ke2 Qh2+ Kd1 Bc3","Delayed Alapin Variation"],["1999.02.27","Linares 16th","Linares","6","Leko, Peter","2812","2694","1/2-1/2","B45","Sicilian Defense: Four Knights Variation, Exchange Variation","e4 c5 Nf3 e6 Nc3 Nc6 d4 cxd4 Nxd4 Nf6 Nxc6 bxc6 e5 Nd5 Ne4 Bb7 Be2 c5 O-O Qc7 Nd6+ Bxd6 exd6 Qc6 f3 c4 Qd4 O-O Bxc4 Qxd6 Bb3 Qb6 Rd1 Rfc8 Qxb6 Nxb6 a4 d5 a5 Nc4 a6 Bc6 Bxc4 dxc4 Be3 Bd5 Ra5 Rc6 Rda1 f6 h4 Kf7 Rb5 Rc7 Kf2 Rd8 Raa5 Ke7 Kg3 h5 b4 cxb3 cxb3 Rg8 Rc5 Rd7 b4 g5 Rc2 g4 Kf2 g3+ Ke1 e5 Rd2 Rgd8 Rc5 Ke6 b5 Rb8 Rd3 Rbd8 Rd2 Rb8 Rd3 Rbd8 b6 axb6 Rb5 Bc4 Rxb6+ Kf5 Rxd7 Rxd7 a7",""],["1999.06.21","Kasparov-The World","Internet MSN","1","The World, ","2851","0","1-0","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 Nc6 Nc3 Nf6 O-O g6 d4 cxd4 Nxd4 Bg7 Nde2 Qe6 Nd5 Qxe4 Nc7+ Kd7 Nxa8 Qxc4 Nb6+ axb6 Nc3 Ra8 a4 Ne4 Nxe4 Qxe4 Qb3 f5 Bg5 Qb4 Qf7 Be5 h3 Rxa4 Rxa4 Qxa4 Qxh7 Bxb2 Qxg6 Qe4 Qf7 Bd4 Qb3 f4 Qf7 Be5 h4 b5 h5 Qc4 Qf5+ Qe6 Qxe6+ Kxe6 g3 fxg3 fxg3 b4 Bf4 Bd4+ Kh1 b3 g4 Kd5 g5 e6 h6 Ne7 Rd1 e5 Be3 Kc4 Bxd4 exd4 Kg2 b2 Kf3 Kc3 h7 Ng6 Ke4 Kc2 Rh1 d3 Kf5 b1=Q Rxb1 Kxb1 Kxg6 d2 h8=Q d1=Q Qh7 b5 Kf6+ Kb2 Qh2+ Ka1 Qf4 b4 Qxb4 Qf3+ Kg7 d5 Qd4+ Kb1 g6 Qe4 Qg1+ Kb2 Qf2+ Kc1 Kf6 d4 g7","Moscow Variation"],["1999.06.29","Siemens Giants","Frankfurt","2","Kramnik, Vladimir","2812","2751","1/2-1/2","B66","Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation, Early Deviations","e4 c5 Nf3 Nc6 Nc3 d6 d4 cxd4 Nxd4 Nf6 Bg5 e6 Qd2 a6 O-O-O h6 Be3 Be7 f3 Nxd4 Qxd4 b5 Kb1 Bb7 h4 Rc8 Be2 d5 exd5 Nxd5 Nxd5 Bxd5 Qxg7 Bf6 Qg4 Bxa2+ Kxa2 Qa5+ Kb1 Bxb2 Kxb2 Qc3+ Ka2 Qxc2+ Ka1 Qc3+ Ka2 Qc2+","Richter-Rauzer Variation"],["1999.07.01","Siemens Giants","Frankfurt","8","Kramnik, Vladimir","2810","2750","1-0","B66","Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation, Early Deviations","e4 c5 Nf3 Nc6 Nc3 d6 d4 cxd4 Nxd4 Nf6 Bg5 e6 Qd2 a6 O-O-O h6 Be3 Bd7 f3 b5 Nxc6 Bxc6 Ne2 Qc7 Kb1 Bb7 h4 Rc8 Rh3 h5 Nd4 Nd7 Bg5 g6 Rh1 d5 exd5 Bxd5 Bf4 Qb7 Nb3 Bg7 Bd6 Qc6 Ba3 Nb6 Bd3 Nc4 Bxc4 bxc4 Nd4 Qb6 Qg5 Bf8 Bxf8 Rxf8 Rhe1 Rb8 b3 Rd8 Ne2 cxb3 axb3 Rd7 Kb2 Qd8 Qf4 Qc7 Rxd5 exd5 Nd4+","Richter-Rauzer Variation"],["1999.08.23","Besancon sim2","Besancon","?","Nicoara, Malina","2812","2245","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 c3 Nf6 Qe2 Bd7 d4 g6 dxc5 dxc5 e5 Nd5 O-O Nc7 Bd3 Bg7 h3 O-O Na3 Qc8 Re1 Bf5 Be4 Bxe4 Qxe4 Ne6 Nc4 Qc7 a4 b6 Qh4 Rfd8 Bh6 Bh8 Qe4 Rac8 h4 Qd7 Rac1 Qd3 Qg4 Qf5 Qxf5 gxf5 h5 Rd3 Nh4 f4 Nf5 Bg7 Nxg7 Nxg7 Bxf4 Nxh5 Bh6 f5 exf6 exf6 Re6 Kf7 Rd6","Nyezhmetdinov-Rossolimo Attack"],["1999.11.20","Lisbon Festival sim","Lisbon","?","Cruz, Manuel Joao","2851","0","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 c3 Bd7 d4 b6 O-O g6 Re1 cxd4 cxd4 e5 Na3 Bg7 Nc4 a6 Nxd6+ Ke7 Bxc6 Bxc6 dxe5 Qc7 Qb3 Rf8 Bf4 Nh6 Rac1 Qd7 Nd4 Ba4 Qd5 f6 exf6+ Rxf6 N6f5+ gxf5 exf5+ Kd8 Qa8+ Qc8 Qxc8#","Nyezhmetdinov-Rossolimo Attack"],["1999.11.20","Lisbon Festival sim","Lisbon","?","Ferreira, Sara","2851","0","1-0","B27","Sicilian Defense","e4 c5 Nf3 d5 exd5 Qxd5 Nc3 Qd8 d4 cxd4 Nxd4 Nf6 Bf4 e6 Ndb5 Na6 Qxd8+ Kxd8 O-O-O+ Bd7 Be2 Bb4 Bf3 Bxc3 Nxc3 Nc5 Be3 Rc8 g4 b6 g5 Ne8 Rd2 Nc7 Bxc5 bxc5 Rhd1 f6 Rxd7+ Ke8 gxf6 gxf6 Bh5+ Kf8 Rf7+ Kg8 Rg1#",""],["1998.02.26","Linares 15th","Linares","5","Topalov, Veselin","2825","2740","1/2-1/2","B91","Sicilian Defense: Najdorf Variation, Zagreb Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 e5 Nde2 Nbd7 a4 b6 Bg2 Bb7 h3 Be7 g4 Nc5 Ng3 g6 Bh6 Ne6 Qd2 Rc8 O-O-O Rc4 Kb1 Qc7 Rhe1 Rd4 Qc1 Rb4 Bd2 Rd4 Bh6 Rb4 Bd2 Rd4 Bh6","Najdorf Variation"],["1998.??.??","Sofia m 25'","Sofia","2","Topalov, Veselin","2825","2740","1-0","B90","Sicilian Defense: Najdorf Variation, English Attack, Anti-English","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 Ng4 Bg5 h6 Bh4 g5 Bg3 Bg7 Be2 h5 Nf5 Bxf5 exf5 Qa5 O-O Bxc3 bxc3 Qxf5 Rb1 Nd7 Rxb7 Ngf6 Re1 Kf8 h3 Re8 Bxa6 h4 Bd3 Qd5 Rb5 Nc5 Bh2 Rg8 Rb4 Nxd3 cxd3 Qxa2 Rb5 Rg6 Rf5 g4 hxg4 Nxg4 Qf3 f6 Rh5 Nxh2 Kxh2 Qd2 Re4 Qxc3 Rexh4 Rg8 Rg4 Qb3 Rxg8+ Qxg8 Qh3 Qg6 Rh6 Qg5 Rh8+ Kf7 Qh7+ Ke6 Rxe8","Najdorf Variation"],["1998.??.??","Sofia m 25'","Sofia","4","Topalov, Veselin","2825","2740","1-0","B43","Sicilian Defense: Kan Variation, Knight Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 b5 O-O b4 Na4 Bb7 c3 Nf6 cxb4 Bxb4 Be3 O-O Rc1 Nc6 Qd3 Qa5 Nc5 Ne5 Qb1 Bxc5 Nb3 Qc7 Rxc5 Qb8 f3 d5 Na5 Rc8 b4 Nc6 Nxb7 Qxb7 Rfc1 dxe4 fxe4 Nd7 R5c3 Nde5 a4 Rd8 b5 axb5 Qxb5 Qxb5 axb5 Nb4 Rb1 Ra2 Bf1 Rc2 Rxc2 Nxc2 Bc5 Nd4 b6 Ndc6 b7 h5 Bb6 Rd2 Ba5 Rd4 Bc3","Kan Variation"],["1998.05.19","ISR-Kasparov handicap","Tel Aviv","1.1","Alterman, Boris","2825","2615","1/2-1/2","B36","Sicilian Defense: Accelerated Dragon, Maróczy Bind","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Nf6 Nc3 d6 f3 Nxd4 Qxd4 Bg7 Be3 O-O Qd2 a5 Be2 a4 O-O Qa5 Rac1 Bd7 c5 Bc6 cxd6 Rfd8 Nb1 Qxd2 Nxd2 exd6 Nc4 d5 Nb6 Ra5 e5 Nd7 f4 Nf8 Bd2 Ra7 Be3 Ra5 Bd2 Ra7 Be3",""],["1998.05.19","ISR-Kasparov handicap","Tel Aviv","1.3","Smirin, Ilia","2820","2595","1/2-1/2","B43","Sicilian Defense: Kan Variation, Wing Attack","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 b5 Bd3 Qb6 Nb3 Qc7 O-O Nf6 Re1 Bd6 g3 b4 Ne2 Nc6 Ned4 Nxd4 Nxd4 h5 Bf1 h4 Bg2 hxg3 hxg3 Bb7 Bd2 Bc5 c3 Qb6 Qe2 d5 e5 Ne4 Be3 Qc7 c4 Qxe5 Nb3 Bxe3 Qxe3 Qh5 Qb6 Rb8 c5 Qh2+ Kf1 O-O c6 Ba8 Qxa6 f5 c7 Rbe8 Nd4 Nd2+ Ke2 Qxg2 c8=Q Qe4+ Kd1 Qxd4 Qaxe6+ Rxe6 Qxe6+ Rf7 Qe8+ Rf8 Qe6+ Rf7 Qe8+","Kan Variation"],["1998.05.21","ISR-Kasparov handicap","Tel Aviv","2.2","Sutovsky, Emil","2825","2595","1-0","B30","Sicilian Defense: Closed, Anti-Sveshnikov Variation, Kharlov-Kramnik Line","e4 c5 Nf3 Nc6 Nc3 e5 Bc4 Be7 d3 d6 Nd2 Bg5 h4 Bh6 Qh5 g6 Qd1 Nf6 Nf1 Bxc1 Qxc1 Be6 Ne3 Qd7 Ned5 Bxd5 Nxd5 Nxd5 Bxd5 O-O-O c3 f5 Qe3 Ne7 Bb3 Qc7 h5 d5 Bxd5 Nxd5 exd5 gxh5 c4 Qa5+ Kf1 Qb6 Rxh5 Qxb2 Re1 e4 Rxf5 exd3 Qxd3 Qxa2 Rf7 Qa4 g3 Rd7 Ree7 Rxe7 Rxe7 Rf8 Kg2 Kb8 Qxh7 Qb3 Qe4 a5 Re8+ Rxe8 Qxe8+ Kc7 Qe7+ Kb6 d6 Qxc4 d7 Qd5+ Kh2 Qh5+ Qh4",""],["1998.05.21","ISR-Kasparov handicap","Tel Aviv","2.4","Huzman, Alexander","2825","2610","1-0","B90","Sicilian Defense: Najdorf Variation, English Attack","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Nbd7 g4 h6 Qd2 Be7 O-O-O b5 h4 Nb6 Qf2 Nfd7 Kb1 Rc8 Nd5 Bxd5 exd5 Nc4 Bc1 Qb6 Qe1 a5 Bxc4 bxc4 Nxa5 c3 Nc6 cxb2 Be3 Qa6 Qb4 Rxc6 dxc6 Qxc6 Qb3 O-O g5 Qxf3 gxh6 Rb8 Rhf1 Qxd1+ Rxd1 Rxb3 cxb3 gxh6 a4 f5 Bxh6 f4 a5 Kh7 Bg5 Bxg5 hxg5 f3 a6 e4 a7 Nb6 Kxb2 e3 Kc2 e2 Rh1+ Kg6 Kd2","Najdorf Variation"],["1998.06.29","Internet blitz 5'","Internet ICC","?","Akopian, Vladimir","2825","2660","1-0","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 Nc6 Nc3 Nf6 O-O Ne5 d3 e6 Ne1 Be7 f4 Nc6 Nf3 Qc7 h3 a6 Be3 O-O a4 Rad8 Qe2 Nb4 Bf2 Rfe8 g4 d5 e5 Nd7 cxd5 exd5 d4 Bf8 Rad1 cxd4 Nxd4 Nc5 Qf3 Qd7 a5 Ne6 Nde2 Bc5 Bxc5 Nxc5 Rd4 Nc6 Rxd5 Qe7 Rfd1 g5 Rxd8 Rxd8 Nd5 Qe6 Nf6+ Kg7 Rxd8 Nxd8 Qe3 Qc4 f5 h6 Ne8+ Kf8 Nd6 Qb4 Nd4 Qxb2 e6 fxe6 fxe6 Qb1+ Kh2 Qa2+ Kg3 Ndxe6 Nxb7 Nxd4 Nxc5 Ne2+ Kf3 Nf4 Nd7+ Kf7 Ne5+ Kg7 Qa7+ Kf6 Nd7+ Ke6 Nc5+ Kd6 Ne4+ Kc6 Qxa6+ Kc7 Qb6+ Kc8 Qc6+ Kb8 Qb5+ Ka8 Qe8+ Ka7 Qd7+ Ka8 Qc8+ Ka7 Qc7+ Ka8 Qc6+","Moscow Variation"],["1998.07.01","Internet blitz 5'","Internet ICC","?","Gurevich, Ilya","2825","2580","1/2-1/2","B43","Sicilian Defense: Kan Variation, Wing Attack","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 b5 Bd3 Qb6 Nb3 Qc7 O-O Bb7 f4 b4 Nb1 Nf6 N1d2 d6 Qe2 Nbd7 Kh1 Be7 a3 bxa3 Rxa3 d5 Ra5 dxe4 Nxe4 Nxe4 Bxe4 Bxe4 Qxe4 O-O Bd2 Nf6 Qd3 Rfd8 Qc3 Qb7 Qf3 Qxf3 gxf3 Rac8 Rc1 Rxd2 Nxd2 Bb4 Nb3 Bxa5 Nxa5 Nd5 c4 Nxf4 c5 Kf8 c6 Ke7 Rc3 Rb8 b3 Nd5 Rc4 Rb4 Rc1 Nc7 Rd1 Nd5 Rc1 Nc7 Rd1 Nd5 Rc1 Nc7","Kan Variation"],["1998.05.28","Internet blitz 5'","Internet ICC","?","NNG, ","2825","0","1-0","B27","Sicilian Defense: Hyperaccelerated Dragon","e4 c5 Nf3 g6 c3 Bg7 d4 cxd4 cxd4 d5 e5 Bg4 Nbd2 Nc6 h3 Bxf3 Nxf3 e6 h4 h5 Bd3 Nge7 O-O Qb6 Bg5 Nf5 Bxf5 gxf5 Qd2 Qb4 Qe3 Rc8 a3 Qb6 Rfc1 Kd7 b4 Rc7 g3 a5 Rab1 axb4 axb4 Rhc8 Kg2 Na7 Bf6 Bf8 Rxc7+ Qxc7 Qg5 Qc2 Ra1 Nb5 Qxh5 Ke8 Ng5 Qc7 Rc1",""],["1998.05.29","Internet blitz 5'","Internet ICC","?","NNG, ","2825","0","1-0","B27","Sicilian Defense: Hyperaccelerated Dragon","e4 c5 Nf3 g6 c3 Bg7 d4 cxd4 cxd4 d5 e5 Bg4 Nbd2 Nc6 h3 Bxf3 Nxf3 e6 h4 h5 Bd3 Nge7 O-O Qb6 Bg5 Nf5 Bxf5 gxf5 Qd2 Kd7 b4 a5 b5 Qxb5 Rab1 Qa6 Bf6 Bh6 Qb2 Rhb8 Qa3 Bf8 Qe3 Be7 Qg5 Rh8 Qg7 Rag8 Qxf7 Rf8 Qg6 Rfg8 Bg7 Kc7 Rfc1 Qa8 Qf7 Qe8 Qxe8 Rxe8 Bxh8 Rxh8 Ng5 Bxg5 hxg5 f4 Rb3 Rg8 Rf3 Rxg5 Rxf4 b5 Rf6 Kd7 Rf7+ Ne7 Rc5",""],["1998.06.29","Internet blitz 5'","Internet ICC","?","NNG, ","2825","0","0-1","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 Nf6 Nc3 O-O Be3 b6 Qd2 a5 Bh6 a4 a3 Qc7 O-O e5 Bxg7 Kxg7 Ne2 Nh5 g4 Nf6 Ng3 h6 Qc3 Re8 Nd2 Be6 f3 Kh7 Kg2 Nd7 h4 b5 Rf2 Qd6 Ndf1 Qd4 Qe1 Qxb2 c3 Qb3 h5 g5 Ne2 b4 axb4 cxb4 Rb1 Qa3 cxb4 Qxd3 Neg3 a3 Rd1 Qb5 Nf5 Bxf5 gxf5 Nf6 Ra2 Red8 Rxd8 Rxd8 Rxa3 g4 Ne3 Rd4 Ra7 Kg7 Nxg4 Nxg4 fxg4 Qd3 f6+ Kg8 Ra8+ Kh7 Ra7 Rxe4 Rxf7+ Kg8 Rg7+ Kh8 Qf2 Re2 Rg6 Qe4+ Kg1 Rxf2 Kxf2 Qf4+ Ke2 e4 Kd1 Qf3+ Kc2 e3 Rxh6+ Kg8","Nyezhmetdinov-Rossolimo Attack"],["1998.06.04","Internet blitz 5'","Internet ICC","?","VERDUGO, ","2825","0","1-0","B53","Sicilian Defense: Chekhover Variation","e4 c5 Nf3 d6 d4 cxd4 Qxd4 a6 c4 Nc6 Qd1 Nf6 Nc3 g6 Be2 Bg7 O-O O-O h3 Nd7 Be3 Nde5 Nd4 Nxd4 Bxd4 Be6 b3 Nc6 Bxg7 Kxg7 Qd2 Qa5 Qb2 f6 f4 Rac8 Rad1 Rfd8 Kh1 Qc5 Nd5 b5 b4 Qa7 cxb5 axb5 Bxb5 Qb7 a4 Na7 Be2 Bxd5 exd5 Rc7 Qd4 Rb8 b5 Rc2 Bd3 Ra2 Qc4 Rb2 Rfe1 Rc8 Qd4 Ra2 b6 e5 fxe5 dxe5 Qg1",""],["1998.08.25","Internet blitz 5'","Internet ICC","?","Zarnicki, Pablo","2825","2515","1-0","B57","Sicilian Defense: Classical Variation, Anti-Sozin Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bc4 Qb6 Nb3 e6 Bf4 Ne5 Be2 Bd7 Qd2 Rc8 f3 Be7 Be3 Qc7 g4 h6 O-O-O a6 h4 Nc4 Bxc4 Qxc4 Kb1 b5 Qf2 b4 Rd4 Qc7 Rxb4 d5 Rd4 dxe4 Nxe4 Nxe4 Rxe4 O-O g5 h5 Bd4 Bc6 Be5 Qb7 Na5 Qb5 Nxc6 Rxc6 Qe2 Qa5 Rd1 Rfc8 c4 Qa4 b3 Qb4 Bb2 a5 Qd2 Qb6 Qd4 Qxd4 Rexd4 f6 Rd7 Kf7 g6+ Ke8 Ra7 Rd6 Rxd6 Bxd6 Rxg7",""],["1998.05.24","Internet m1","Internet ICC","1","Svidler, Peter","2825","2690","1-0","B51","Sicilian Defense: Moscow Variation","e4 c5 Nf3 d6 Bb5+ Nd7 d4 Nf6 Nc3 cxd4 Qxd4 e5 Qd3 Be7 Bg5 O-O Bxd7 Nxd7 Bxe7 Qxe7 O-O-O Nf6 Qxd6 Qxd6 Rxd6 Re8 h3 b6 Rhd1 Bb7 Nd2 Rac8 f3 Kf8 Nf1 Ke7 Ne3 g6 a4 Red8 Rxd8 Rxd8 Rxd8 Kxd8 Nc4 Nd7 Nd6 Ba6 Nd5 f6 Kd2 Nc5 b4 Nxa4 b5 Bc8 Nxc8 Kxc8 Nxf6 h5 h4 Kd8 g4 Ke7 Nd5+ Ke6 Ke3 Nb2 gxh5 gxh5 f4 Nc4+ Kd3 Nb2+ Ke2 exf4 Nxf4+ Ke5 Nd3+ Nxd3 Kxd3","Moscow Variation"],["1998.06.17","Chess Classics Giants","Frankfurt","3","Ivanchuk, Vassily","2825","2740","1-0","B63","Sicilian Defense: Richter-Rauzer Variation, Classical Variation, Kantscher Line","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 d6 Bg5 e6 Qd2 a6 O-O-O Be7 f4 Nxd4 Qxd4 b5 Bxf6 gxf6 e5 d5 Kb1 Bb7 f5 fxe5 Qxe5 Bf6 Qg3 Qe7 fxe6 fxe6 Be2 O-O-O Bg4 h5 Bh3 h4 Qf4 Bg7 Rhe1 Rh6 a3 Rg6 Bxe6+ Rxe6 Qg4 Rd6 Rxe6 Qxe6 Qxg7 Qf6 Qg4+ Kb8 Rd4 Re6 Qxh4 Qf1+ Ka2 Qxg2 Rg4 Qf1 Rg8+ Ka7 Qd4+ Rb6 Nxd5","Richter-Rauzer Variation"],["1998.06.18","Chess Classics Giants","Frankfurt","6","Anand, Viswanathan","2825","2770","1/2-1/2","B44","Sicilian Defense: Taimanov Variation, Szén Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nb5 d6 Bf4 e5 Be3 a6 N5c3 Nf6 Bg5 Be7 Bxf6 Bxf6 Nd2 O-O Nc4 b5 Qxd6 bxc4 Qxc6 Be6 Be2 Rb8 O-O Qd2 Rab1 Qxc2 Rfc1 Qd2 Rd1 Qc2 Qxa6 Rfc8 h3 Be7 Rdc1 Qd2 Rd1 Qc2","Taimanov Variation"],["1998.06.19","Chess Classics Giants 3rd pl","Frankfurt","1","Ivanchuk, Vassily","2825","2740","1-0","B90","Sicilian Defense: Najdorf Variation, English Attack","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Nbd7 g4 h6 Qd2 b5 O-O-O Nb6 Qf2 Nfd7 Kb1 g6 h4 h5 Nd5 Bxd5 exd5 Qc7 f4 Nc4 gxh5 Rxh5 Be2 Rf5 h5 gxh5 Bc1 Nf6 Bd3 e4 Qe2 Qe7 Bxc4 bxc4 Qxc4 Qd7 Rhe1 Be7 Rg1 Qb5 Qc3 Rxd5 Rg5 Rxg5 fxg5 Nd7 Qh8+ Nf8 Qxh5 Ng6 Qg4 Qe5 Nd4 d5 Be3 Rb8 b3 Ba3 Rf1 a5 Qh3 a4 Rf5 Qd6 Qh7 Rb7 Rf1 axb3 axb3 Qe5 Qh3 Ne7 Qh7 Ng6 Qh3 Ne7 Rf6 Bc5 Nc6 Nxc6 Bxc5 Ne7 Qh8+ Kd7 Rd6+ Qxd6 Bxd6 Kxd6 Qf6+ Kd7 Qxf7 Rb6 Kc1 Rg6 Qf4 Re6 Kd1 e3 Ke2 Kc6 c4 dxc4 Qxc4+ Kd7 b4 Rg6 Qg4+ Kc7 Kxe3 Nd5+ Kf2 Kd6 b5 Kc5 Qf5 Rg7 g6 Kd6 b6 Rb7 Kg3 Rg7 Kh4 Rg8 b7","Najdorf Variation"],["1998.07.09","Colmar sim","Colmar","?","Krick, M.","2825","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Be2 a6 O-O e6 Re1 Be7 Bf1 e5 h3 O-O d4 cxd4 cxd4 Qc7 Nc3 Nbd7 Be3 b5 Rc1 Qa5 Nd2 Qd8 d5 Bb7 b4 h6 Nb3 Nh7 Na5 Qb8 a4 Bc8 Nc6 Qb7 Nxe7+ Kh8 Nc6 f5 axb5 axb5 Nxb5 Qa6 Nxd6 Qa4 exf5 Ndf6 Qxa4 Rxa4 Ne7 Ba6 Ng6+","Delayed Alapin Variation"],["1998.07.09","Colmar sim","Colmar","?","Winkelmueller, JL.","2825","1960","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 e6 c3 Nge7 d4 cxd4 cxd4 d5 Nc3 a6 Ba4 g6 Bg5 Bg7 Bxc6+ bxc6 e5 O-O Qd2 Qc7 Na4 a5 O-O Ba6 Rfc1 Rfc8 Nc5 Nf5 g4 Ne7 Bf6 Kf8 Ng5 Kg8 Bxg7 Rab8 Bf6 Qd8 Nxh7 Kxh7","Nyezhmetdinov-Rossolimo Attack"],["1998.07.09","Colmar sim","Colmar","?","Wurtz, F.","2825","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 e6 Nc3 Bd7 Bd3 Qc7 O-O a6 d5 Nce7 Be3 Nf6 Rc1 Qd8 Qe2 Rc8 dxe6 Bxe6 Nd5 Qd7 Rxc8+ Qxc8 Nxf6+ gxf6 Nd4 Bd7 Qf3 Bg7 Rc1 Qd8 Nf5 O-O Nxg7 Kxg7 Qh5 Rg8 Qh6+ Kh8 Qxf6+ Rg7 Bh6 Qg8 Bxg7+ Qxg7 Qxe7 Be6 Qd8+ Qg8 Qxd6 Bh3 Qf6+ Qg7 Qxg7+ Kxg7 gxh3","Delayed Alapin Variation"],["1998.12.17","BT Wireplay sim","London","?","Maroroa Jones, Gawain C B","2815","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Be2 g6 O-O Bg7 Bb5+ Bd7 Bxd7+ Nbxd7 Re1 O-O d4 cxd4 cxd4 e6 Nc3 a6 Bf4 Qe7 a4 Rac8 Qd2 Rfd8 Bg5 e5 a5 Qf8 Qe2 Re8 d5 Bh6 Bxh6 Qxh6 Qd2 Qxd2 Nxd2 h6 f3 Nh5 g3 g5 Rec1 Nc5 Nc4 Red8 Nxd6 Nb3 Nxc8 Rxc8 Ne2 Nxc1 Rxc1 Rxc1+ Nxc1 Ng7 Nd3 Ne8 Nxe5 Nd6 Kf2 f6 Ng4 Kg7 Ne3 Kf7 Ke2 Ke7 Kd3 Kd7 Nf5 Nf7 f4 Kc7 Kd4 h5 h4 gxh4 gxh4 Kd7 e5 fxe5+ fxe5 Nd8 Kc5 Ke8 e6 Nxe6+ dxe6 b6+ Kd6 bxa5 e7 Kf7 Kd7 Kf6 Nd6 a4 e8=Q a3 Qe6+ Kg7 Nf5+ Kh7 Qf7+","Delayed Alapin Variation"],["1998.12.17","BT Wireplay sim","London","?","Williams, Alan P","2815","0","1-0","B40","Sicilian Defense: French Variation, Westerinen Attack","e4 c5 Nf3 e6 b3 Nf6 e5 Nd5 Bb2 Be7 g3 O-O Bg2 f5 O-O Nc6 c4 Nc7 Re1 b6 d4 cxd4 Nxd4 Bb7 Nc3 Rc8 Ndb5 Nxb5 Nxb5 a6 Nd6 Bxd6 Qxd6 Qc7 Rad1 Rf7 f4 Nd8 Qxc7 Rxc7 Bd4 Bxg2 Bxb6 Rc8 Kxg2 Nb7 Re2 Kf8 Red2 Ke8 Kf3 Rc6 Be3 Nc5 Bxc5 Rxc5 Rd6 Ra5 R1d2 g5 Rb6 gxf4 gxf4 Rg7 Rb8+ Ke7 a4 h5 Rxd7+ Kxd7 Rb7+ Kc6 Rxg7 Kc5 Rb7 Kd4 Rb6 Kc3 Ke3","French Variation"],["1997.??.??","London sim","London","?","BCF Girls, ","2820","0","1/2-1/2","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 Nd4 Nxd4 cxd4 O-O g6 c3 dxc3 Nxc3 Bg7 d4 e6 d5 Ne7 d6 Nc6 Be3 O-O Qd2 f5 Rad1 Ne5 f4 Ng4 Bd4 fxe4 Nxe4 Nf6 Nxf6+ Bxf6 Kh1 a6 Be2 Bxd4 Qxd4 b5 f5 gxf5 Rd3 Rf6 Bh5 Bb7 Rg3+ Kf8 Qf4 Rc8 Qg5 Rg6 Qxd8+ Rxd8 Bxg6 hxg6 Rxg6 Rc8 Kg1 Rc2 h4 Kf7 h5 Be4 Rg3 e5 h6 f4 Rg7+ Kf6 Rf2 Rc1+ Kh2 Bf5 g3 Be4 gxf4 Rh1+ Kg3 Rg1+ Kh3 Rh1+ Rh2 Bf5+ Kg2 Be4+ Kg3 exf4+ Kxf4 Rxh2 Kxe4 Rxh6 Rxd7 Ke6 Ra7 Rh2 Rxa6 Rxb2 Kd4 Rc2","Nyezhmetdinov-Rossolimo Attack"],["1997.02.06","Linares 14th","Linares","3","Gelfand, Boris","2795","2700","1/2-1/2","B92","Sicilian Defense: Najdorf Variation, Opocensky Variation, Traditional Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Kh1 b6 Bg5 Bb7 Bxf6 Bxf6 Bc4 Nc6 Bd5 Rc8 Nd2 b5 a3 Qc7 Nf3 Rfd8 Qd2 b4 axb4 Nxb4 Bb3 Bc6 Rfd1 a5 Ne1 Ra8 Nd3 Qb6 f3 h6 Nxb4 axb4 Nd5 Bxd5 Qxd5 Ra7 Rxa7 Qxa7 Qc4 Rb8 g3 Kh7 Kg2 Qe3 Rxd6 Rc8 Qf1 Rd8 Rxd8 Bxd8 Bxf7 Qd2+ Qf2 Qxf2+ Kxf2 Bb6+ Ke2 Bd4 c3 bxc3 b3 g5 Kd3 Kg7 Be8 Kf6 b4 Bg1 h4 gxh4 gxh4 Bf2 h5 Ke7 Ba4 Bg3 Kxc3","Najdorf Variation"],["1997.02.14","Linares 14th","Linares","9","Polgar, Judit","2795","2645","1-0","B47","Sicilian Defense: Taimanov Variation, Bastrikov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be2 a6 O-O Nf6 Be3 Bb4 Na4 Bd6 g3 Be7 c4 d6 f3 Bd7 Rc1 O-O Nxc6 Bxc6 Nb6 Rad8 b4 Qb8 b5 Be8 a4 Nd7 Nxd7 Rxd7 Qb3 Qc7 Rfd1 Rd8 Bd4 Ra8 Qc3 axb5 cxb5 Qxc3 Rxc3 Rxa4 Rc7 Bg5 Bf2 b6 Rb7 Ra2 Bf1 Rb2 f4 Bf6 Rxb6 Bc3 Rb7 g5 f5 Bb4 f6 h5 Rc1 Kh7 Rb8 d5 exd5 Bd6 Rd8 Be5 Rcc8 Bxb5 Bxb5 Rxd8 Bd3+","Taimanov Variation"],["1997.06.11","El Pais sim","Madrid","?","Charambalos, J.","2795","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 g6 Bc2 Bg7 h3 O-O d4 cxd4 cxd4 Nc6 Nc3","Delayed Alapin Variation"],["1997.09.07","Buenos Aires sim","Buenos Aires","2","Ricardi, Pablo","2820","2575","1-0","B90","Sicilian Defense: Najdorf Variation, English Attack","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Qd2 O-O O-O-O b5 g4 b4 Na4 d5 Bc5 d4 Qxb4 Nc6 Bxe7 Qe8 Qa3 Nxe7 Nbc5 Ng6 c3 Nd7 cxd4 exd4 Kb1 Nxc5 Nxc5 Qc6 Nxe6 fxe6 Rxd4 Ne5 Be2 Rac8 Rd2 Rf7 Qxa6 Nxf3 Rd8+","Najdorf Variation"],["1997.11.06","Oakham clock sim","Oakham","?","Pert, Richard G","2820","2230","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Be2 g6 O-O Bg7 Bb5+ Nbd7 Re1 a6 Bf1 O-O d4 e5 dxe5 dxe5 a4 Qc7 Na3 Rd8 Qc2 h6 Nd2 b6 Ndc4 Bb7 f3 Bc6 b4 cxb4 cxb4 Rac8 Be3 Qb8 Qf2 Bxa4 Nxb6 Rc6 Nxa4","Delayed Alapin Variation"],["1996.10.04","Corfu sim","Corfu","?","Drissner, George","2785","0","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 Nf6 O-O O-O Nc3 c4 Be3 b5 a3 a5 dxc4 bxc4 Qe2 Nxe4 Nxe4","Nyezhmetdinov-Rossolimo Attack"],["1996.10.04","Corfu sim","Corfu","?","Holis, Hristos","2785","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 Nf6 Nc3 g6 d5 Ne5 Nxe5 dxe5 Bb5+ Bd7 Qb3 Bg7 O-O O-O Be3 Ne8 Bxd7 Qxd7 Na4 b6 Nc3 Nd6 a4 f5 f3 fxe4 Nxe4 h6 h3 Kh7 Rac1 Rfc8 Bf2 Rc7 Rxc7 Qxc7 Be3 Qd7 Rc1 Rc8 Rc2 Nf5 Rxc8 Qxc8 Bd2 Nd6 Qd3 Qc4 Qxc4 Nxc4 b3 Nd6 Kf2 Nf5 b4 a6 Be3 Nd4 Bxd4 exd4 Ke2 Kg8 Kd3 Kf8 a5 bxa5 bxa5 Be5 Nc5","Delayed Alapin Variation"],["1996.10.04","Corfu sim","Corfu","?","Mavromihalis, G.","2785","0","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 d6 c3 Bd7 d4 Ne5 Nxe5 Bxb5 Qb3 dxe5 Qxb5+ Qd7 Qxd7+ Kxd7 dxc5 g6 Be3 Bh6 Bxh6 Nxh6 Nd2 Rhc8 b4 f5 Ke2 Ng4 Rhd1 Ke6 a4 Nf6 f3 a5 Ke3 b6 Nc4 Nd7 Rxd7 Kxd7 Nxb6+ Kc6 Nxa8 Rxa8 Kd3 axb4 cxb4 Rd8+ Kc3 fxe4 fxe4 Rd4 a5 Rxe4 a6","Nyezhmetdinov-Rossolimo Attack"],["1996.01.27","Rio de Janiero sim","Rio de Janiero","1","Milos, Gilberto","2775","2565","1/2-1/2","B48","Sicilian Defense: Taimanov Variation, Bastrikov Variation, English Attack","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3 Nf6 O-O Ne5 h3 Bc5 Kh1 d6 f4 Ng6 Qe1 O-O f5 Ne5 Qh4 Bd7 g4 Qb6 g5 Nh5 Qxh5 Bxd4 Bxd4 Qxd4 f6 Bc6 fxg7 Kxg7 Qh6+ Kg8 Qf6 Qe3 Kh2 Nd7 Qh6 Ne5 Qf6 Nd7 Qh6 Ne5 Qf6","Taimanov Variation"],["1996.01.27","Rio de Janiero sim","Rio de Janiero","5","Miranda, Marcio MC","2775","2305","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 h3 Nf6 d3 Bg7 Nc3 O-O Be3 c4 O-O cxd3 cxd3 Qa5 d4 Be6 Qc2 h6 a3 Rfd8 b4 Qh5 Ne2 Qb5 Nf4 Qc4 Qb1 Qb3 e5 Ne8 Nxe6 Qxe6 b5 Rac8 bxc6 Qxc6 Qb4 Qd7 Rfd1 b6 d5 Nc7 d6 exd6 Rxd6 Qe8 Rad1 Ne6 Qh4 Qf8 a4 Rxd6 exd6 Rd8 d7 g5 Qe4 Qe7 Qb7 Nf8 Qxa7 Rxd7 Rxd7 Qxd7 Qxd7 Nxd7 Nd2 Be5 Nc4 Bc7 g4 f6 Kg2 Kf7 Kf3 Ke6 Ke4 h5 gxh5 f5+ Kd3 f4 Bd4 Kf5 f3","Nyezhmetdinov-Rossolimo Attack"],["1996.04.01","Amsterdam VSB  Euwe mem","Amsterdam","9","Gelfand, Boris","2775","2700","1-0","B92","Sicilian Defense: Najdorf Variation, Opocensky Variation, Traditional Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Kh1 Nc6 f4 a5 a4 Nb4 Bf3 Qb6 g4 exf4 Bxf4 Nd7 Nd4 g6 Bh6 Re8 Nf5 gxf5 gxf5 Bf6 Rg1+ Kh8 Qd2 Ne5 Qg2 Ng6 fxg6 fxg6 Rgf1 Bg7 Bxg7+ Kxg7 Rad1 Bd7 Qg3 Re5 Bg2 Nxc2 Nd5 Qd8 Qf2 Nb4 Nb6 Bg4 Qf7+ Kh8 Nxa8 Bxd1 Rxd1 Qxa8 Qf6+ Kg8 Rxd6 Re8 Rd7","Najdorf Variation"],["1996.04.30","Moscow PCA-GP Kremlin Stars","Moscow","3.1","Anand, Viswanathan","2775","2725","1-0","B84","Sicilian Defense: Scheveningen Variation, Classical Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 f4 Be7 O-O O-O Be3 Qc7 g4 Re8 g5 Nfd7 Bd3 Nc6 Qh5 g6 Qh4 Bf8 Rf3 Bg7 Nde2 b5 Rh3 Nf8 f5 Ne5 f6 Bh8 a3 Rb8 b4 Bb7 Rf1 Rbc8 Bd4 Nc6 Be3 Ne5 Rf4 Qd7 Qh6 Nxd3 cxd3 e5 Rf1 Rc7 Bb6 Rc6 Nd5 Bc8 Re3 Qb7 Bd8 Ne6 Ne7+ Rxe7 fxe7 Qd7 Rh3","Scheveningen Variation"],["1996.05.30","Dos Hermanas","Dos Hermanas","8","Topalov, Veselin","2775","2700","1/2-1/2","B84","Sicilian Defense: Scheveningen Variation, Classical Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 O-O Be7 a4 Nc6 Be3 O-O f4 Qc7 Kh1 Re8 Bf3 Na5 Bg1 Bf8 Qe1 Rb8 h3 Nd7 Bh2 Nc6 Rd1 Nxd4 Rxd4 b5 axb5 axb5 e5 f5 exd6 Bxd6 Nd5 Qa7 Rd1 b4 Bg1 Qa5 Bh5 g6 Qg3 Kf7 Bf3 Bf8 Rfe1 Bg7 Ne3 Kf8 Nc4 Qc7 Nd6 Re7 Bd4 Bxd4 Rxd4 Nf6 Red1 Ba6 Qh4 Nd7 Qe1 e5 fxe5 Nxe5 Qg3 Nxf3 gxf3 Ra8 Qf4 Be2 R1d2 Ra1+ Kg2 Bf1+ Kg3 Ba6 Rd1 Rxd1 Rxd1 Qxc2 Qd4 Kg8 Qd5+ Kg7 Qd4+","Scheveningen Variation"],["1996.08.31","Geneve PCA-GP Credit Suisse","Geneve","2.1","Topalov, Veselin","2785","2750","1/2-1/2","B40","Sicilian Defense: Delayed Alapin Variation, with e6","e4 c5 Nf3 e6 c3 d5 exd5 exd5 d4 a6 Bf4 Nc6 Be2 Nf6 O-O Be7 dxc5 Bxc5 Nbd2 O-O Nb3 Bb6 Nfd4 Ne4 f3 Nd6 Kh1 Qf6 Qc1 Re8 Bd3 h6 Be3 Bd7 Bg1 Ne5 Bc2 Ndc4 Nd2 Rac8 Re1 Nd6 Nf1 Nec4 Rxe8+ Rxe8 b3 Na5 Qd2 Bc7 Re1 Rxe1 Qxe1 Nc6 Qd1 g6 Ne3 Ne7 Qe1 h5 Bf2 Nb5 Bh4 g5 Nxb5 axb5 Bf2 Be6 Nf1 Nc6 Qe3 h4 Qd3 h3 Ng3 hxg2+ Kxg2 Ne5 Qh7+ Kf8 Bf5 Nxf3 Bxe6 Nh4+ Kf1 Qxe6 Bc5+ Ke8 Qg8+ Kd7 Qxg5 Qh3+ Ke2 Qxh2+ Bf2 Bxg3 Qxg3 Qxg3 Bxg3 Nf5 Bh2 Ne7 Kd3 Nc6 c4 Nb4+ Kd4 bxc4 bxc4 Kc6 cxd5+ Nxd5 Ke5 b5 Kf5 Kc5 Bg3 Kc4 Bd6 Kd4 a3 Kd3 Bf8 Nb6 Bc5 Nd7 Be7 Kd4 Bb4 Kc4 Bd6 Kb3 Kg5 Nb6 Kf6 Nc4 Bf8 Nxa3 Kxf7 Nc2 Ke6 Kc4 Kd7 Nd4 Be7 Kd5 Kc7 Nc6 Kb6 Nd4 Bc5","Delayed Alapin Variation"],["1996.09.01","Geneve PCA-GP Credit Suisse","Geneve","3.1","Polgar, Judit","2785","2665","1/2-1/2","B40","Sicilian Defense: Delayed Alapin Variation, with e6","e4 c5 Nf3 e6 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Bc4 Nb6 Bb3 Nc6 exd6 Bxd6 O-O O-O Nc3 Nd5 Re1 b6 Nxd5 exd5 h3 Bf5 Bg5 Qd7 Bxd5 Bh2+ Kxh2 Qxd5 Qb3 Qd6+ Kg1 h6 Bh4 Be6 Qd3 Nb4 Qd2 Rfc8 Bg3 Qf8 d5 Bxd5 a3 Bxf3 Qxb4 Qxb4","Delayed Alapin Variation"],["1996.??.??","Yerevan ol (Men)","Yerevan","7","Hracek, Zbynek","2785","2625","1-0","B63","Sicilian Defense: Richter-Rauzer Variation, Classical Variation, Kantscher Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 e6 Qd2 a6 O-O-O Nxd4 Qxd4 Be7 f4 b5 Bxf6 gxf6 e5 d5 Kb1 b4 Ne2 a5 Ng3 f5 Nh5 Rb8 g4 fxg4 f5 Rg8 Nf6+ Bxf6 exf6 Qd6 Bg2 Rg5 Bxd5 Bd7 Rhe1 h6 fxe6 fxe6 Qa7","Richter-Rauzer Variation"],["1996.12.12","Las Palmas","Las Palmas","4","Anand, Viswanathan","2785","2735","1/2-1/2","B92","Sicilian Defense: Najdorf Variation, Opocensky Variation, Traditional Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Kh1 b5 a4 Bb7 Nd5 bxa4 Rxa4 Bc6 Ra3 Nxe4 Na5 Nf6 Nxc6 Nxc6 Bc4 Nd4 Rh3 g6 Qd2 Nf5 Nxf6+ Bxf6 Bd5 h5 Bxa8 Qxa8 Ra3 Rc8 c3 Qb7 Qd3 Rc6 Rd1 d5 Ra5 d4 cxd4 exd4 b4 Nh4 f3 Qxb4 Rxa6 Rxa6 Qxa6 Bg7 Qd3 Nf5 Bf4 Qb2 g3 Kh7 Rd2 Qb7 Qe4 Qb5 Qd3 Qb7 Qe4 Qb5 Kg1 Qa5 Qd3 Ne7 Rd1 Nd5 Bd2 Qa7 Re1 Qd7 Kg2 Qa7 Kg1 Qa2 Re2 Qa1+ Re1 Qa4 Rc1 Nc3 g4 Qa5 Re1 Qc5 h3 Bf6 f4 h4 Qf3 Qb5 g5 Bg7 Re7 Qb1+ Qf1 Qf5 Qe1 Qxh3 Rxf7 Qg4+ Kh2 h3 Qf1 Ne4 Be1 d3 Qxh3+ Qxh3+ Kxh3 d2","Najdorf Variation"],["1995.??.??","Tal mem","Riga","10","Kengis, Edvins","2805","2575","1-0","B47","Sicilian Defense: Taimanov Variation, Bastrikov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be2 a6 O-O Nf6 Kh1 Nxd4 Qxd4 Bc5 Qd3 h5 Bg5 b5 f4 Bb7 e5 Nd5 Nxd5 Bxd5 a4 Qc6 Bf3 Bxf3 Rxf3 bxa4 f5 Rb8 Raf1 O-O Bf6 Qb5 Rg3 g6 Qd1 exf5 Rxf5 Rb6 Qxh5","Taimanov Variation"],["1995.05.16","Euwe mem","Amsterdam","4","Lautier, Joel","2805","2655","0-1","B48","Sicilian Defense: Taimanov Variation, Bastrikov Variation, English Attack","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Bd3 Nf6 O-O Ne5 h3 Bc5 Kh1 d6 f4 Ned7 a3 b5 Bxb5 axb5 Ndxb5 Qb6 Bxc5 dxc5 Nd6+ Ke7 Nxc8+ Rhxc8 e5 Ne8 Qh5 h6 Rae1 f5 Rf3 c4 g4 fxg4 Qxg4 Ra5 Ne4 Qc6 Nd6 Nxd6 exd6+ Kf8 Rg1 g5 Rg3 Rf5 Qh5 Nf6 Qxh6+ Kf7 Kg1 Rg8","Taimanov Variation"],["1995.05.17","Euwe mem","Amsterdam","5","Topalov, Veselin","2805","2630","1-0","B76","Sicilian Defense: Dragon Variation, Yugoslav Attack, Modern Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 Nxc3 Qxc3 Bh6+ Be3 Bxe3+ Qxe3 Qb6 Qxe7 Be6 Qa3 Rfd8 Ba6 c5 Be2 c4 f4 Rd4 Rxd4 Qxd4 g3 c3 Qxc3 Qxc3 bxc3 Bxa2 Kb2 Be6 c4 Kf8 Ra1 a5 c5 Ke7 c4 Bd7 Bf3 Rb8+ Kc3 a4 Ra3 Rc8 Kd4 h5 Bb7 Rd8 Kc3 h4 gxh4 Rh8 Bd5 Rxh4 Kb4 Rxh2 c6 Be6 Bxe6 fxe6 Kc5 Kd8 Rxa4",""],["1995.06.22","PCA/Intel-GP","New York","2.1","De Firmian, Nick E","2805","2590","1-0","B92","Sicilian Defense: Najdorf Variation, Opocensky Variation, Traditional Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Kh1 Nbd7 a4 b6 f3 Bb7 Be3 Qc7 Rf2 Rad8 Bf1 Nc5 Rd2 h6 Nxc5 dxc5 Bc4 Nh5 Nd5 Bxd5 Rxd5 Bg5 Bg1 Nf4 Rxd8 Rxd8 Qe1 a5 Rd1 Kf8 Bf2 Rd6 h4 Be7 Rxd6 Qxd6 g3 Ne6 c3 g5 h5 g4 fxg4 Bg5 Kg2 Ke7 Qe2 Qd2 Qxd2 Bxd2 Bxe6 Kxe6 Kf3 Kd6 Ke2 Bc1 Kd3 Kc6 Be1 Bg5 Kc4 Be3 b4 cxb4 cxb4 axb4 Bxb4 Bc1 Bf8 Bg5 Bg7 f6 Bh8 Kd6 Kb5 Kc7 Bg7 Kb7 Bf8 Kc7 Be7 Kd7 Bb4 Be3 g5 fxg5 g4 Ke6 Kc6 Bd4 Bd6","Najdorf Variation"],["1995.10.06","PCA-World Championship","New York","16","Anand, Viswanathan","2795","2725","1/2-1/2","B84","Sicilian Defense: Scheveningen Variation, Classical Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 O-O Be7 a4 Nc6 Be3 O-O f4 Qc7 Kh1 Re8 Bd3 Nb4 a5 Bd7 Nf3 Rac8 Bb6 Qb8 Bd4 Bc6 Qd2 Nxd3 cxd3 Nd7 Bg1 Qc7 Nd4","Scheveningen Variation"],["1995.10.10","PCA-World Championship","New York","18","Anand, Viswanathan","2795","2725","1/2-1/2","B84","Sicilian Defense: Scheveningen Variation, Classical Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 O-O Be7 a4 Nc6 Be3 O-O f4 Qc7 Kh1 Re8 Bf3","Scheveningen Variation"],["1995.11.12","PCA/Intel-GP","Paris","4.1","Kramnik, Vladimir","2795","2730","0-1","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 c3 a6 Be2 d5 exd5 Nxd5 d4 Be7 c4 Nf6 dxc5 Bxc5 Qxd8+ Kxd8 Nc3 Ke7 Rd1 Rd8 Rxd8 Nxd8 a3 Bd7 b4 Bd6 Be3 h6 Rd1 Rc8 h3 Be8 Nd4 Nd7 f4 Bc7 Nb3 f6 c5 Nc6 Bf3 Rd8 h4 Ndb8 Rxd8 Nxd8 Kf2 Nbc6 g3 Bf7 Nd2 Bg6 h5 Bd3 Be2 Bh7 Nc4 Bg8 Bf3 Kd7 Ke2 Ne7 Kd3 Ndc6 Bf2 e5 Nb6+ Kd8 Nbd5 Bxd5 Nxd5 Nxd5 Bxd5 exf4 gxf4 Bxf4 Ke4 Bc1 a4 Nxb4 Bxb7 Kc7 Ba8 Kb8 Bd5 f5+ Kxf5 Nxd5 Bd4 Nf6 Kg6 Kc7 Be5+ Kc6 Kxg7 Nd7 Bd4 Nxc5 Kg6 Ne6 Bf6 Kc5 Be7+ Kc4 Kf5 Nf4 Kg4 Kb3 a5 Ka4 Bd8 Ne6 Bb6 Bg5 Kf5 Nf4 Kg4 Nd5 Kf5 Kb5","Nyezhmetdinov-Rossolimo Attack"],["1995.11.12","PCA/Intel-GP","Paris","4.3","Kramnik, Vladimir","2795","2730","1/2-1/2","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Nc3 d6 h3 Bd7 Re1 Nf6 Bxc6 Bxc6 e5 dxe5 Nxe5 Rc8 d3 O-O Bg5 Re8 Qd2 Nd7 Nxc6 Rxc6 Bh6 Nf8 Bxg7 Kxg7 Ne4 b6 a4 Qd4 a5 Ne6 axb6 axb6 b3 b5 Ng5 Nxg5 Qxg5 Re6 Qd2 Rxe1+ Qxe1 Qb2 Qb1 Qxb1+","Nyezhmetdinov-Rossolimo Attack"],["1995.12.04","Internet sim1","Internet ICC","?","Firor, Jon","2805","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 h3 Bh5 d3 e6 Nbd2 Be7 Qe2 Qc7 Nf1 O-O g4 Bg6 Ng3 d5 h4 dxe4 dxe4 h6 h5 Bh7 g5 Ng4 Ng1 Bd6 Qxg4 f5 gxf6 Rxf6 N3e2 Raf8 f4 Bxf4 Nxf4 e5 Nf3 exf4 Bd2 Re8 O-O-O Bxe4 Rhe1 Ne5 Nxe5 Qxe5 Rxe4 Qxe4 Bxe4 Rxe4 Be1 Re8 Bf2 b6 Rd7 Rf7 Rxf7","Delayed Alapin Variation"],["1995.12.04","Internet sim1","Internet ICC","?","Hvarre, K.","2805","0","1/2-1/2","B91","Sicilian Defense: Najdorf Variation, Zagreb Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 Qc7 Bg2 e6 O-O Nc6 Be3 Be7 Nxc6 bxc6 Na4 Bb7 c4 c5 Nc3 e5 f4 exf4 gxf4 Qd7 Kh1 Qg4 Qxg4 Nxg4 Bg1 Rd8 Rad1 Nf6 b3 Bc6 Rfe1 Nh5 Be3 Bh4 Re2 g6 Red2 Be7 e5 Bxg2+ Kxg2 dxe5 Rxd8+ Bxd8 fxe5 Bc7 Rd5 O-O Kf3 Re8 Bxc5 Bxe5 Ne4 f5 Nd6 Re6 b4 Nf6 Rd2 f4 b5 axb5 cxb5 g5 b6 g4+ Kg2 f3+ Kf1 g3 hxg3 Bxg3 Rd1 f2 Bxf2 Bxd6","Najdorf Variation"],["1994.??.??","Novgorod","Novgorod","3","Ivanchuk, Vassily","2805","2695","1/2-1/2","B43","Sicilian Defense: Kan Variation, Knight Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nc6 Be3 Nf6 O-O Ne5 h3 Bc5 Kh1 d6 f4 Ned7 a3 O-O Qe1 Qb6 Qf2 e5 fxe5 dxe5 Nf5 Bxe3 Nxe3 Qxb2 Ned5 Nxd5 Nxd5 b5 Qg3 Nc5 Rab1 Qxa3 Ra1 Qb2 Rab1 Qa3 Ra1 Qb2","Kan Variation"],["1994.??.??","Horgen CS","Horgen","5","Gelfand, Boris","2805","2680","1-0","B93","Sicilian Defense: Najdorf Variation, Amsterdam Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f4 Nbd7 Be2 e5 fxe5 dxe5 Nf5 Qb6 Nd5 Nxd5 Qxd5 Qc5 Qb3 Nf6 Bc4 Qb4+ Qxb4 Bxb4+ c3 Bf8 Bd3 Be6 Rf1 O-O-O Bc2 Ne8 Bb3 Rd7 Bg5 Bc5 Ke2 Bxb3 axb3 f6 Bc1 Nd6 Nxd6+ Rxd6 b4 Ba7 b5 Rhd8 Ra2 Kb8 bxa6 bxa6 b3 Kb7 Rd2 Kc6 Rxd6+ Rxd6 g4 Rd7 Bd2 Bb6 Ra1 Kb7 h4 Rd8 h5 Rd6 Be1 Bc7 b4 Bb6 Ra2 Rc6 Ra1 Rd6 Bd2 Rd7 Rf1 Kc6 c4 Bd4 h6 Kb7 c5 a5 Rc1 Rc7 c6+","Najdorf Variation"],["1994.??.??","Horgen CS","Horgen","9","Shirov, Alexei","2805","2740","1-0","B33","Sicilian Defense: Lasker-Pelikan Variation, Sveshnikov Variation, Chelyabinsk Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Ndb5 d6 Bf4 e5 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Bb7 Nc2 Nb8 a4 bxa4 Rxa4 Nd7 Rb4 Nc5 Rxb7 Nxb7 b4 Bg5 Na3 O-O Nc4 a5 Bd3 axb4 cxb4 Qb8 h4 Bh6 Ncb6 Ra2 O-O Rd2 Qf3 Qa7 Nd7 Nd8 Nxf8 Kxf8 b5 Qa3 Qf5 Ke8 Bc4 Rc2 Qxh7 Rxc4 Qg8+ Kd7 Nb6+ Ke7 Nxc4 Qc5 Ra1 Qd4 Ra3 Bc1 Ne3","Lasker-Pelikan Variation"],["1994.10.??","Tel Aviv sim","Tel Aviv","?","Kogan, Artur","2805","2470","1/2-1/2","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 e6 c3 Nge7 d4 cxd4 cxd4 d5 Nc3 dxe4 Nxe4 Nd5 O-O Bd7 Bg5 f6 Bh4 Qb6 Bc4 Be7 Nc3 Nxc3 bxc3 Na5 Bd3 Qc7 Rc1 Ba3 Rc2 Ba4 Qb1 Bxc2 Qxc2 O-O-O Re1 Rhe8 Bxh7 g5 Bg3 Bd6 Rxe6 Bxg3 Bf5 Bxh2+ Nxh2 Rxe6 Bxe6+ Kb8 Nf3 Qf4 Nd2 Nc6 g3 Qc7 Qf5 Rf8 Ne4 Nxd4 cxd4 Qc1+ Kg2 Rh8 Kf3 Qd1+ Ke3 Rh1 Nxg5 Re1+ Kf4 fxg5+ Kxg5 Qxd4 Qf6 Qc5+ Kg6 a6 g4 Qc2+ Kg7 Qe4 Bf5 Qf4 Be6","Nyezhmetdinov-Rossolimo Attack"],["1994.10.??","Tel Aviv sim","Tel Aviv","?","Zelkind, C.","2805","2290","1-0","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 Nf6 Nc3 Nc6 d4 cxd4 Nxd4 g6 f3 Bg7 Be3 O-O O-O Rac8 b3 Rfd8 Rc1 e6 Kh1 d5 exd5 exd5 c5 Ne8 Ncb5 a6 Nc3 Nc7 Na4 Qe7 Re1 Ne6 Nb6 Rb8 Nxc6 bxc6 b4 Qh4 Bd2 Re8 Qe2 Nc7 Qd3 Qf2 a4 Bh6 Red1 Re2 Qxe2 Qxe2 Bxh6 Re8 Bf4 Ne6 Re1 Nxf4 Rxe2 Rxe2 b5 Nd3 Rb1 axb5 axb5 cxb5 c6 Rc2 Nxd5 Kf8 c7 Ke8 h3 Kd7 Rxb5 Nc5 Rb8 Ne6 c8=Q+","Moscow Variation"],["1994.??.??","Moscow ol (Men)","Moscow","?","Short, Nigel D","2805","2665","1-0","B84","Sicilian Defense: Scheveningen Variation, Classical Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 f4 Be7 O-O Qc7 Qe1 Nbd7 Bf3 O-O Kh1 Kh8 a4 Rb8 g4 b6 g5 Ne8 Bg2 Bb7 b3 Qd8 h4 g6 Bb2 Ng7 Rd1 Rc8 f5 e5 f6 exd4 fxe7 Qxe7 Rxd4 f6 Qd2 fxg5 Rxf8+ Rxf8 Rxd6 Ne5 Rxb6 gxh4 Nd5 Bxd5 Qxd5 Re8 Bh3 Qc7 Re6 Rxe6 Bxe6 Nc6 Qg5 Qd6 Bd5 Nb4 Qf6 Qxf6 Bxf6 Nxc2 Bc3 h6 b4 Kh7 b5 axb5 axb5 Nh5 b6 Ng3+ Kh2","Scheveningen Variation"],["1994.??.??","Moscow ol (Men)","Moscow","5","Gelfand, Boris","2800","2680","1/2-1/2","B87","Sicilian Defense: Sozin Attack, Flank Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 b5 O-O Be7 Qf3 Qc7 Qg3 O-O Bh6 Ne8 Rad1 Bd7 Nf3 Nc6 Bf4 Qb7 Rfe1 b4 Ne2 e5 Bg5 Be6 Nh4 Na5 Bd5 Bxd5 Rxd5 Bxg5 Qxg5 Nc4 Ng3 Nxb2 Ngf5 f6 Qg3 Rc8 Qb3 Nc4 a3 g6 Ne3 Nxe3 Rxe3 Rf7 axb4 Qc6 c3 Nc7 Rdd3 Nb5 Nf3 Kg7 h4 h5 Nd2 Rfc7 Qa2 Qb7 Qa1 Rc6 Rg3 Qc7 Qd1",""],["1994.??.??","Moscow ol (Men)","Moscow","7","Lautier, Joel","2800","2645","1-0","B33","Sicilian Defense: Lasker-Pelikan Variation, Sveshnikov Variation, Chelyabinsk Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Ndb5 d6 Bf4 e5 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Rb8 h4 Ne7 Nxf6+ gxf6 Bd3 d5 exd5 Qxd5 Ne3 Qe6 Qh5 e4 Bc2 b4 c4 Kh8 O-O-O f5 Qg5 Rb6 h5 Rc6 Kb1 Rc5 h6 Qe5 Rh5 Rg8 Ng4","Lasker-Pelikan Variation"],["1993.??.??","FRA-chT","Auxerre","9","Salov, Valery","2805","2685","1/2-1/2","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 f6 d4 cxd4 Nxd4 e5 Nb3 Nh6 c4 Nf7 c5 O-O Na3 a5 Nc4 a4 Nb6 Ra7 Nxc8 Qxc8 Nd2 Qa6 Qc2 Ng5 Nc4 Ne6 Be3 Rb8 Red1 Bf8 Nb6 Rbb7 Nc8 Ra8 Nb6 Raa7 b4 axb3 Qxb3 Qb5 Qxb5","Nyezhmetdinov-Rossolimo Attack"],["1993.??.??","Katowice sim","Katowice","?","Hurnik, Zbigniew","2805","2230","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nc6 d4 cxd4 cxd4 e6 Nc3 Be7 d5 Nb8 Bb5+ Bd7 O-O e5 a4 Nf6 Nd2 a6 Be2 O-O Nc4 Bc8 a5 Nbd7 Be3 Re8 Bd3 Bf8 b4 h6 Na4 Qe7 Rc1 g6 f3 Bg7 Qd2 Kh7 Rc2 Rf8 Rfc1 Rb8 Ba7 Ra8 Ncb6 Nxb6 Nxb6 Bd7 Nxa8 Rxa8 Be3 Ne8 Qe2 f5 Bb6 f4 b5 axb5 Bxb5 Bxb5 Qxb5 Rb8 Rc8 Rxc8 Rxc8","Delayed Alapin Variation"],["1993.??.??","Linares 11th","Linares","11","Gelfand, Boris","2805","2690","1-0","B87","Sicilian Defense: Sozin Attack, Flank Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 b5 O-O Be7 Qf3 Qc7 Qg3 O-O Bh6 Ne8 Rad1 Bd7 Nf3 b4 Ne2 a5 Nf4 Kh8 Bg5 Nf6 Qh4 Bb5 Nd4 Be8 Ndxe6 fxe6 Nxe6 Qa7 e5 dxe5 Nxf8 Bxf8 Bxf6 gxf6 Rd8 Nd7 Qg4",""],["1993.??.??","Linares 11th","Linares","13","Kamsky, Gata","2805","2655","1-0","B90","Sicilian Defense: Scheveningen Variation, English Attack, with f3","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 d6 Be3 a6 f3 Nbd7 g4 h6 Rg1 Qb6 a3 Ne5 Bf2 Qc7 f4 Nc4 Bxc4 Qxc4 Qf3 e5 Nf5 Bxf5 gxf5 d5 fxe5 Nxe4 Rg4 h5 Rh4 Bc5 O-O-O Bxf2 Nxe4 dxe4 Qxf2 Rc8 Kb1 Rd8 Rxd8+ Kxd8 Rh3 Qd5 Rc3 Kd7 Qb6 Rd8 Rc5 Qd1+ Ka2 Ke8 Qxb7 Qg4 e6 fxe6 Re5 Qg5 h4 Qxh4 Rxe6+ Kf8 f6","Scheveningen Variation"],["1993.02.??","London Simpson's sim","London","?","Barclays, ","2805","0","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 e5 c3 Qb6 Na3 Ba6 d3 Ne7 Nc4 Qc7 Be3 d6 b4 cxb4 cxb4 O-O Rc1 Rfe8 d4 d5 exd5 Bxc4 Rxc4 Nxd5 dxe5 Nxe3 Rxe3 Rad8 Qe2 Bxe5 g3 Rd5 Rce4 f6 Kg2 a5 h4 axb4 Rxb4 Ra8 a4 Qd6 Reb3 Rda5 h5 Kh8 hxg6 hxg6 Rh4+ Kg8 Rb7 R5a7 Rbb4 Re7 Qc2 f5 Rb6 Rc8 Qc4+ Kg7 Nxe5 Rxe5 Rb7+ Rc7 Qd4","Nyezhmetdinov-Rossolimo Attack"],["1993.02.??","London Simpson's sim","London","?","CITY Warburg, ","2805","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 h3 Bh5 d3 e6 Nbd2 Be7 Qe2 Qc7 Nf1 d5 g4 dxe4 dxe4 Bg6 N3d2 h5 g5 Nd7 h4 O-O-O Nc4 f5 f4 fxe4 Bxe4 Bf5 Ng3 g6 Bd2 Rhe8 O-O-O Na5 Nxa5 Qxa5 Kb1 Qc7 Bc1 Kb8 Rhe1 b6 Nxf5 exf5 Bh1 Nf8 Qf3 Kc8 Rxe7 Rxe7 Qa8+","Delayed Alapin Variation"],["1993.02.??","London Simpson's sim","London","?","London Electricity, ","2805","0","1-0","B40","Sicilian Defense: Delayed Alapin Variation, with e6","e4 c5 Nf3 e6 c3 Nc6 d4 cxd4 cxd4 Nf6 e5 Nd5 a3 Be7 Bd3 d6 O-O dxe5 dxe5 Qc7 Qe2 Bd7 Bd2 h6 Nc3 Nxc3 Bxc3 a6 Rfd1 Rd8 Rac1 Qb8 b4 Na7 Bd4 Bc6 Bb6 Rd7 Nd4 Ba4 Bc2 Bb5 Nxb5 Rxd1+ Rxd1 Nxb5 Ba4 O-O Bxb5 axb5 Qxb5 Qc8 g3 Qc6 Qxc6 bxc6 Rd7 Re8 Bc7 Bf8 Bd6 Rc8 Rb7 f6 Bxf8 Kxf8 exf6 gxf6 a4 c5 a5 c4 Rd7 c3 Rd1 c2 Rc1 Rc4 Kf1 Rxb4 Rxc2 Ra4 Rc5 Ra2 g4 Kf7 h4 e5 h5 Ke7 Kg2 Kf7 Rc7+ Kg8 Ra7 Ra4 Kf3 Kh8 a6 Kg8 Ke3 Rxg4 Rb7","Delayed Alapin Variation"],["1993.02.??","London Simpson's sim","London","?","Norfolk Champions, ","2805","0","1/2-1/2","B40","Sicilian Defense: Delayed Alapin Variation, with e6","e4 c5 Nf3 e6 c3 d5 exd5 exd5 Bb5+ Bd7 Bxd7+ Qxd7 O-O Bd6 d4 Nc6 dxc5 Bxc5 Nbd2 Nge7 Nb3 Bd6 Be3 O-O Re1 Rfe8 Qd3 Rad8 Rad1 Ng6 Nbd4 Re4 h3 Nge5 Nxe5 Nxe5 Qc2 Re8 Bc1 Rxe1+ Rxe1 Bc5 Rd1 g6 Bf4 Nc6 Nf3 Qe6 Qd2 Qe2 Bg3 Qxd2 Rxd2 Rd8 Bh4 Be7 Bxe7 Nxe7 Nd4 f6 Nc2 Nc6 f3 Kf7 Kf2 h5 g4 hxg4 hxg4 g5 Nd4 Nxd4 Rxd4 Ke6 Ke3 Rh8 Ra4 Rh2 b3 a6 Rb4 Rxa2 Rxb7 Ke5 Re7+ Kd6 Ra7 Ke5 Re7+ Kd6 Ra7 Ke5","Delayed Alapin Variation"],["1992.??.??","Manila ol (Men)","Manila","?","Timman, Jan H","2780","2620","1/2-1/2","B57","Sicilian Defense: Classical Variation, Anti-Sozin Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bc4 Qb6 Nde2 e6 O-O a6 Bb3 Be7 Bg5 Qc7 Ng3 b5 Kh1 h5 Bxf6 gxf6 Nxh5 Bb7 Ng3 O-O-O a4 b4 Nce2 Kb8 Rc1 Qa5 c3 Rh4 Ng1 Ne5 Qd2 d5 exd5 Nc4 Qe2 Bxd5 Rfd1 Rc8 Nf3 Rf4 Rd4 Bd6 Rc2 bxc3 bxc3 f5 Qd1",""],["1992.??.??","Dortmund","Dortmund","9","Salov, Valery","2780","2655","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 Nf6 e5 Nd5 c4 Nc7 d4 cxd4 Qxd4 O-O Qh4 d6 Bh6 Ne6 Nc3 f6 Bxg7 Kxg7 exf6+ Rxf6 Ng5 Nxg5 Qxg5 Qf8 Re2 Ba6 b3 e5 Rd1 Rf4 Red2 Rd8 Qg3 c5 Ne2 Rf5 Qe3 Bb7 f3 h5 Rd3 Rd7 Nc3 Bc6 Qd2 Rf6 Nd5 Re6 h3 Qf5 Re1 Qf7 a3 Rd8 b4 cxb4 axb4 Qb7 b5 Bxd5 Rxd5 Qb6+ Kh2 Rc8 f4 Rce8 fxe5 dxe5 Rd7+ R8e7 Qd5 Kh6 Qd2+ Kh7 Rf1 e4 Rf7+ Rxf7 Rxf7+ Kg8 Qd7 Qb8+ Kg1 Qe5 Rg7+ Qxg7 Qxe6+ Kh7 Qxe4 Qc3 Qe7+ Kh6 Qxa7 Qc1+ Kh2 Qxc4 Qb8","Nyezhmetdinov-Rossolimo Attack"],["1992.??.??","Linares 10th","Linares","12","Salov, Valery","2780","2655","1/2-1/2","B33","Sicilian Defense: Lasker-Pelikan Variation, Sveshnikov Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 f5 Bd3 Be6 Qh5 Rg8 g3 Rc8 c3 Rg6 Nc2 Rh6 Qe2 Bxd5 exd5 Ne7 f3 Bg7 Ne3 f4 gxf4 Ng6 O-O-O Nxf4 Qc2 Qb6 Nf5 Rg6 Be4 b4 c4 Kf8 Rd2 Rc5 Ng3 Qc7 Kb1 Bh6 Qb3 Rg7 Nf5 Rg6 Qxb4 Rxc4 Qxc4 Qxc4 Rc2 Qxc2+ Kxc2 Rf6 Ne3 Ne2 Ng4 Nd4+ Kd3 Rf4 Nxh6 Kg7 Nxf7 Rxf7 Rf1 Rb7 b3 a5 f4 Rb4 fxe5 dxe5 Rc1 Nb5 Rc6 Kf7 Ke3 Ke7 Bxh7 Rh4 Bd3 Nd6 Rc7+ Kd8 Rh7 Rd4 h4 Rg4 h5 Rg3+ Kd2 Rg2+ Ke1 e4 Be2 Nf5 Rf7 Nd4 Bf1 Rh2 Rf4 Nc2+ Kd1 Ne3+ Ke1 Nc2+ Kd1 Ne3+","Lasker-Pelikan Variation"],["1992.??.??","Linares 10th","Linares","10","Illescas Cordoba, Miguel","2780","2555","1-0","B45","Sicilian Defense: Four Knights Variation, Exchange Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Nf6 Nxc6 bxc6 e5 Nd5 Ne4 Qc7 f4 Qb6 c4 Ne3 Qd3 Nf5 g4 Nd4 Bg2 h5 g5 Bb7 Be3 Nc2+ Kf2 Nxe3 Qxe3 Qxb2+ Kg3 Ba6 Rab1 h4+ Kh3 Qc2 Rhc1 Qa4 Qc3 Ba3 Rc2 Be7 Rb3 O-O Nf6+ gxf6 gxf6 Bc5 Be4 Rfb8 Kxh4 Kf8 Rg2 Qxc4 Qxc4 Bxc4 Bh7 Bf2+ Kh5",""],["1992.??.??","Cordoba sim","Cordoba","?","Natali, Federico","2790","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Be2 e6 O-O Be7 Re1 a6 Bf1 Nc6 d4 cxd4 cxd4 Qc7 Nc3 O-O h3 b5 a3 Bb7 Bg5 Rad8 Rc1 Qb8 Bd3 Nd7 Bf4 e5 Be3 exd4 Nxd4 Nxd4 Bxd4 Bf6 Bf1 Bxd4 Qxd4 Nf6 Rcd1 Bc8 f4 h6 Qf2 Bb7 Rd4 Qa7 Bd3 Qb6 Rd1 Rfe8 Bb1 Ba8 e5 Nh5 g4 Ng3 Rxd6 Rxd6 Rxd6 Qxf2+ Kxf2 Nh1+ Ke3 Bg2 Be4","Delayed Alapin Variation"],["1992.??.??","Cordoba sim","Cordoba","?","Moreira, Juan Carlos","2790","2220","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 bxc6 O-O Bg7 Re1 e5 c3 Nh6 d4 cxd4 cxd4 exd4 Nxd4 O-O Nc3 Re8 Nb3 d5 Bg5 Be6 Nd4 Qb6 Nxe6 fxe6 Qc2 dxe4 Rxe4 Nf5 Rd1 h6 Bc1 Rad8 Rxd8 Rxd8 h4 Rd4 Rxe6 Rd6 Qe4 Rd4 Qxc6 Qd8 Re8+ Kh7 Qe6 g5 Qg8+ Kg6 Re6+","Nyezhmetdinov-Rossolimo Attack"],["1992.??.??","Cordoba sim","Cordoba","?","Lopez, Gabriela","2790","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Be2 Nc6 d4 cxd4 cxd4 g6 Nc3 Bg7 O-O O-O d5 Nb8 h3 Bd7 Bf4 a5 e5 dxe5 Nxe5 Na6 Re1 Nc5 Bf3 Rc8 Qe2 e6 Rad1 exd5 Nxd5 Re8 Qe3 b6 Bg5 Kf8 Nxf6 Bxf6 Bxf6 Qxf6 Nxd7+ Nxd7 Qh6+","Delayed Alapin Variation"],["1992.??.??","Cordoba sim","Cordoba","?","Gimenez, Ismael","2790","2075","1/2-1/2","B51","Sicilian Defense: Moscow Variation","e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 e6 c3 a6 Bf1 Ne5 d4 cxd4 cxd4 Nxf3+ Qxf3 Be7 Nc3 O-O Bf4 Qb6 e5 dxe5 dxe5 Nd5 Nxd5 exd5 Bd3 Be6 Re2 Rfd8 Qg3 Qc6 h4 Kh8 Rd1 Qd7 h5 Rac8 h6 g6 Bg5 Qe8 Qh4 Rd7 Bxe7 Qxe7 Qxe7 Rxe7 Bc2 Kg8 f3 Rd7 Rd4 Rc4 Red2 Rxd4 Rxd4 f6 exf6 Kf7 Kf2 Kxf6 Ke3 Kg5 Rb4 Kxh6 Kd4 Kg7 Rb6","Moscow Variation"],["1992.??.??","Cordoba sim","Cordoba","?","Fernandez, Jorge A","2790","2200","1-0","B22","Sicilian Defense: Delayed Alapin Variation","e4 c5 Nf3 e6 c3 d5 exd5 Qxd5 d4 Nf6 Be3 cxd4 cxd4 Be7 Nc3 Qd8 Bd3 O-O O-O b6 Qe2 Bb7 Rad1 Nbd7 Rfe1 Nd5 Bd2 N7f6 Ne5 Rc8 Bb1 Nxc3 bxc3 a6 Qd3 g6 Qh3 Bd5 Bg5 Nd7 Bh6 Re8 c4 Bxc4 Nxc4 Rxc4 Rxe6 Nc5 Ree1 Rxd4 Rxd4 Qxd4 g3 Ne6 Qf1 Bc5 Be3 Qa4 Bxc5 Nxc5 Rxe8+ Qxe8 Bc2 Qe5 Qd1 Qc3 h4 h5 Kg2 Kg7 Bb1 b5 Qd6 Ne6 Qxa6 Qe5 Qc6 b4 Bd3 Nd4 Qb7 Qc5 Be4 Nb5 Qd5 Qxd5 Bxd5 Nd4 f4 f6 Kf2 Kh6 Bc4 g5 Bd3 gxf4 gxf4 Kg7 Ke3 Ne6 Bc4 Nf8 f5 Nd7 Kd4 Ne5 Be2 Nf7 Kc5 Nh6 Bd3 Ng4 Kxb4","Delayed Alapin Variation"],["1992.??.??","Cordoba sim","Cordoba","?","Demaria, Juan Pablo","2790","0","1/2-1/2","B40","Sicilian Defense: Delayed Alapin Variation, with e6","e4 c5 Nf3 e6 c3 d5 exd5 exd5 d4 Nf6 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Nxc5 Be3 O-O Nbd2 Re8 Qc2 Qc7 Nb3 Rad8 Rad1 a6 Bxc5 Bxc5 Nxc5 Qxc5 Nd4 b5 a3 Qc7 h3 Re4 Nf5 g6 Ne3 Re7 Rd4 Red7 Rfd1 Qc6 Qe2 Qe6 Qf3 Ne4 Qf4 Nf6 a4 bxa4 Rxa4 Rb7 Rb4 Rdd7 Qd4 Rxb4 Qxb4 Kg7 Qd4 h5 Qf4 Ne4 Rd4 Nf6 Qb8 Qc6 Qe5 Qe6 f4 Re7 Qxe6 fxe6 Ra4 Ra7 Nc2 Ne8 Nd4 Nc7 Kf2 Rb7 Ra2 Rb6 Ke3 Kf6 Nf3 Nb5 g4 Nd6 Kd4 Nc4 b4 Rc6 Ra1 Nd6 g5+ Kg7 Rc1 Nb5+ Ke3 Rc4 Ne5 Rxc3+ Rxc3 Nxc3 Kd4 Ne2+ Ke3 Nc3 Kd4","Delayed Alapin Variation"],["1992.??.??","Cordoba sim","Cordoba","?","Cagliero, Hugo","2790","1980","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 Bg4 h3 Bh5 O-O e6 Bc2 Be7 d4 O-O Re1 Nc6 dxc5 dxc5 Nbd2 Qc7 Qe2 Nd7 g4 Bg6 Nf1 a6 Ng3 b5 h4 f6 Kg2 Rfd8 h5 Be8 g5 Bf8 Be3 Nde5 gxf6 gxf6 Nxe5 Qxe5 f4 Qd6 Rg1 Kh8 Kh1 Bh6 e5 Qe7 Qg4 Nxe5 fxe5 Bc6+ Be4 f5 Bxc6 fxg4 Bxh6 Qh4+ Kg2 Rd3 Kf2 Rad8 Rae1 b4 Be4 R3d7 Ke2 bxc3 bxc3 c4 Ref1 Qe7 Bc1 Qc5 Bg5 Rb8 Bf6+ Kg8 Rb1 Rf8 Nh1 Rxf6 Rxg4+ Rg7 Rxg7+ Kxg7 exf6+ Kxf6 Nf2 Qxh5+ Bf3 Qa5 Rb2 h5 Ne4+ Kg6 Ke3 Qe5 Rg2+ Kf7 Rg5 Qh2 Bxh5+ Ke7 Be2 Qh1 Bxc4","Delayed Alapin Variation"],["1992.??.??","Cordoba sim","Cordoba","?","Herrera, Laura","2790","0","1-0","B40","Sicilian Defense: French Variation, Westerinen Attack","e4 c5 Nf3 e6 b3 d6 Bb2 Nf6 Bb5+ Bd7 Bxd7+ Qxd7 Qe2 Nc6 O-O Be7 d4 cxd4 Nxd4 O-O Rd1 Nxd4 Bxd4 Qc6 f3 b5 a4 a6 Nd2 Rac8 c4 b4 Nf1 Nd7 Ng3 Bf6 Bxf6 Nxf6 Rd4 Qc5 Qf2 Rfd8 Rad1 g6 R4d2 Qc7 Qe3 Ne8 Ne2 Qc5 Kf2 Kf8 Qxc5 Rxc5 Nf4 a5 Ne2 e5 Rd5 Rdc8 f4 Nf6 fxe5 Nxd5 exd5 dxe5 g4 Rd8 g5 Ke7 Ng3 Rcc8 Ne4 Rd7 Ke3 Rf8 c5 Rc8 h4 h5 Rd2 Kd8 d6 Rc6 Rd5","French Variation"],["1992.??.??","EU-chT (Men)","Debrecen","8","Portisch, Lajos","2780","2575","1/2-1/2","B43","Sicilian Defense: Kan Variation, Knight Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Bd3 Nc6 Be3 Nf6 O-O Bd6 Nxc6 bxc6 f4 e5 f5 Be7 Na4 d5 Bb6 Qb8 Qe2 c5 Bxc5 Bxc5+ Nxc5 Qb6 Qf2 Ng4 Na4 Qxf2+ Rxf2 Nxf2 Kxf2 d4 b4 Bd7 Nc5 Bb5 a4 Bxd3 cxd3 Ke7 Rc1 Rhc8 Rc4 Rc6 a5 Rb8 Ke2 Kd6 h4 h5 Kf3 Rb5 g4 g6 g5 Rb8 f6 Rb5 Ke2 Rcxc5 bxc5+ Kc6 Ra4 Rxc5 Ra2 Rb5","Kan Variation"],["1992.??.??","Paris Immopar rapid","Paris","1","Kramnik, Vladimir","2790","2625","1-0","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 c3 d5 exd5 Qxd5 Re1 g6 b4 Bg7 Bb2 O-O c4 Qh5 Bxg7 Kxg7 bxc5 Qxc5 d4 Qb6 Nc3 Rd8 Bxc6 Qxc6 Qe2 a6 Rac1 Qc7 d5 f6 dxe6 Rd6 Nd5 Qd8 Nxf6 Rxe6 Ne4 Nc6 Qb2+ Kg8 Nfg5 Re5 f4 Rf5 Rcd1","Nyezhmetdinov-Rossolimo Attack"],["1991.??.??","Euwe mem","Amsterdam","4","Salov, Valery","2800","2645","1/2-1/2","B30","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack","e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 c3 d5 exd5 Qxd5 Re1 Bd7 Na3 Ng6 Bf1 Be7 d4 cxd4 Nb5 Rc8 Nfxd4 Nxd4 Nxd4 a6 g3 b5 Bg2 Qc5 h4 Bf6 Be3 Qc7 Nf5 O-O Nd6 Rcd8 Nb7 Rc8 Nd6 Rcd8 Nb7 Rc8 h5 Ne5 Bf4 Bc6 Bxc6 Qxc6 Bxe5 Bxe5 Rxe5 Qxb7 h6 Qe7 hxg7 Rfd8 Qe2 Rc5 a4 Rxe5 Qxe5 bxa4 Qe4 Qc5 Rxa4 a5 Qe2 Qg5 Rf4 Rd7 Qf3 Qd5 Qxd5","Nyezhmetdinov-Rossolimo Attack"],["1991.??.??","Tilburg","Tilburg","5","Anand, Viswanathan","2770","2650","1-0","B48","Sicilian Defense: Taimanov Variation, Bastrikov Variation, English Attack","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Qc7 Nc3 e6 Be3 a6 Bd3 Nf6 O-O Ne5 h3 Bc5 Kh1 d6 f4 Nc6 e5 Nxe5 fxe5 dxe5 Bb5+ axb5 Ndxb5 Qb6 Bxc5 Qxc5 Nd6+ Ke7 Rxf6 gxf6 Nce4 Qd4 Qh5 Rf8 Rd1 Qe3 Qh4 Qf4 Qe1 Ra4 Qc3 Rd4 Rxd4 Qf1+ Kh2 exd4 Qc5 Kd7 Nb5 Qf4+ g3","Taimanov Variation"],["1991.??.??","Paris Immopar rapid","Paris","2","Gelfand, Boris","2770","2665","1-0","B87","Sicilian Defense: Sozin Attack, Flank Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 b5 O-O Be7 Qf3 Qc7 Qg3 O-O Bh6 Ne8 Rfe1 Bd7 a4 b4 Nce2 Kh8 Bg5 Bxg5 Qxg5 Nf6 Ng3 Nc6 Nxc6 Bxc6 Rad1 Rad8 Rd3 h6 Qf4 Qe7 Qh4 Rd7 Nh5 Nxh5 Qxh5 Qd8 h3 Qb6 a5 Qb7 Qh4 Qb5 Red1 Rfd8 Qf4 Qxa5 Rxd6 Qg5 Rxd7 Qxf4 Rxd8+ Kh7 R8d4 a5 c3 a4 Bc2 bxc3 e5+",""],["1989.09.15","Tilburg","Tilburg","1","Piket, Jeroen","2775","2540","1-0","B77","Sicilian Defense: Dragon Variation, Yugoslav Attack, Main Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O Bc4 Bd7 h4 Ne5 Bb3 Rc8 O-O-O Nc4 Bxc4 Rxc4 h5 Nxh5 g4 Nf6 Bh6 Nxe4 Qe3 Rxc3 bxc3 Nf6 Bxg7 Kxg7 Rh2 Rh8 Nb3 Bc6 g5 Nh5 f4 Re8 f5 Qb6 Nd4 Qc5 Re1 Bd7 Qf3 Bc6 Qe3 Bd7 Qf3 Bc6 Qf2 Kg8 Re3 Bd5 Rxh5 gxh5 Qh4 Qc4 Qxh5 Qf1+ Kb2 e5 Qh6 Kh8 g6 fxg6 fxg6 Re7 Rf3 Qc4 Qf8+",""],["1989.09.17","Tilburg","Tilburg","3","Sax, Gyula","2775","2580","1-0","B81","Sicilian Defense: Scheveningen Variation, Keres Attack","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 d6 g4 h6 h4 Nc6 Rg1 h5 gxh5 Nxh5 Bg5 Nf6 Be2 Bd7 h5 a6 Qd2 b5 a3 Be7 Be3 Nxh5 O-O-O Nf6 Rxg7 Qb8 Nxc6 Bxc6 Qd4 e5 Qd3 Kf8 Rdg1 Qc8 f4 Qh3 R7g3 Qh2 Bf3 Rg8 Rxg8+ Nxg8 Ne2 Qh3 Ng3 exf4 Bxf4 Qh4 Qe3 Rc8 Nh5 Qh3 Bh6+","Scheveningen Variation"],["1988.10.29","Cologne sim","Cologne","?","Evers, Leo","2760","0","1-0","B50","Sicilian Defense: Delayed Alapin Variation, with d6","e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 O-O Bg4 h3 Bxf3 Qxf3 Ne5 Bb5+ Nfd7 Qe2 a6 Bxd7+ Qxd7 d4 cxd4 cxd4 Nc6 d5 Nd4 Qd3 Qa4 Nc3 Qb4 a3","Delayed Alapin Variation"],["1986.05.31","Zaragoza simul","Zaragoza","?","Martin Catalan, JV.","2720","0","1/2-1/2","B76","Sicilian Defense: Dragon Variation, Yugoslav Attack, Modern Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 e5 Bc5 Be6 Ne4 Re8 g4 f5 gxf5 gxf5 Nd6 Bf8 Rg1+ Kh8 Qg2 Bh6+ Kb1 Qa5 c4 Nc3+ bxc3 Qxc3 Qb2 Rab8 Nb5 Rxb5 cxb5 Qxc5 Rg2 cxb5 Qxb5 Qf8 Qxe5+ Bg7 Qxg7+ Qxg7",""],["1986.05.31","Zaragoza simul","Zaragoza","?","Miguel, E.","2720","0","1-0","B31","Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation","e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 d6 c3 Bg4 h3 Bxf3 Qxf3 e6 d4 Qb6 Na3 cxd4 cxd4 Bxd4 Nc4 Qc7 Bf4 e5 Rad1 O-O-O Bxc6 bxc6 Rxd4 exd4 Qa3 Rd7 Nxd6+ Rxd6 Bxd6 Qd7 Rc1 Kd8 Be5 f6 Qf8+ Qe8 Bxf6+ Nxf6 Qxf6+ Kc7 Qxd4 Kb8 Rxc6","Nyezhmetdinov-Rossolimo Attack"],["1986.05.31","Zaragoza simul","Zaragoza","?","Romero Coca, Albert","2720","0","1-0","B69","Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation, Nyezhmetdinov Attack","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 e6 Qd2 Be7 O-O-O a6 f4 Bd7 Nf3 b5 Bxf6 gxf6 Kb1 Qb6 g3 Na5 b3 Bc6 Qd4 Qc7 f5 Rc8 fxe6 fxe6 Bd3 Bd7 Ne2 Qc5 Rhf1 Qxd4 Nexd4 Nc6 Nxc6 Rxc6 Be2 O-O c4 Rb8 Rc1 bxc4 Bxc4 Rxc4 Rxc4 Bb5 Rfc1 Bxc4 Rxc4 Rb7 Kc2 Bd8 Rc8 Rc7+ Rxc7 Bxc7 Kd3 Kf7 Kc4 Ke7 b4 Kd7 a4 Bb6 g4 Be3 Nd4 Bxd4 Kxd4 Kc6 Kc4 Kb6 b5 axb5+ axb5 Ka5 h3 h6 h4 Kb6 Kb4 d5 exd5 exd5 h5","Richter-Rauzer Variation"],["1985.??.??","Hamburg Spiegel sim comp","Hamburg","5","Comp Meph Munchen B+P, ","2715","0","1-0","B90","Sicilian Defense: Najdorf Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 a4 e5 Nf3 Bg4 h3 Bxf3 Qxf3 Be7 Bc4 O-O O-O Nbd7 Bg5 Rc8 Bb3 Nc5 Bxf6 Bxf6 Nd5 Nxb3 Qxb3 a5 c3 Bg5 Rad1 Rb8 Qb5 Rc8 Rd3 Qe8 Qxe8 Rfxe8 Ra1 Rc4 f3 Bd8 Kf2 Rc6 Ke2 h6 b4 axb4 cxb4 Bg5 Ra2 Rec8 a5 Rc1 Rd1 Rxd1 Kxd1 Rc6 Rc2 Rxc2 Kxc2 Bd8 Kb3 g6 Ka4 Kg7 b5 Bh4 a6 bxa6 bxa6 Bf2 Kb5 Ba7 Kc6 f5 Kb7 Bd4 Nb6","Najdorf Variation"],["1985.??.??","Hamburg Spiegel sim comp","Hamburg","7","Comp Meph Exclusive S, ","2715","0","1-0","B40","Sicilian Defense: French Variation","e4 c5 Nf3 e6 d3 d5 Nbd2 Nc6 g3 Nf6 Bg2 Bd6 O-O O-O Re1 Ng4 h3 Nge5 Nxe5 Bxe5 c3 d4 c4 b6 f4 Bb8 e5 Bb7 Ne4 a5 Qh5 Qd7 Nf6+ gxf6 exf6 Kh8 Be4 h6 Qxh6+ Kg8 Qg7#","French Variation"],["1981.04.??","Moscow","Moscow","11","Balashov, Yuri S","2625","2600","1/2-1/2","B56","Sicilian Defense: Classical Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 f4 g6 Nxc6 bxc6 e5 Nd7 exd6 exd6 Qd4 Nf6 Be3 Be7 Be2 O-O Bf3 d5 Qd2 Qa5 O-O Bc5 Kh1",""],["1980.??.??","Bydgoszczy","Bydgoszczy","?","Crotto, Rachel","2595","2115","1/2-1/2","B47","Sicilian Defense: Taimanov Variation, Bastrikov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 g3 a6 Bg2 Nf6 O-O Be7 Nde2 O-O h3 d6 g4 Rd8 f4 b5 a3 Rb8 Ng3 d5 e5 Ne4 Ngxe4 dxe4 Qe1 b4 axb4 Rxb4 Bxe4 Nd4 Ra4 a5 Be3 Rc4 Bd3 Qc6 Be4","Taimanov Variation"],["1980.??.??","Bydgoszczy","Bydgoszczy","?","Hofmann, ","2595","0","0-1","B91","Sicilian Defense: Najdorf Variation, Zagreb Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 e5 Nde2 Be7 Bg2 O-O O-O Qc7 h3 b5 a3 Nc6 g4 Be6 Be3 Na5 b3 Rac8 Qd2 h5 g5 Nd7 Rfc1 Nb7 Nd5 Bxd5 Qxd5 Nb6 Qd2 Nc5 Ng3 g6 h4 Ne6 Nf5 gxf5 exf5 Nd4 Bxd4 exd4 f6 Bd8 Qe2 Qc5 Qxh5 Qf5 Qh6 Qg6 Qxg6+ fxg6 Be4 Kf7 Kg2 d5 Bd3 Rh8 Rh1 Nd7 f4 Nc5 f5 Nxd3 fxg6+ Kxg6 cxd3 Re8 Kg3 Kh5 Kf4 Bc7+ Kf5","Najdorf Variation"],["1980.??.??","Bydgoszczy","Bydgoszczy","?","Zatulovskaya, Tatiana","2595","2245","1/2-1/2","B40","Sicilian Defense: French Variation, Normal","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Bd3 Nc6 c3 e5 Nxc6 dxc6 O-O Be6 a4 Be7 Qe2 O-O Be3 Ng4 Bd2 Qd7 h3 Rfd8 Bc2 Nf6 Be3 b5 Nd2 Qb7 b4 a6 Rfd1 Rac8 Rdb1 Ra8 c4 Rdb8 cxb5 cxb5 Bd3 bxa4 Rxa4 Qd7 Rxa6 Rxa6 Bxa6 Rxb4 Rxb4 Bxb4 Nf3 Nxe4 Nxe5","French Variation"],["1979.07.??","URS Spartakiad","Moscow","3","Polugaevsky, Lev","2200","2625","1-0","B90","Sicilian Defense: Scheveningen Variation, Delayed Keres Attack","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 e6 Be3 a6 g4 Nc6 g5 Nd7 Rg1 Be7 h4 O-O h5 Nde5 Nxc6 Nxc6 f4 b5 Qf3 Bb7 Bd3 Nb4 f5 exf5 Qxf5 Nxd3+ cxd3 Qc8 h6 Re8 hxg7 Qxf5 exf5 Bxg5 Rxg5 Rxe3+ Kd2 Rf3 Ne4 Bxe4 dxe4 Re8 Rc1 d5 e5 h6 Rh5 Rxe5 f6 Rf2+ Kd3 Rf3+ Kd4 Re4+ Kxd5 Re8 Rxh6 Rf5+ Kd4 Rf4+ Kc5 Re5+ Kb6 Re6+ Rc6","Scheveningen Variation"],["1979.12.??","URS-ch47","Minsk","4","Rashkovsky, Nukhim N","2545","2500","1/2-1/2","B97","Sicilian Defense: Najdorf Variation, Poisoned Pawn Accepted","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Rb1 Qa3 f5 Nc6 fxe6 fxe6 Nxc6 bxc6 e5 dxe5 Bxf6 gxf6 Ne4 Be7 Be2 h5 Rb3 Qa4 Nxf6+ Bxf6 c4 Be7 O-O Ra7 Rb8 Rc7 Qd3 Bc5+ Kh1 Ke7 Qg6 Kd6 Rd1+ Bd4 Rxd4+ exd4 Qg3+ e5 c5+ Kd5 Bf3+ e4 Qg5+ Kc4 Qc1+ Kd5 Bd1 Qxa2 Qg5+ Kc4 Qc1+","Najdorf Variation"],["1979.12.??","URS-ch47","Minsk","12","Anikaev, Yuri N","2545","2455","0-1","B60","Sicilian Defense: Richter-Rauzer Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 a6 Qd2 Qb6 Nb3 e6 Be2 Qc7 a4 b6 Bxf6 gxf6 f4 Bh6 O-O Bb7 Rf3 Rd8 Rh3 Bg7 f5 O-O Qf4 Ne5 Rd1 Qe7 Qh4 h6 Qf2 Qc7 Nd4 Bc8 Qf1 Qb7 Bc4 d5 exd5 exd5 Bb3 Rfe8 Rg3 Kh7 Qf2 Nc4 Nde2 b5 axb5 axb5 Nf4 Re5 Nh5 Bh8 Rf3 Nxb2 Rd4 Nc4 Bxc4 bxc4 g4 Qe7 Qd2 Bb7 Kf2 Re8 Nf4 Bg7 Rh3 Kg8 Nce2 Bf8 Nc3 Qc5 Nh5 Qb6 Rf3 Kh7 Kg3 Rd8 Kh4 Bb4 Qf4 Qd6 Rg3 Qe7 Kh3 Bc5 Qd2 Rd6 Nf4 Bxd4 Qxd4 Qd8 Nh5 Re8 g5 hxg5 Rxg5 Rg8 Rxg8 Kxg8 Nb5 Rc6 Qg4+ Kf8 Nd4 Ra6 Ne6+ Rxe6 fxe6 Ke7 Qg7 Kxe6 Nf4+ Ke5 Kg3 Qa5 Kf2 Qb6+ Kf3 d4+ Kg4 d3 Qxf7 Qg1+ Kh4 Qg5+","Richter-Rauzer Variation"],["1978.??.??","Sokolsky mem","Minsk","?","Smirnov, Valerij","0","0","1/2-1/2","B46","Sicilian Defense: Taimanov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 a6 Be2 Qc7 O-O Nf6 Kh1 Bb4 Bg5 Bxc3 Bxf6 Bxd4 Bxd4 Nxd4 Qxd4 O-O e5 f5 c4 b6 Rad1 Qc5 Qd6 a5 b3 Kf7 a3 Qxd6 Rxd6 Rb8 b4 axb4 axb4 g5 Ra1 Ke7 Kg1 f4 Bd3 h5 h3 f3 g3 h4 Kh2 hxg3+ Kxg3 Rf4 b5 Kd8 Rc1 Rb7 Re1 Kc7 Re4 Rb8 Rxf4 gxf4+ Kxf3 Bb7+ Kxf4 Rg8 Ke3 Rh8 Rd4 Rh5 Be4 Rxe5 Kf4 Rc5 Kf3 e5 Rd2 Bxe4+ Kxe4 Rxc4+ Kxe5 Rh4 Rc2+ Kd8","Taimanov Variation"],["1978.06.??","URS-ch sf","Daugavpils","1","Panchenko, Alexander N","2200","2495","1-0","B67","Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 d6 Bg5 e6 Qd2 a6 O-O-O Bd7 f4 b5 Nxc6 Bxc6 Bd3 Be7 e5 dxe5 fxe5 Nd7 Bxe7 Qxe7 Be4 Bxe4 Nxe4 Nxe5 Qd4 f6 Nd6+ Kf8 Rhf1 Kg8 g4 h6 h4 Nf7 Qe4 Rf8 Nf5 Qe8 Nd4 e5 Nf5 h5 Rg1 Rh7 Qb7 Kh8 gxh5 Qe6 Nxg7 Qxa2 Qe7 Rg8 Qxf6 Qa1+ Kd2 Qa5+ Ke2 Rgxg7 Rxg7 Rxg7 Rg1","Richter-Rauzer Variation"],["1978.06.??","URS-ch sf","Daugavpils","3","Korsunsky, Rostislav R","2200","2200","1-0","B45","Sicilian Defense: Taimanov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 d6 Be2 Be7 O-O Nf6 Be3 a6 f4 Bd7 Qe1 b5 a3 O-O Qg3 Qc7 Kh1 Rab8 e5 dxe5 fxe5 Nxe5 Rxf6 Bxf6 Bf4 Qb6 Bxe5 Bxe5 Qxe5 b4 axb4 f6 Qc5 Qxb4 Qxb4 Rxb4 Nb3 Bb5 Kg1 Bxe2 Nxe2 Rc8 Nc3 Rc6 Kf2 Kf7 Ra2 g5 Nc1 Rf4+ Ke2 Rg4 g3 h5 Nd3 Rgc4 Ke3 h4 Ne4 hxg3 hxg3 Rb6 c3 Rc8 Ndc5 f5 Nxg5+ Kg6 Nd7 Rxb2 Rxb2 Rxc3+ Kd4 Rxg3 Nxe6 f4 Nxf4+ Kf5 Nd3 a5 Rb5+ Ke6 N7c5+ Kf7 Rb7+ Kg8 Ne6 a4 Ndf4 a3 Ra7 a2 Rxa2 Rg1 Ke5","Taimanov Variation"],["1978.06.??","URS-ch sf","Daugavpils","9","Ivanov, Igor V","0","2415","1/2-1/2","B38","Sicilian Defense: Accelerated Dragon, Maróczy Bind","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Bg7 Be3 d6 Nc3 Nh6 Be2 O-O Qd2 Ng4 Bxg4 Bxg4 O-O Qa5 Rac1 Rfc8 b3 a6 Nxc6 Rxc6 Bh6 Rac8 Bxg7 Kxg7 f4 f6 Kh1 b5 f5 g5 Qf2 bxc4 Nd5 cxb3 Rxc6 Rxc6 Qa7 Qd8 axb3 Be2 Re1 Bb5 h4 gxh4 Qf2 Kh8 Qxh4 Rc2 Re3 Qf8 Rh3 Qg7 Rg3 Qf8 Nf4 Be8 Ne6 Qf7 Kg1 Qh5 Qxh5 Bxh5 Rg7 Re2 Rxe7 Rxe4 Ra7 h6 Ra8+ Kh7 Ra7+",""],["1978.??.??","Azerbaijan tt","Baku","2","Ehlvest, Jaan","0","0","1-0","B96","Sicilian Defense: Najdorf Variation, Polugaevsky Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 b5 e5 h6 Bh4 g5 fxg5 Nh7 Qh5 hxg5 Bg3 Bg7 O-O-O d5 Bd3 b4 Rhf1 Ra7 Ncb5 axb5 Nxb5 Nf8 Qf3 Qe7 Nd6+ Kd8 Qe3 Nc6 Qb6+ Qc7 Nxf7+ Ke8 Nd6+ Kd8 Qe3 b3 axb3 Ne7 Nf7+ Ke8 Nd6+ Kd8 Nb5 Ra1+ Kd2 Qa5+ c3 Ra2 b4 Rxb2+ Ke1 Qa6 Rf7 Qc6 Rxg7 Ba6 Qxg5 Bxb5 Qxe7+ Kc8 Bxb5 Qxc3+ Kf1","Najdorf Variation"],["1978.??.??","Azerbaijan tt","Baku","8","Sokolov, Andrei","0","0","1-0","B83","Sicilian Defense: Scheveningen Variation, Modern Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 d6 Be2 Be7 O-O O-O f4 Nc6 Be3 a6 a4 Re8 Kh1 Bf8 Nf3 b6 Bd3 Nb4 Qe1 Bb7 Qh4 Nxd3 cxd3 Nd7 Qg3 Nc5 Rad1 f5 Bd4 Nb3 Bg1 g6 Rfe1 Bg7 d4 b5 axb5 axb5 exf5 b4 Nb5 gxf5 d5 Qd7 Nxd6 Qxd6 dxe6 Qf8 Ng5 Na5 Rd7 Re7 Bc5 Rae8 Bxb4 Qf6 Bxe7 Rxe7 Rd8+ Bf8 Ne4+ Qg6 Nf6+ Kg7 Nd7 Qxg3 hxg3 Bc6 Nxf8 Nb7 Rb8 Nd6 Rb6","Scheveningen Variation"],["1978.??.??","Azerbaijan tt","Baku","9","Gufeld, Eduard","0","0","1-0","B74","Sicilian Defense: Dragon Variation, Classical Variation, Tartakower Line","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be2 Bg7 O-O O-O Be3 Nc6 Nb3 Be6 f4 Qc8 Kh1 Bg4 Bg1 Bxe2 Qxe2 Qg4 Qd2 Nh5 Rf3 f5 h3 Qh4 exf5 gxf5 Nd4 Ng3+ Kh2 Ne4 Nxe4 fxe4 Rg3 Qh6 Be3 Rf7 f5 Qf6 c3 Kh8 Rf1 Qe5 Nxc6 bxc6 Bd4 Qd5 Rxg7 Rxg7 c4 Qxc4 Rf4 c5 Bxg7+ Kxg7 f6+ exf6 Qxd6 Qf7 Rxe4 Kh8 Rf4 Rg8 Rxf6 Qg7 Rf2 c4 Rc2 a5 a4 h6 Re2 Qg5 Qd4+ Qg7 Qxc4 Qg3+ Kg1 Rd8 Qc3+ Qxc3 bxc3 Rc8 Re5 Rxc3 Rxa5 Kg7 Rh5",""],["1978.12.??","URS-ch46","Tbilisi","4","Polugaevsky, Lev","0","2620","1-0","B43","Sicilian Defense: Kan Variation, Knight Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 Qc7 Be2 b5 Bf3 Bb7 O-O Nc6 Nxc6 dxc6 e5 Qxe5 Re1 Qc7 Bh5 Be7 Rxe6 g6 Re1 Rd8 Qf3 c5 Bf4 Qb6 Qg3 gxh5 Bc7 Qg6 Bxd8 Qxg3 hxg3 Kxd8 Rad1+ Kc7 Nd5+ Bxd5 Rxd5 h6 Rxh5 Rh7 Rhe5 Kd7 R5e3 Rg7 Rd3+ Kc7 Ra3 Rg6 Rf3 Bf6 c3 Kd7 Rd3+ Kc7 Re8 Ne7 Red8 Nc6 R8d7+ Kb6 Rxf7 Be7 Re3 Bd6 f4 c4 Kh2 Bc5 Re2 b4 Re4 bxc3 bxc3 Bf2 Rxc4 Bxg3+ Kh3 Be1 a4 Na5 Rb4+ Kc5 Rf5+","Kan Variation"],["1977.??.??","Leningrad","Leningrad","?","Dolmatov, Sergey","0","0","1/2-1/2","B33","Sicilian Defense: Lasker-Pelikan Variation, Sveshnikov Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Ndb5 d6 Bf4 e5 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 f5 c3 Bg7 exf5 Bxf5 Nc2 O-O Nce3 Be6 g3 f5 Bh3 Ne7 O-O Nxd5 Nxd5 Rc8 a4 Rc5 Ne3 Qb6 b4 Rxc3 Nd5 Bxd5 Qxd5+ Kh8 axb5 Qxb5 Qxd6 Rc6 Qd7 Rb6 Qxb5 Rxb5","Lasker-Pelikan Variation"],["1977.??.??","Leningrad","Leningrad","3","Zaid, Leonid D","0","2400","1-0","B97","Sicilian Defense: Najdorf Variation, Poisoned Pawn Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Nb3 Qa3 Bxf6 gxf6 Be2 Nd7 O-O h5 Qd4 b5 Nb1 Qa4 c4 b4 f5 Be7 fxe6 fxe6 N1d2 Qc6 a3 bxa3 Kh1 Rb8 Rxa3 Qb6 Qa1 Ne5 c5 dxc5 Nc4 Qc7 Nbd2 Nxc4 Nxc4 Rb4 e5 fxe5 Qd1 Bd7 Rxa6 h4 h3 Rg8 Rxe6 Kd8 Rxe5 Rxc4 Qd5 Rxg2 Bxc4 Rg3 Qa8+ Qc8 Qa5+ Ke8 Bf7+ Kf8 Be6+ Kg7 Qa1 Kh6 Qc1+ Bg5 Rxg5 Qc6+ Bd5","Najdorf Variation"],["1977.??.??","Telechess ol1 7778","telex","?","West, Guy","0","0","1-0","B40","Sicilian Defense: Pin Variation, Koch Variation","e4 c5 Nf3 Nf6 Nc3 e6 d4 cxd4 Nxd4 Bb4 e5 Nd5 Bd2 Nxc3 bxc3 Bf8 Bd3 d6 Qe2 Nd7 Nxe6 Qb6 Nc7+",""],["1976.??.??","Moscow","Moscow","3","Guseinov, Aidyn","0","0","1-0","B93","Sicilian Defense: Najdorf Variation, Amsterdam Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f4 Qc7 Bd3 g6 O-O Bg7 Nf3 Nbd7 Qe1 e5 Kh1 b5 fxe5 dxe5 a4 b4 Nd5 Nxd5 exd5 a5 Ng5 O-O Qh4 h6 Ne4 h5 d6 Qc6 Bb5 Qxc2 Bh6 Bb7 Bxg7 Kxg7 Rae1 Bxe4 Rxe4 Rad8 Re2 Qb3 Bc4 Qxa4 b3 Qc6 Qe7 Nb6 Ref2 Kh6 Rxf7 Rxf7 Rxf7 Rh8 h4","Najdorf Variation"],["1976.??.??","Moscow","Moscow","12","Morgulov, Alexsander M","0","2375","1/2-1/2","B84","Sicilian Defense: Scheveningen Variation, Classical Variation","e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 d6 Be2 a6 f4 Qc7 O-O b5 e5 dxe5 fxe5 Nfd7 Bf3 Bb7 Bf4 Nc6 Nxc6 Bxc6 Ne4 Bxe4 Bxe4 Rd8 Bg3 Nc5 Qf3 Nxe4 Qxe4 Bc5+ Kh1 O-O","Scheveningen Variation"],["1976.??.??","URS-ch U18","Tbilisi","?","Lanka, Zigurds","0","0","1/2-1/2","B39","Sicilian Defense: Accelerated Dragon, Maróczy Bind, Breyer Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Bg7 Be3 Nf6 Nc3 Ng4 Qxg4 Nxd4 Qd1 Ne6 Qd2 Qa5 Rc1 b6 Be2 Bb7 f3 f5 exf5 gxf5 O-O Rg8 Rfd1 d6 a3 f4 Bxf4 Qf5 Be3 Be5 Nd5 Qh3 Bf1 Qxh2+ Kf2 Qh4+ Ke2 Rc8 b3 Nc5 Bf2 Qh2 Qc2 Rg6 Re1 Re6 Kd1 Qh6 Be3 Qh5 Bxc5 Rxc5 b4 Rc8 Qe4 Kf7 Bd3 Rh6 g4 Qg5 f4 Qxg4+ Be2 Qh4 Bf3 e6 Rh1 Qxf4 Rxh6 Qxh6 Bg4 exd5 Qf5+ Qf6 Qxh7+ Qg7 Qf5+ Bf6 Qd7+ Kg8 Be6+ Kh8 Qxg7+ Bxg7 Bxc8 Bxc8 cxd5 Bg4+ Ke1 Bb2 Rc2 Bxa3 Rh2+ Kg7 Rg2 Bxb4+ Kf1 Kf6 Rxg4 Bc3 Re4 Kf5 Re7 Be5 Rxa7 Ke4 Ra4+ Bd4 Ke2 Kxd5 Kd3",""],["1976.??.??","URS-ch U18","Tbilisi","?","Sturua, Zurab","0","0","1/2-1/2","B40","Sicilian Defense: French Variation","e4 c5 Nf3 e6 d3 d5 Nbd2 Nc6 g3 Nf6 Bg2 Be7 O-O b6 Re1 Bb7 e5 Nd7 Nf1 Qc7 Bf4 h6 h4 O-O-O Qd2 Rdg8 h5 Qd8 Bh3 Nf8 N1h2 d4 Ng4 Nb4 Bg2 Nd5 c4 Nxf4 Qxf4 f5 exf6 gxf6 Nd2 Bxg2 Kxg2 Qc7 Qf3 Qb7 Nh2 Rg5 Qxb7+ Kxb7 Ndf3 Rxh5 g4 Rg8 Kf1","French Variation"],["1976.??.??","URS-ch U18","Tbilisi","1","Merkulov, M.","0","0","1-0","B36","Sicilian Defense: Accelerated Dragon, Maróczy Bind, Gurgenidze Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Nf6 Nc3 Nxd4 Qxd4 d6 Bg5 Bg7 Qd2 O-O Be2 Be6 Rc1 Qa5 f3 Rfc8 b3 a6 a4 Kf8 h4 h5 Bd1 Bd7 g4 b5 gxh5 gxh5 Bh6 Bc6 axb5 axb5 cxb5 Bxb5 Bxg7+ Kxg7 Rg1+ Kf8 Rg5 Rc5 Rxc5 dxc5 Nxb5 Qxb5 Qh6+ Kg8 Qg5+ Kh8 Qxc5 Qd3 Rc3 Qd7 e5 Ne8 Qc6 Qa7 Rc5 Ng7 Bc2 Ne6 Qe4 Nf8 Qe3 Qa1+ Ke2 Qh1 Qh6+ Kg8 Qg5+ Kh8 Qxh5+ Kg8 Qg4+ Kh8 e6 f6 Rh5+",""],["1976.07.??","Wch U16","Wattignies","8","Rogers, Ian","0","1865","1-0","B33","Sicilian Defense: Lasker-Pelikan Variation, Bird Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 Be6 Nc4 Rc8 Ne3 Be7 Bxf6 Bxf6 Bc4 O-O Bb3 Nd4 O-O Bg5 Ncd5 Nxb3 axb3 g6 Kh1 Bh6 Qd3 f5 exf5 gxf5 f4 Kh8 Rad1 Qh4 Qe2 exf4 Nc4 Bf7 Qd3 Bh5 Nxd6 Bxd1 Nxc8 Bh5 Nce7 f3 gxf3 Qh3 Nf4 Qh4 Qd4+ Qf6 Qxf6+ Rxf6 Nxh5 Rf7 Nd5 f4 Re1","Lasker-Pelikan Variation"],["1976.07.??","Wch U16","Wattignies","9","Grinberg, Nir","0","0","1/2-1/2","B45","Sicilian Defense: Four Knights Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e6 Ndb5 Bb4 a3 Bxc3+ Nxc3 d5 exd5 exd5 Bd3 O-O O-O d4 Ne4 Bf5 Bg5 Bxe4 Bxe4 h6 Bxf6 Qxf6 Qh5 Rfe8 Rfe1",""],["1975.??.??","Leningrad","Leningrad","?","Yermolinsky, Alex","0","0","0-1","B67","Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation","e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 a6 Qd2 e6 O-O-O Bd7 f4 b5 Nxc6 Bxc6 Bd3 Be7 e5 dxe5 fxe5 Nd7 Bxe7 Qxe7 Be4 Qc5 Rhe1 Ra7 Bxc6 Qxc6 Qf2 Qc5 Re3 O-O Ne4 Qxe5 Rg3 Raa8 Rxd7 Qxe4 Rf3 Qg6 a3 Rac8 Kb1 e5 Rg3 Qe6 Qd2 g6 Rh3 Qf6 Qh6 Qg7 Qg5 Rce8 Rd6 e4 Rxa6 Re5 Qd2 Rfe8 Re3 Qh6 g3 Qh3 Rc6 Qf5 Qc3 Qd7 b3 Rf5 Kb2 Rf1 Rf6 Rh1 Qc6 Qd4+ Rc3 Rf8 Rxf7 Rxf7 Qxb5 Rxh2 b4 Rxc2+ Kxc2 Rf2+ Kb3 Qd1+ Kc4 Qe2+","Richter-Rauzer Variation"],["1975.??.??","Team GM/Young Pioneers","Leningrad","?","Polugaevsky, Lev","0","0","1/2-1/2","B40","Sicilian Defense: French Variation","e4 c5 Nf3 e6 d3 d5 Nbd2 Nc6 g3 Bd6 Bg2 Nge7 O-O O-O Re1 Bc7 Qe2 b6 h4 Nb4 Nf1 dxe4 Qxe4 Nxc2 Qxa8 Nxa1 Ne3 Nf5 Nxf5 exf5 Bg5 f6 Rxa1 fxg5 Nxg5 g6 Re1 h6 Qc6 Qd6 Ne6 Qxc6 Bxc6 Bxe6 Rxe6 Kg7 Be8 f4 g4 Bd8","French Variation"],["1975.??.??","URS-ch U18","Vilnius","2","Sokolov, Andrei","0","0","1-0","B67","Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 d6 Bg5 e6 Qd2 a6 O-O-O Bd7 f4 b5 a3 Be7 Bxf6 gxf6 f5 Qb6 fxe6 fxe6 Be2 h5 Nxc6 Bxc6 Rhf1 O-O-O Bf3 Qc5 Qe2 Qe5 Qf2 Kb7 Rfe1 Rc8 g3 h4 Rd5 Bxd5 exd5 Qg5+ Kb1 hxg3 hxg3 e5 a4 b4 a5 Rxc3 Qb6+ Kc8 bxc3 Bd8 Qc6+ Bc7 Qa8+ Bb8 Re4","Richter-Rauzer Variation"],["1975.??.??","URS-ch U18","Vilnius","4","Yurtaev, Leonid","0","0","0-1","B39","Sicilian Defense: Accelerated Dragon, Maróczy Bind, Breyer Variation","e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Bg7 Be3 Nf6 Nc3 Ng4 Qxg4 Nxd4 Qd1 Ne6 Qd2 Qa5 Rc1 b6 Be2 Bb7 f3 f5 exf5 gxf5 O-O Rg8 Rfd1 d6 a3 f4 Bxf4 Bd4+ Kh1 Qf5 Nd5 Bxd5 cxd5 Nxf4 Bb5+ Kf7 Qxd4 Rxg2 Bd7 Rxh2+ Kxh2 Qh5+ Kg3 Ne2+ Kf2 Nxd4 Rxd4 Qh2+ Ke3 Kg7 Be6 Rf8 Rg4+ Kh8 Rcg1 h5 Rg5 Qf4+ Kd3 Qxf3+ Kc2 Qe2+ Kb3 Rf3+ Ka2 Qc4+ Kb1 Rf1+ Rxf1 Qxf1+ Ka2 Qc4+ Kb1 h4 Rg4 Qf1+ Ka2 Qf2 Kb3 h3",""],["1975.??.??","URS-ch U18","Vilnius","7","Kengis, Edvins","0","0","1/2-1/2","B52","Sicilian Defense: Moscow Variation, Sokolsky Variation","e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 c4 Nf6 Nc3 Nc6 d4 cxd4 Nxd4 g6 f3 Bg7 Be3 O-O O-O Rfc8 b3 Qc7 Qd2 Qa5 Rfd1 a6 Rac1 b5 Nxc6 Rxc6 Nd5 Qxd2 Rxd2 Nxd5 exd5 Rc7 Rdc2 Rac8 c5 dxc5 Rxc5 Rxc5 Rxc5 Rxc5 Bxc5 Kf8 Kf2 Ke8 Ke3 Kd7 g4 e6","Moscow Variation"]],"chips":[["Nyezhmetdinov-Rossolimo Attack",29],["Delayed Alapin Variation",25],["Najdorf Variation",21],["Moscow Variation",14],["Taimanov Variation",14],["Scheveningen Variation",14],["Kan Variation",11],["French Variation",10],["Richter-Rauzer Variation",10],["Lasker-Pelikan Variation",8]],"trees":{"Nyezhmetdinov-Rossolimo Attack":{"slug":"e4-c5-nf3--nyezhmetdinov-rossolimo-attack","moves":"1.e4 c5 2.Nf3 Nc6 3.Bb5","n":29},"Delayed Alapin Variation":{"slug":"e4-c5-nf3--delayed-alapin-variation","moves":"1.e4 c5 2.Nf3","n":25},"Najdorf Variation":{"slug":"e4-c5-nf3--najdorf-variation","moves":"1.e4 c5 2.Nf3 d6 3.d4","n":21},"Moscow Variation":{"slug":"e4-c5-nf3--moscow-variation","moves":"1.e4 c5 2.Nf3 d6 3.Bb5+","n":14},"Taimanov Variation":{"slug":"e4-c5-nf3--taimanov-variation","moves":"1.e4 c5 2.Nf3","n":14},"Scheveningen Variation":{"slug":"e4-c5-nf3--scheveningen-variation","moves":"1.e4 c5 2.Nf3","n":14},"Kan Variation":{"slug":"e4-c5-nf3--kan-variation","moves":"1.e4 c5 2.Nf3 e6 3.d4 cxd4 4.Nxd4 a6","n":11},"French Variation":{"slug":"e4-c5-nf3--french-variation","moves":"1.e4 c5 2.Nf3 e6","n":10},"Richter-Rauzer Variation":{"slug":"e4-c5-nf3--richter-rauzer-variation","moves":"1.e4 c5 2.Nf3","n":10},"Lasker-Pelikan Variation":{"slug":"e4-c5-nf3--lasker-pelikan-variation","moves":"1.e4 c5 2.Nf3","n":8}},"player":"Kasparov","playerShort":"Kasparov, G","side":"white"};
+const ME=DATA.player, MESHORT=DATA.playerShort, SIDE=DATA.side, WIN=SIDE==='white'?'1-0':'0-1', LOSS=SIDE==='white'?'0-1':'1-0';
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k){try{return localStorage.getItem('cw_'+DATA.side+'_'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('cw_'+DATA.side+'_'+k,v)}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const files='abcdefgh';
+const G=DATA.games.map((r,i)=>({i,date:r[0],event:r[1],site:r[2],round:r[3],opp:r[4],welo:r[5],belo:r[6],res:r[7],eco:r[8],opn:r[9],moves:r[10].split(' '),fam:r[11]||''}));
+const last=n=>n.split(',')[0].trim();
+const short=n=>{const p=n.split(',');return p.length>1?p[0].trim()+', '+p[1].trim()[0]:n};
+const yr=g=>g.date.slice(0,4).replace(/\?/g,'');
+let view=[], shown=0, fam='', q='', sortk='new', cur={k:null,p:0}, flipped=(store.get('flip')===null?SIDE==='black':store.get('flip')==='1');
+const PAGE=25;
+let hashOK=false; addEventListener('load',()=>{hashOK=true});
+
+/* ---------- list, filter, sort ---------- */
+function applyFilter(){
+  const terms=q.toLowerCase().split(/\s+/).filter(Boolean);
+  view=G.filter(g=>{
+    if(fam&&g.fam!==fam) return false;
+    if(!terms.length) return true;
+    const hay=(g.opp+' '+g.event+' '+g.site+' '+g.date+' '+g.opn+' '+g.eco+' '+g.res).toLowerCase();
+    return terms.every(t=>hay.includes(t));
+  });
+  const num=v=>parseInt(v)||0;
+  const cmp={new:(a,b)=>b.date.localeCompare(a.date)||b.i-a.i, old:(a,b)=>a.date.localeCompare(b.date)||a.i-b.i,
+    elo:(a,b)=>num(SIDE==='white'?b.belo:b.welo)-num(SIDE==='white'?a.belo:a.welo), long:(a,b)=>b.moves.length-a.moves.length}[sortk];
+  view.sort(cmp);
+  shown=0; $('#games').innerHTML=''; renderMore(); renderToc(); renderStats();
+}
+function renderStats(){
+  let w=0,d=0,l=0; view.forEach(g=>{if(g.res===WIN)w++;else if(g.res===LOSS)l++;else d++});
+  const n=view.length, sc=n?Math.round((w+d/2)/n*100):0;
+  $('#stats').innerHTML=n?`<b>${n}</b> game${n==1?'':'s'} · ${ME} <b>+${w} =${d} −${l}</b> · score <b>${sc}%</b>`:'';
+}
+function renderToc(){
+  $('#tocn').textContent='('+view.length+')';
+  $('#toc').innerHTML=view.map(g=>`<a data-k="${g.i}" title="${esc(g.event)} ${esc(g.date)}">${yr(g)} · ${esc(last(g.opp))} <span class="r">${g.res.replace('1/2-1/2','½')}</span></a>`).join('');
+  markToc();
+}
+function markToc(){ $$('#toc a').forEach(a=>a.classList.toggle('on',cur.k!==null&&+a.dataset.k===cur.k)); const on=$('#toc a.on'), box=$('nav.toc'); if(on&&box.offsetParent!==null){ const t=on.offsetTop, h=box.clientHeight; if(t<box.scrollTop+30||t>box.scrollTop+h-60) box.scrollTop=Math.max(0,t-h/2) } }
+function movesHTML(g){
+  return g.moves.map((s,i)=>`<a class="mv" data-k="${g.i}" data-p="${i+1}">${i%2?'':(i/2+1)+'.'}${esc(s)}</a>`).join(' ');
+}
+function blockHTML(g){
+  const ev=[g.event,g.site&&g.site!=='?'?g.site:''].filter(Boolean).join(', ');
+  const rd=g.round&&g.round!=='?'&&g.round!=='-'?' · rd '+esc(g.round):'';
+  return `<section class="game" id="g${g.i}" data-k="${g.i}">
+  <h2 data-k="${g.i}">${SIDE==="white"?ME+" – "+esc(last(g.opp)):esc(last(g.opp))+" – "+ME}</h2>
+  <div class="gamehead">${SIDE==='white'?`<b>${esc(MESHORT)}</b>${g.welo?' ('+esc(g.welo)+')':''} – <b>${esc(short(g.opp))}</b>${g.belo?' ('+esc(g.belo)+')':''}`:`<b>${esc(short(g.opp))}</b>${g.welo?' ('+esc(g.welo)+')':''} – <b>${esc(MESHORT)}</b>${g.belo?' ('+esc(g.belo)+')':''}`}</div>
+  <div class="gamehead">${esc(ev)} · ${esc(g.date.replace(/\.\?\?/g,''))}${rd} · ${esc(g.res)}</div>
+  ${g.opn?`<div class="opn">${esc(g.eco)} · ${esc(g.opn)}</div>`:''}
+  <p class="ml">${movesHTML(g)} <span class="res">${esc(g.res)}</span></p>
+</section>`;
+}
+function renderMore(){
+  const next=view.slice(shown,shown+PAGE);
+  $('#games').insertAdjacentHTML('beforeend',next.map(blockHTML).join(''));
+  shown+=next.length;
+  $('#more').hidden=shown>=view.length;
+  $('#more').textContent='Show more games ('+(view.length-shown)+' left)';
+  if(!view.length) $('#games').innerHTML='<p class="empty">No games match.</p>';
+  paintCur();
+}
+function ensureShown(k){ let idx=view.findIndex(g=>g.i===k); if(idx<0) return false; while(shown<=idx) renderMore(); return true }
+
+/* ---------- board ---------- */
+function boardHTML(fen,lm){
+  const rows=fen.split(' ')[0].split('/'); const grid=[];
+  rows.forEach((r,ri)=>{let c=0;for(const ch of r){if(/\d/.test(ch))c+=+ch;else{grid[ri*8+c]=ch;c++}}});
+  let sq='';
+  for(let i=0;i<64;i++){
+    const r=flipped?7-Math.floor(i/8):Math.floor(i/8), c=flipped?7-i%8:i%8;
+    const name=files[c]+(8-r), p=grid[r*8+c];
+    sq+=`<div class="sq ${(r+c)%2?'d':'l'}${lm.includes(name)?' lm':''}">${p?`<div class="pc ${p===p.toUpperCase()?'w':'b'}${p.toUpperCase()}"></div>`:''}</div>`;
+  }
+  const rk=[...Array(8)].map((_,i)=>`<span>${flipped?i+1:8-i}</span>`).join('');
+  const fs=[...Array(8)].map((_,i)=>`<span>${files[flipped?7-i:i]}</span>`).join('');
+  return `<div class="bwrap"><div class="rk">${rk}</div><div class="bd">${sq}</div><div class="fl">${fs}</div></div>`;
+}
+function render(){
+  const g=cur.k===null?null:G[cur.k];
+  const c=new Chess(); let lastMv=null;
+  if(g) for(let i=0;i<cur.p;i++) lastMv=c.move(g.moves[i],{sloppy:true});
+  $('#live').innerHTML=boardHTML(c.fen(),lastMv?[lastMv.from,lastMv.to]:[]);
+  if(!g){ $('#who').textContent='Pick a game'; $('#cur').textContent=''; return }
+  $('#who').textContent=(SIDE==='white'?ME+' – '+last(g.opp):last(g.opp)+' – '+ME)+' · '+yr(g);
+  const lab=cur.p===0?'Start':(cur.p%2?((cur.p+1)/2)+'.':(cur.p/2)+'...')+g.moves[cur.p-1];
+  $('#cur').textContent=lab;
+  let m=c.in_checkmate()?'Checkmate.':c.in_stalemate()?'Stalemate.':'';
+  if(!m&&cur.p===g.moves.length) m='End of game · '+g.res.replace('1/2-1/2','draw');
+  $('#msg').textContent=m||((c.turn()==='w'?'White':'Black')+' to move');
+  $('#bPrev').disabled=$('#bStart').disabled=cur.p===0;
+  $('#bNext').disabled=$('#bEnd').disabled=cur.p>=g.moves.length;
+  const gi=view.findIndex(x=>x.i===cur.k);
+  $('#gPrev').disabled=gi<=0; $('#gNext').disabled=gi<0||gi>=view.length-1;
+}
+function paintCur(){
+  $$('main a.mv.cur').forEach(a=>a.classList.remove('cur'));
+  if(cur.k===null||cur.p===0) return null;
+  const a=document.querySelector(`main a.mv[data-k="${cur.k}"][data-p="${cur.p}"]`);
+  if(a) a.classList.add('cur');
+  return a;
+}
+function go(k,p,fromText){
+  cur={k,p}; render(); markToc();
+  const a=paintCur();
+  if(a&&!fromText){const r=a.getBoundingClientRect(), bp=document.querySelector('aside.bp').getBoundingClientRect(), pb=(bp.width>innerWidth*0.9)?bp.bottom:80;
+    if(r.top<pb+8||r.bottom>innerHeight-20) scrollBy({top:r.top-(pb+innerHeight)/2+r.height/2,behavior:'smooth'})}
+  if(hashOK){try{history.replaceState(null,'','#g'+k)}catch(e){}}
+}
+function gotoGame(k,scroll){
+  if(!ensureShown(k)) return;
+  go(k,0,true);
+  if(scroll){const el=document.getElementById('g'+k); if(el){const bp=document.querySelector('aside.bp').getBoundingClientRect(); const off=(bp.width>innerWidth*0.9)?bp.bottom+10:70; scrollTo({top:el.getBoundingClientRect().top+scrollY-off,behavior:'smooth'})}}
+}
+const L=()=>cur.k===null?0:G[cur.k].moves.length;
+const next=()=>{if(cur.k!==null&&cur.p<L())go(cur.k,cur.p+1)};
+const prev=()=>{if(cur.k!==null&&cur.p>0)go(cur.k,cur.p-1)};
+const start=()=>{if(cur.k!==null)go(cur.k,0)};
+const end=()=>{if(cur.k!==null)go(cur.k,L())};
+function gstep(d){const gi=view.findIndex(x=>x.i===cur.k); const n=view[gi+d]; if(n) gotoGame(n.i,true)}
+const flip=()=>{flipped=!flipped;store.set('flip',flipped?'1':'0');render()};
+$('#bNext').onclick=next;$('#bPrev').onclick=prev;$('#bStart').onclick=start;$('#bEnd').onclick=end;$('#bFlip').onclick=flip;
+$('#gPrev').onclick=()=>gstep(-1);$('#gNext').onclick=()=>gstep(1);
+$('#more').onclick=renderMore;
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a.mv'); if(a){go(+a.dataset.k,+a.dataset.p,true);return}
+  const h=e.target.closest('h2[data-k]'); if(h){go(+h.dataset.k,0,true);return}
+  const t=e.target.closest('#toc a'); if(t){gotoGame(+t.dataset.k,true)}
+});
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey||/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName))return;
+  const k=e.key;
+  if(k==='ArrowRight'){next();e.preventDefault()}else if(k==='ArrowLeft'){prev();e.preventDefault()}
+  else if(k==='Home'){start();e.preventDefault()}else if(k==='End'){end();e.preventDefault()}
+  else if(k==='['){gstep(-1)}else if(k===']'){gstep(1)}
+  else if(k==='f'||k==='F')flip();
+});
+/* chips: opening names in this line; each one also swaps the tree above the games */
+(function(){
+  const el=$('#chips'), top=DATA.chips||[];
+  const link=$('#treeLink'), img=$('#treeImg'), cap=$('#treeCap'), note=$('#treeNote');
+  const base=link?{href:link.getAttribute('href'),src:img.getAttribute('src'),cap:cap.textContent}:null;
+  function setTree(f){
+    if(!base) return;
+    const t=f&&DATA.trees&&DATA.trees[f];
+    if(t){
+      link.setAttribute('href','../../trees/'+t.slug+'/'); img.setAttribute('src','../../trees/'+t.slug+'/preview.jpg');
+      img.alt='Opening tree for '+f; cap.textContent='Open the zoomable tree for '+f+' \u2192';
+      note.innerHTML='Tree of the <b>'+t.n+'</b> '+esc(f)+' games. They all start <b>'+esc(t.moves)+'</b> and differ after that.';
+    } else {
+      link.setAttribute('href',base.href); img.setAttribute('src',base.src); img.alt='Opening tree'; cap.textContent=base.cap;
+      note.textContent=f?'No separate tree for '+f+' (too few games).':'';
+    }
+  }
+  if(top.length<2){el.remove();return}
+  const draw=()=>{el.innerHTML=`<button class="${fam?'':'on'}" data-f="">All <small>${G.length}</small></button>`+top.map(([f,n])=>`<button class="${fam===f?'on':''}" data-f="${esc(f)}">${esc(f)} <small>${n}</small></button>`).join('')};
+  el.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return; fam=b.dataset.f; draw(); setTree(fam); applyFilter()});
+  draw();
+})();
+$('#q').addEventListener('input',e=>{q=e.target.value; applyFilter()});
+$('#sort').addEventListener('change',e=>{sortk=e.target.value; applyFilter()});
+/* text size & dark mode */
+let fs=+store.get('fs')||21;
+const setFs=v=>{fs=Math.max(15,Math.min(34,v));document.documentElement.style.setProperty('--fs',fs+'px');store.set('fs',fs)};
+$('#fplus').onclick=()=>setFs(fs+2);$('#fminus').onclick=()=>setFs(fs-2);setFs(fs);
+const setDark=d=>{document.documentElement.dataset.theme=d?'dark':'light';$('#dark').textContent=d?'Light':'Dark';store.set('dark',d?'1':'0')};
+let dk=store.get('dark')==='1';setDark(dk);$('#dark').onclick=()=>{dk=!dk;setDark(dk)};
+(function(){var b=$('#bTog');b.onclick=function(){var h=document.body.classList.toggle('hideb');b.textContent=h?'Show board':'Hide board'}})();
+/* go */
+applyFilter();
+const hash=location.hash.match(/^#g(\d+)$/);
+if(hash&&G[+hash[1]]){ gotoGame(+hash[1],true) } else if(view.length){ go(view[0].i,0,true) } else render();
+})();
+</script>
+</body>
+</html>

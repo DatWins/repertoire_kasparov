@@ -1,0 +1,2101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.Nf3 Nf6 – Kasparov with Black</title>
+<style>
+:root{
+  --fs:21px;
+  --paper:#fbfaf7; --ink:#1d1f22; --muted:#5d6670; --line:#e2e0da; --side:#f2f0eb;
+  --main:#1f4fa3; --var:#2b2f36; --hl:#ffe08a; --hlink:#e8eefb;
+  --light:#dee3e6; --dark:#8ca2ad; --lm:rgba(155,199,0,.45);
+  --btn:#ffffff; --btnb:#cfd5db; --win:#2f6b3a; --loss:#a33a2a;
+}
+:root[data-theme="dark"]{
+  --paper:#16191d; --ink:#e4e6e9; --muted:#9aa3ad; --line:#2c3238; --side:#1d2126;
+  --main:#86b4ff; --var:#d5d9de; --hl:#6b5a1e; --hlink:#25324a;
+  --btn:#232930; --btnb:#3a434c; --win:#7fcf93; --loss:#f08a7a;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink)}
+body{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;font-size:var(--fs);line-height:1.6}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--side);border-bottom:1px solid var(--line);font-family:system-ui,"Segoe UI",sans-serif;font-size:15px}
+.top a.lib{color:var(--main);text-decoration:none;font-weight:600;white-space:nowrap}
+.top .t{font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+button,select,input{font:inherit;font-family:system-ui,"Segoe UI",sans-serif;background:var(--btn);color:var(--ink);border:1px solid var(--btnb);border-radius:7px;padding:6px 12px}
+button{cursor:pointer;min-width:40px}
+button:hover{border-color:var(--main)}
+button:disabled{opacity:.35;cursor:default}
+.wrap{display:grid;grid-template-columns:240px minmax(0,1fr) auto;align-items:start}
+nav.toc{position:sticky;top:49px;height:calc(100vh - 49px);overflow:auto;padding:18px 12px;border-right:1px solid var(--line);background:var(--side);font-family:system-ui,"Segoe UI",sans-serif;font-size:14px}
+nav.toc .h{font-weight:700;color:var(--muted);text-transform:uppercase;font-size:12px;letter-spacing:.06em;margin-bottom:8px}
+nav.toc a{display:block;padding:5px 8px;border-radius:6px;color:var(--ink);text-decoration:none;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav.toc a:hover,nav.toc a.on{background:var(--hlink);color:var(--main)}
+nav.toc a .r{color:var(--muted);font-size:12px}
+main{padding:28px 40px 120px;max-width:44em;margin:0 auto;width:100%}
+aside.bp{position:sticky;top:49px;padding:16px 20px;border-left:1px solid var(--line);height:calc(100vh - 49px);overflow:auto;width:calc(var(--bw) + 70px)}
+:root{--bw:min(44vw, calc(100vh - 290px), 680px)}
+.kicker{font-family:system-ui,"Segoe UI",sans-serif;font-size:.7em;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+h1{font-family:system-ui,"Segoe UI",sans-serif;font-size:2.3em;line-height:1.1;margin:.2em 0 .15em}
+.dek{color:var(--main);font-size:1.15em;margin:.2em 0}
+.stats{font-family:system-ui,"Segoe UI",sans-serif;font-size:.78em;color:var(--muted);margin:.5em 0 1em}
+.stats b{color:var(--ink)}
+h2{font-family:system-ui,"Segoe UI",sans-serif;font-size:1.25em;margin:1.8em 0 .3em;padding-top:.5em;border-top:2px solid var(--line);cursor:pointer}
+h2:hover{color:var(--main)}
+p{margin:.65em 0}
+.gamehead{font-size:.88em;line-height:1.5;margin:.15em 0;color:var(--muted)}
+.gamehead b{color:var(--ink)}
+.opn{font-family:system-ui,"Segoe UI",sans-serif;font-size:.72em;font-weight:600;color:var(--muted);margin:.3em 0 0}
+a.mv{cursor:pointer;border-radius:4px;padding:0 2px;color:var(--var);text-decoration:none}
+a.mv:hover{background:var(--hlink)}
+a.mv.cur{background:var(--hl)}
+p.ml{font-weight:700;font-size:1.08em;margin:.7em 0 .3em}
+p.ml a.mv{color:var(--main)}
+.res{font-family:system-ui,"Segoe UI",sans-serif;font-weight:700;font-size:.85em;color:var(--muted)}
+.tree{display:block;margin:.8em 0 .3em}
+.tree img{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;object-position:top;border-radius:10px;box-shadow:0 0 0 5px #3b2416;background:#fff}
+.tree span{font-family:system-ui,"Segoe UI",sans-serif;font-size:.7em;color:var(--main);font-weight:600}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin:.8em 0 .4em;font-family:system-ui,"Segoe UI",sans-serif;font-size:15px}
+.tools input{flex:1;min-width:12em}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:.6em 0;font-family:system-ui,"Segoe UI",sans-serif;font-size:14px}
+.chips button{border-radius:999px;padding:4px 12px}
+.chips button.on{background:var(--main);border-color:var(--main);color:#fff}
+.chips small{opacity:.7}
+.more{display:block;margin:2em auto;font-size:16px;padding:10px 22px}
+.empty{color:var(--muted);font-style:italic}
+/* board */
+.bwrap{display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr auto;width:max-content}
+.bd{display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);aspect-ratio:1;border:2px solid #5b6f79;user-select:none}
+.sq{position:relative}
+.sq.l{background:var(--light)} .sq.d{background:var(--dark)}
+.sq.lm::after{content:"";position:absolute;inset:0;background:var(--lm)}
+.pc{position:absolute;inset:0;background-size:100% 100%;z-index:1}
+.rk{display:grid;grid-template-rows:repeat(8,minmax(0,1fr));line-height:1;font-family:system-ui,sans-serif;color:var(--muted);text-align:center;padding-right:5px}
+.fl{grid-column:2;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));line-height:1.4;font-family:system-ui,sans-serif;color:var(--muted);text-align:center}
+.rk span{display:flex;align-items:center}
+#live .bd{width:var(--bw)} #live .rk,#live .fl{font-size:14px}
+.bhead{font-family:system-ui,"Segoe UI",sans-serif;font-size:15px;color:var(--muted);margin-bottom:8px;min-height:1.4em;display:flex;justify-content:space-between;gap:10px}
+.bhead b{color:var(--ink);font-size:17px;white-space:nowrap}
+.ctrls{display:flex;gap:6px;margin:12px 0 0 22px;flex-wrap:wrap}
+.ctrls button{font-size:18px;padding:5px 12px}
+.gnav{display:flex;gap:6px;margin:8px 0 0 22px;font-size:14px}
+.gnav button{font-size:14px;padding:4px 10px}
+.msg{margin:8px 0 0 22px;font-family:system-ui,"Segoe UI",sans-serif;font-size:14px;color:var(--muted)}
+.tog{display:none}
+@media (max-width:1100px){
+  .top{height:49px;padding:0 10px;gap:6px}
+  .top button{padding:5px 9px;min-width:0}
+  .tog{display:inline-block}
+  .wrap{grid-template-columns:1fr}
+  nav.toc{display:none}
+  aside.bp{order:-1;position:sticky;top:49px;z-index:10;height:auto;width:auto;border-left:0;border-bottom:1px solid var(--line);background:var(--paper);padding:8px 12px 10px}
+  :root{--bw:min(calc(100vw - 56px), 38vh, 560px);--bw:min(calc(100vw - 56px), 38svh, 560px)}
+  .bhead{font-size:13px;margin-bottom:4px;align-items:baseline}
+  .bhead #who{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .bhead b{font-size:15px}
+  #live{display:flex;justify-content:center}
+  #live .rk,#live .fl{font-size:11px}
+  .ctrls,.gnav,.msg{margin-left:0;justify-content:center;text-align:center}
+  .ctrls{margin-top:8px}
+  .ctrls button{font-size:17px;padding:4px 0;flex:1;max-width:64px}
+  .gnav{margin-top:4px}
+  .msg{margin-top:4px;font-size:12px}
+  main{padding:16px 16px 80px}
+  body.hideb #live,body.hideb .bhead,body.hideb .gnav{display:none}
+}
+@media (max-width:480px){ .top .t{display:none} .top a.lib{flex:1} }
+</style>
+<style>.pc.wP{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PHBhdGggZD0iTTIyLjUgOWMtMi4yMSAwLTQgMS43OS00IDQgMCAuODkuMjkgMS43MS43OCAyLjM4QzE3LjMzIDE2LjUgMTYgMTguNTkgMTYgMjFjMCAyLjAzLjk0IDMuODQgMi40MSA1LjAzLTMgMS4wNi03LjQxIDUuNTUtNy40MSAxMy40N2gyM2MwLTcuOTItNC40MS0xMi40MS03LjQxLTEzLjQ3IDEuNDctMS4xOSAyLjQxLTMgMi40MS01LjAzIDAtMi40MS0xLjMzLTQuNS0zLjI4LTUuNjIuNDktLjY3Ljc4LTEuNDkuNzgtMi4zOCAwLTIuMjEtMS43OS00LTQtNHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==')}
+.pc.wB{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxnIGZpbGw9IiNmZmYiIHN0cm9rZS1saW5lY2FwPSJidXR0Ij48cGF0aCBkPSJNOSAzNmMzLjM5LS45NyAxMC4xMS40MyAxMy41LTIgMy4zOSAyLjQzIDEwLjExIDEuMDMgMTMuNSAyIDAgMCAxLjY1LjU0IDMgMi0uNjguOTctMS42NS45OS0zIC41LTMuMzktLjk3LTEwLjExLjQ2LTEzLjUtMS0zLjM5IDEuNDYtMTAuMTEuMDMtMTMuNSAxLTEuMzU0LjQ5LTIuMzIzLjQ3LTMtLjUgMS4zNTQtMS45NCAzLTIgMy0yeiIvPjxwYXRoIGQ9Ik0xNSAzMmMyLjUgMi41IDEyLjUgMi41IDE1IDAgLjUtMS41IDAtMiAwLTIgMC0yLjUtMi41LTQtMi41LTQgNS41LTEuNSA2LTExLjUtNS0xNS41LTExIDQtMTAuNSAxNC01IDE1LjUgMCAwLTIuNSAxLjUtMi41IDQgMCAwLS41LjUgMCAyeiIvPjxwYXRoIGQ9Ik0yNSA4YTIuNSAyLjUgMCAxIDEtNSAwIDIuNSAyLjUgMCAxIDEgNSAweiIvPjwvZz48cGF0aCBkPSJNMTcuNSAyNmgxME0xNSAzMGgxNW0tNy41LTE0LjV2NU0yMCAxOGg1IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PC9nPjwvc3ZnPg==')}
+.pc.wN{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5SDE1YzAtOSAxMC02LjUgOC0yMSIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0yNCAxOGMuMzggMi45MS01LjU1IDcuMzctOCA5LTMgMi0yLjgyIDQuMzQtNSA0LTEuMDQyLS45NCAxLjQxLTMuMDQgMC0zLTEgMCAuMTkgMS4yMy0xIDItMSAwLTQuMDAzIDEtNC00IDAtMiA2LTEyIDYtMTJzMS44OS0xLjkgMi0zLjVjLS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMnMuNzgtMS45OTIgMi41LTNjMSAwIDEgMyAxIDMiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNOS41IDI1LjVhLjUuNSAwIDEgMS0xIDAgLjUuNSAwIDEgMSAxIDB6bTUuNDMzLTkuNzVhLjUgMS41IDMwIDEgMS0uODY2LS41LjUgMS41IDMwIDEgMSAuODY2LjV6IiBmaWxsPSIjMDAwIi8+PC9nPjwvc3ZnPg==')}
+.pc.wR{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05IDM5aDI3di0zSDl2M3ptMy0zdi00aDIxdjRIMTJ6bS0xLTIyVjloNHYyaDVWOWg1djJoNVY5aDR2NSIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiLz48cGF0aCBkPSJNMzQgMTRsLTMgM0gxNGwtMy0zIi8+PHBhdGggZD0iTTMxIDE3djEyLjVIMTRWMTciIHN0cm9rZS1saW5lY2FwPSJidXR0IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PHBhdGggZD0iTTMxIDI5LjVsMS41IDIuNWgtMjBsMS41LTIuNSIvPjxwYXRoIGQ9Ik0xMSAxNGgyMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvZz48L3N2Zz4=')}
+.pc.wQ{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik04IDEyYTIgMiAwIDEgMS00IDAgMiAyIDAgMSAxIDQgMHptMTYuNS00LjVhMiAyIDAgMSAxLTQgMCAyIDIgMCAxIDEgNCAwek00MSAxMmEyIDIgMCAxIDEtNCAwIDIgMiAwIDEgMSA0IDB6TTE2IDguNWEyIDIgMCAxIDEtNCAwIDIgMiAwIDEgMSA0IDB6TTMzIDlhMiAyIDAgMSAxLTQgMCAyIDIgMCAxIDEgNCAweiIvPjxwYXRoIGQ9Ik05IDI2YzguNS0xLjUgMjEtMS41IDI3IDBsMi0xMi03IDExVjExbC01LjUgMTMuNS0zLTE1LTMgMTUtNS41LTE0VjI1TDcgMTRsMiAxMnoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTkgMjZjMCAyIDEuNSAyIDIuNSA0IDEgMS41IDEgMSAuNSAzLjUtMS41IDEtMS41IDIuNS0xLjUgMi41LTEuNSAxLjUuNSAyLjUuNSAyLjUgNi41IDEgMTYuNSAxIDIzIDAgMCAwIDEuNS0xIDAtMi41IDAgMCAuNS0xLjUtMS0yLjUtLjUtMi41LS41LTIgLjUtMy41IDEtMiAyLjUtMiAyLjUtNC04LjUtMS41LTE4LjUtMS41LTI3IDB6IiBzdHJva2UtbGluZWNhcD0iYnV0dCIvPjxwYXRoIGQ9Ik0xMS41IDMwYzMuNS0xIDE4LjUtMSAyMiAwTTEyIDMzLjVjNi0xIDE1LTEgMjEgMCIgZmlsbD0ibm9uZSIvPjwvZz48L3N2Zz4=')}
+.pc.wK{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMi41IDExLjYzVjZNMjAgOGg1IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PHBhdGggZD0iTTIyLjUgMjVzNC41LTcuNSAzLTEwLjVjMCAwLTEtMi41LTMtMi41cy0zIDIuNS0zIDIuNWMtMS41IDMgMyAxMC41IDMgMTAuNSIgZmlsbD0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48cGF0aCBkPSJNMTEuNSAzN2M1LjUgMy41IDE1LjUgMy41IDIxIDB2LTdzOS00LjUgNi0xMC41Yy00LTYuNS0xMy41LTMuNS0xNiA0VjI3di0zLjVjLTMuNS03LjUtMTMtMTAuNS0xNi00LTMgNiA1IDEwIDUgMTBWMzd6IiBmaWxsPSIjZmZmIi8+PHBhdGggZD0iTTExLjUgMzBjNS41LTMgMTUuNS0zIDIxIDBtLTIxIDMuNWM1LjUtMyAxNS41LTMgMjEgMG0tMjEgMy41YzUuNS0zIDE1LjUtMyAyMSAwIi8+PC9nPjwvc3ZnPg==')}
+.pc.bP{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PHBhdGggZD0iTTIyLjUgOWMtMi4yMSAwLTQgMS43OS00IDQgMCAuODkuMjkgMS43MS43OCAyLjM4QzE3LjMzIDE2LjUgMTYgMTguNTkgMTYgMjFjMCAyLjAzLjk0IDMuODQgMi40MSA1LjAzLTMgMS4wNi03LjQxIDUuNTUtNy40MSAxMy40N2gyM2MwLTcuOTItNC40MS0xMi40MS03LjQxLTEzLjQ3IDEuNDctMS4xOSAyLjQxLTMgMi40MS01LjAzIDAtMi40MS0xLjMzLTQuNS0zLjI4LTUuNjIuNDktLjY3Ljc4LTEuNDkuNzgtMi4zOCAwLTIuMjEtMS43OS00LTQtNHoiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==')}
+.pc.bB{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxnIGZpbGw9IiMwMDAiIHN0cm9rZS1saW5lY2FwPSJidXR0Ij48cGF0aCBkPSJNOSAzNmMzLjM5LS45NyAxMC4xMS40MyAxMy41LTIgMy4zOSAyLjQzIDEwLjExIDEuMDMgMTMuNSAyIDAgMCAxLjY1LjU0IDMgMi0uNjguOTctMS42NS45OS0zIC41LTMuMzktLjk3LTEwLjExLjQ2LTEzLjUtMS0zLjM5IDEuNDYtMTAuMTEuMDMtMTMuNSAxLTEuMzU0LjQ5LTIuMzIzLjQ3LTMtLjUgMS4zNTQtMS45NCAzLTIgMy0yeiIvPjxwYXRoIGQ9Ik0xNSAzMmMyLjUgMi41IDEyLjUgMi41IDE1IDAgLjUtMS41IDAtMiAwLTIgMC0yLjUtMi41LTQtMi41LTQgNS41LTEuNSA2LTExLjUtNS0xNS41LTExIDQtMTAuNSAxNC01IDE1LjUgMCAwLTIuNSAxLjUtMi41IDQgMCAwLS41LjUgMCAyeiIvPjxwYXRoIGQ9Ik0yNSA4YTIuNSAyLjUgMCAxIDEtNSAwIDIuNSAyLjUgMCAxIDEgNSAweiIvPjwvZz48cGF0aCBkPSJNMTcuNSAyNmgxME0xNSAzMGgxNW0tNy41LTE0LjV2NU0yMCAxOGg1IiBzdHJva2U9IiNlY2VjZWMiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48L2c+PC9zdmc+')}
+.pc.bN{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMiAxMGMxMC41IDEgMTYuNSA4IDE2IDI5SDE1YzAtOSAxMC02LjUgOC0yMSIgZmlsbD0iIzAwMCIvPjxwYXRoIGQ9Ik0yNCAxOGMuMzggMi45MS01LjU1IDcuMzctOCA5LTMgMi0yLjgyIDQuMzQtNSA0LTEuMDQyLS45NCAxLjQxLTMuMDQgMC0zLTEgMCAuMTkgMS4yMy0xIDItMSAwLTQuMDAzIDEtNC00IDAtMiA2LTEyIDYtMTJzMS44OS0xLjkgMi0zLjVjLS43My0uOTk0LS41LTItLjUtMyAxLTEgMyAyLjUgMyAyLjVoMnMuNzgtMS45OTIgMi41LTNjMSAwIDEgMyAxIDMiIGZpbGw9IiMwMDAiLz48cGF0aCBkPSJNOS41IDI1LjVhLjUuNSAwIDEgMS0xIDAgLjUuNSAwIDEgMSAxIDB6bTUuNDMzLTkuNzVhLjUgMS41IDMwIDEgMS0uODY2LS41LjUgMS41IDMwIDEgMSAuODY2LjV6IiBmaWxsPSIjZWNlY2VjIiBzdHJva2U9IiNlY2VjZWMiLz48cGF0aCBkPSJNMjQuNTUgMTAuNGwtLjQ1IDEuNDUuNS4xNWMzLjE1IDEgNS42NSAyLjQ5IDcuOSA2Ljc1UzM1Ljc1IDI5LjA2IDM1LjI1IDM5bC0uMDUuNWgyLjI1bC4wNS0uNWMuNS0xMC4wNi0uODgtMTYuODUtMy4yNS0yMS4zNC0yLjM3LTQuNDktNS43OS02LjY0LTkuMTktNy4xNmwtLjUxLS4xeiIgZmlsbD0iI2VjZWNlYyIgc3Ryb2tlPSJub25lIi8+PC9nPjwvc3ZnPg==')}
+.pc.bR{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05IDM5aDI3di0zSDl2M3ptMy41LTdsMS41LTIuNWgxN2wxLjUgMi41aC0yMHptLS41IDR2LTRoMjF2NEgxMnoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTE0IDI5LjV2LTEzaDE3djEzSDE0eiIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48cGF0aCBkPSJNMTQgMTYuNUwxMSAxNGgyM2wtMyAyLjVIMTR6TTExIDE0VjloNHYyaDVWOWg1djJoNVY5aDR2NUgxMXoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTEyIDM1LjVoMjFtLTIwLTRoMTltLTE4LTJoMTdtLTE3LTEzaDE3TTExIDE0aDIzIiBmaWxsPSJub25lIiBzdHJva2U9IiNlY2VjZWMiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjwvZz48L3N2Zz4=')}
+.pc.bQ{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxnIHN0cm9rZT0ibm9uZSI+PGNpcmNsZSBjeD0iNiIgY3k9IjEyIiByPSIyLjc1Ii8+PGNpcmNsZSBjeD0iMTQiIGN5PSI5IiByPSIyLjc1Ii8+PGNpcmNsZSBjeD0iMjIuNSIgY3k9IjgiIHI9IjIuNzUiLz48Y2lyY2xlIGN4PSIzMSIgY3k9IjkiIHI9IjIuNzUiLz48Y2lyY2xlIGN4PSIzOSIgY3k9IjEyIiByPSIyLjc1Ii8+PC9nPjxwYXRoIGQ9Ik05IDI2YzguNS0xLjUgMjEtMS41IDI3IDBsMi41LTEyLjVMMzEgMjVsLS4zLTE0LjEtNS4yIDEzLjYtMy0xNC41LTMgMTQuNS01LjItMTMuNkwxNCAyNSA2LjUgMTMuNSA5IDI2eiIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiLz48cGF0aCBkPSJNOSAyNmMwIDIgMS41IDIgMi41IDQgMSAxLjUgMSAxIC41IDMuNS0xLjUgMS0xLjUgMi41LTEuNSAyLjUtMS41IDEuNS41IDIuNS41IDIuNSA2LjUgMSAxNi41IDEgMjMgMCAwIDAgMS41LTEgMC0yLjUgMCAwIC41LTEuNS0xLTIuNS0uNS0yLjUtLjUtMiAuNS0zLjUgMS0yIDIuNS0yIDIuNS00LTguNS0xLjUtMTguNS0xLjUtMjcgMHoiIHN0cm9rZS1saW5lY2FwPSJidXR0Ii8+PHBhdGggZD0iTTExIDM4LjVhMzUgMzUgMSAwIDAgMjMgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9ImJ1dHQiLz48cGF0aCBkPSJNMTEgMjlhMzUgMzUgMSAwIDEgMjMgMG0tMjEuNSAyLjVoMjBtLTIxIDNhMzUgMzUgMSAwIDAgMjIgMG0tMjMgM2EzNSAzNSAxIDAgMCAyNCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlY2VjZWMiLz48L2c+PC9zdmc+')}
+.pc.bK{background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0NSIgaGVpZ2h0PSI0NSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0yMi41IDExLjYzVjYiIHN0cm9rZS1saW5lam9pbj0ibWl0ZXIiLz48cGF0aCBkPSJNMjIuNSAyNXM0LjUtNy41IDMtMTAuNWMwIDAtMS0yLjUtMy0yLjVzLTMgMi41LTMgMi41Yy0xLjUgMyAzIDEwLjUgMyAxMC41IiBmaWxsPSIjMDAwIiBzdHJva2UtbGluZWNhcD0iYnV0dCIgc3Ryb2tlLWxpbmVqb2luPSJtaXRlciIvPjxwYXRoIGQ9Ik0xMS41IDM3YzUuNSAzLjUgMTUuNSAzLjUgMjEgMHYtN3M5LTQuNSA2LTEwLjVjLTQtNi41LTEzLjUtMy41LTE2IDRWMjd2LTMuNWMtMy41LTcuNS0xMy0xMC41LTE2LTQtMyA2IDUgMTAgNSAxMFYzN3oiIGZpbGw9IiMwMDAiLz48cGF0aCBkPSJNMjAgOGg1IiBzdHJva2UtbGluZWpvaW49Im1pdGVyIi8+PHBhdGggZD0iTTMyIDI5LjVzOC41LTQgNi4wMy05LjY1QzM0LjE1IDE0IDI1IDE4IDIyLjUgMjQuNWwuMDEgMi4xLS4wMS0yLjFDMjAgMTggOS45MDYgMTQgNi45OTcgMTkuODVjLTIuNDk3IDUuNjUgNC44NTMgOSA0Ljg1MyA5IiBzdHJva2U9IiNlY2VjZWMiLz48cGF0aCBkPSJNMTEuNSAzMGM1LjUtMyAxNS41LTMgMjEgMG0tMjEgMy41YzUuNS0zIDE1LjUtMyAyMSAwbS0yMSAzLjVjNS41LTMgMTUuNS0zIDIxIDAiIHN0cm9rZT0iI2VjZWNlYyIvPjwvZz48L3N2Zz4=')}
+</style>
+</head>
+<body>
+<div class="top">
+  <a class="lib" href="../../../#black-1nf3" title="Back to the repertoire">&larr; Repertoire</a>
+  <span class="t">1.Nf3 Nf6 — Kasparov with Black</span>
+  <button id="fminus" title="Smaller text">A−</button>
+  <button id="fplus" title="Larger text">A+</button>
+  <button id="dark" title="Dark mode">Dark</button>
+  <button id="bTog" class="tog" title="Show or hide the board">Hide board</button>
+</div>
+<div class="wrap">
+  <nav class="toc">
+    <div class="h">Games <span id="tocn"></span></div>
+    <div id="toc"></div>
+  </nav>
+  <main>
+    <div class="kicker">Kasparov with Black · against 1.Nf3</div>
+    <h1>1.Nf3 Nf6</h1>
+    <div class="dek">Mostly English Opening (29), King&#x27;s Indian Defense (21), King&#x27;s Indian Attack (6)</div>
+    <div class="stats" id="stats"></div>
+    <a class="tree" id="treeLink" href="../../trees/nf3-nf6/"><img id="treeImg" src="../../trees/nf3-nf6/preview.jpg" alt="Opening tree for 1.Nf3 Nf6"><span id="treeCap">Open the zoomable tree &rarr;</span></a>
+    <div class="stats" id="treeNote"></div>
+
+    <div class="chips" id="chips"></div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search opponent, event, year, opening…" aria-label="Search games">
+      <select id="sort" aria-label="Sort games">
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+        <option value="elo">Strongest opponent first</option>
+        <option value="long">Longest games first</option>
+      </select>
+    </div>
+    <p class="stats">Click any move to see the position on the board. Use ← → to step through a game, Home / End to jump, [ and ] for the previous or next game, F to flip the board.</p>
+    <div id="games"></div>
+    <button class="more" id="more" hidden>Show more games</button>
+  </main>
+  <aside class="bp">
+    <div class="bhead"><span id="who"></span><b id="cur"></b></div>
+    <div id="live"></div>
+    <div class="ctrls">
+      <button id="bStart" title="Start (Home)">⏮</button>
+      <button id="bPrev" title="Back (←)">◀</button>
+      <button id="bNext" title="Forward (→)">▶</button>
+      <button id="bEnd" title="End of game (End)">⏭</button>
+      <button id="bFlip" title="Flip board (F)">⇅</button>
+    </div>
+    <div class="gnav"><button id="gPrev" title="Previous game ([)">◀ game</button><button id="gNext" title="Next game (])">game ▶</button></div>
+    <div class="msg" id="msg"></div>
+  </aside>
+</div>
+<script>/*
+ * Copyright (c) 2020, Jeff Hlywa (jhlywa@gmail.com)
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ *----------------------------------------------------------------------------*/
+
+/* minified license below  */
+
+/* @license
+ * Copyright (c) 2018, Jeff Hlywa (jhlywa@gmail.com)
+ * Released under the BSD license
+ * https://github.com/jhlywa/chess.js/blob/master/LICENSE
+ */
+
+var Chess = function(fen) {
+  var BLACK = 'b'
+  var WHITE = 'w'
+
+  var EMPTY = -1
+
+  var PAWN = 'p'
+  var KNIGHT = 'n'
+  var BISHOP = 'b'
+  var ROOK = 'r'
+  var QUEEN = 'q'
+  var KING = 'k'
+
+  var SYMBOLS = 'pnbrqkPNBRQK'
+
+  var DEFAULT_POSITION =
+    'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+
+  var POSSIBLE_RESULTS = ['1-0', '0-1', '1/2-1/2', '*']
+
+  var PAWN_OFFSETS = {
+    b: [16, 32, 17, 15],
+    w: [-16, -32, -17, -15]
+  }
+
+  var PIECE_OFFSETS = {
+    n: [-18, -33, -31, -14, 18, 33, 31, 14],
+    b: [-17, -15, 17, 15],
+    r: [-16, 1, 16, -1],
+    q: [-17, -16, -15, 1, 17, 16, 15, -1],
+    k: [-17, -16, -15, 1, 17, 16, 15, -1]
+  }
+
+  // prettier-ignore
+  var ATTACKS = [
+    20, 0, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0, 0,20, 0,
+     0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
+     0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
+     0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
+     0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
+    24,24,24,24,24,24,56,  0, 56,24,24,24,24,24,24, 0,
+     0, 0, 0, 0, 0, 2,53, 56, 53, 2, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0,20, 2, 24,  2,20, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0,20, 0, 0, 24,  0, 0,20, 0, 0, 0, 0, 0,
+     0, 0, 0,20, 0, 0, 0, 24,  0, 0, 0,20, 0, 0, 0, 0,
+     0, 0,20, 0, 0, 0, 0, 24,  0, 0, 0, 0,20, 0, 0, 0,
+     0,20, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0,20, 0, 0,
+    20, 0, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0, 0,20
+  ];
+
+  // prettier-ignore
+  var RAYS = [
+     17,  0,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0,  0, 15, 0,
+      0, 17,  0,  0,  0,  0,  0, 16,  0,  0,  0,  0,  0, 15,  0, 0,
+      0,  0, 17,  0,  0,  0,  0, 16,  0,  0,  0,  0, 15,  0,  0, 0,
+      0,  0,  0, 17,  0,  0,  0, 16,  0,  0,  0, 15,  0,  0,  0, 0,
+      0,  0,  0,  0, 17,  0,  0, 16,  0,  0, 15,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,  0, 17,  0, 16,  0, 15,  0,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,  0,  0, 17, 16, 15,  0,  0,  0,  0,  0,  0, 0,
+      1,  1,  1,  1,  1,  1,  1,  0, -1, -1,  -1,-1, -1, -1, -1, 0,
+      0,  0,  0,  0,  0,  0,-15,-16,-17,  0,  0,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,  0,-15,  0,-16,  0,-17,  0,  0,  0,  0,  0, 0,
+      0,  0,  0,  0,-15,  0,  0,-16,  0,  0,-17,  0,  0,  0,  0, 0,
+      0,  0,  0,-15,  0,  0,  0,-16,  0,  0,  0,-17,  0,  0,  0, 0,
+      0,  0,-15,  0,  0,  0,  0,-16,  0,  0,  0,  0,-17,  0,  0, 0,
+      0,-15,  0,  0,  0,  0,  0,-16,  0,  0,  0,  0,  0,-17,  0, 0,
+    -15,  0,  0,  0,  0,  0,  0,-16,  0,  0,  0,  0,  0,  0,-17
+  ];
+
+  var SHIFTS = { p: 0, n: 1, b: 2, r: 3, q: 4, k: 5 }
+
+  var FLAGS = {
+    NORMAL: 'n',
+    CAPTURE: 'c',
+    BIG_PAWN: 'b',
+    EP_CAPTURE: 'e',
+    PROMOTION: 'p',
+    KSIDE_CASTLE: 'k',
+    QSIDE_CASTLE: 'q'
+  }
+
+  var BITS = {
+    NORMAL: 1,
+    CAPTURE: 2,
+    BIG_PAWN: 4,
+    EP_CAPTURE: 8,
+    PROMOTION: 16,
+    KSIDE_CASTLE: 32,
+    QSIDE_CASTLE: 64
+  }
+
+  var RANK_1 = 7
+  var RANK_2 = 6
+  var RANK_3 = 5
+  var RANK_4 = 4
+  var RANK_5 = 3
+  var RANK_6 = 2
+  var RANK_7 = 1
+  var RANK_8 = 0
+
+  // prettier-ignore
+  var SQUARES = {
+    a8:   0, b8:   1, c8:   2, d8:   3, e8:   4, f8:   5, g8:   6, h8:   7,
+    a7:  16, b7:  17, c7:  18, d7:  19, e7:  20, f7:  21, g7:  22, h7:  23,
+    a6:  32, b6:  33, c6:  34, d6:  35, e6:  36, f6:  37, g6:  38, h6:  39,
+    a5:  48, b5:  49, c5:  50, d5:  51, e5:  52, f5:  53, g5:  54, h5:  55,
+    a4:  64, b4:  65, c4:  66, d4:  67, e4:  68, f4:  69, g4:  70, h4:  71,
+    a3:  80, b3:  81, c3:  82, d3:  83, e3:  84, f3:  85, g3:  86, h3:  87,
+    a2:  96, b2:  97, c2:  98, d2:  99, e2: 100, f2: 101, g2: 102, h2: 103,
+    a1: 112, b1: 113, c1: 114, d1: 115, e1: 116, f1: 117, g1: 118, h1: 119
+  };
+
+  var ROOKS = {
+    w: [
+      { square: SQUARES.a1, flag: BITS.QSIDE_CASTLE },
+      { square: SQUARES.h1, flag: BITS.KSIDE_CASTLE }
+    ],
+    b: [
+      { square: SQUARES.a8, flag: BITS.QSIDE_CASTLE },
+      { square: SQUARES.h8, flag: BITS.KSIDE_CASTLE }
+    ]
+  }
+
+  var board = new Array(128)
+  var kings = { w: EMPTY, b: EMPTY }
+  var turn = WHITE
+  var castling = { w: 0, b: 0 }
+  var ep_square = EMPTY
+  var half_moves = 0
+  var move_number = 1
+  var history = []
+  var header = {}
+
+  /* if the user passes in a fen string, load it, else default to
+   * starting position
+   */
+  if (typeof fen === 'undefined') {
+    load(DEFAULT_POSITION)
+  } else {
+    load(fen)
+  }
+
+  function clear(keep_headers) {
+    if (typeof keep_headers === 'undefined') {
+      keep_headers = false
+    }
+
+    board = new Array(128)
+    kings = { w: EMPTY, b: EMPTY }
+    turn = WHITE
+    castling = { w: 0, b: 0 }
+    ep_square = EMPTY
+    half_moves = 0
+    move_number = 1
+    history = []
+    if (!keep_headers) header = {}
+    update_setup(generate_fen())
+  }
+
+  function reset() {
+    load(DEFAULT_POSITION)
+  }
+
+  function load(fen, keep_headers) {
+    if (typeof keep_headers === 'undefined') {
+      keep_headers = false
+    }
+
+    var tokens = fen.split(/\s+/)
+    var position = tokens[0]
+    var square = 0
+
+    if (!validate_fen(fen).valid) {
+      return false
+    }
+
+    clear(keep_headers)
+
+    for (var i = 0; i < position.length; i++) {
+      var piece = position.charAt(i)
+
+      if (piece === '/') {
+        square += 8
+      } else if (is_digit(piece)) {
+        square += parseInt(piece, 10)
+      } else {
+        var color = piece < 'a' ? WHITE : BLACK
+        put({ type: piece.toLowerCase(), color: color }, algebraic(square))
+        square++
+      }
+    }
+
+    turn = tokens[1]
+
+    if (tokens[2].indexOf('K') > -1) {
+      castling.w |= BITS.KSIDE_CASTLE
+    }
+    if (tokens[2].indexOf('Q') > -1) {
+      castling.w |= BITS.QSIDE_CASTLE
+    }
+    if (tokens[2].indexOf('k') > -1) {
+      castling.b |= BITS.KSIDE_CASTLE
+    }
+    if (tokens[2].indexOf('q') > -1) {
+      castling.b |= BITS.QSIDE_CASTLE
+    }
+
+    ep_square = tokens[3] === '-' ? EMPTY : SQUARES[tokens[3]]
+    half_moves = parseInt(tokens[4], 10)
+    move_number = parseInt(tokens[5], 10)
+
+    update_setup(generate_fen())
+
+    return true
+  }
+
+  /* TODO: this function is pretty much crap - it validates structure but
+   * completely ignores content (e.g. doesn't verify that each side has a king)
+   * ... we should rewrite this, and ditch the silly error_number field while
+   * we're at it
+   */
+  function validate_fen(fen) {
+    var errors = {
+      0: 'No errors.',
+      1: 'FEN string must contain six space-delimited fields.',
+      2: '6th field (move number) must be a positive integer.',
+      3: '5th field (half move counter) must be a non-negative integer.',
+      4: '4th field (en-passant square) is invalid.',
+      5: '3rd field (castling availability) is invalid.',
+      6: '2nd field (side to move) is invalid.',
+      7: "1st field (piece positions) does not contain 8 '/'-delimited rows.",
+      8: '1st field (piece positions) is invalid [consecutive numbers].',
+      9: '1st field (piece positions) is invalid [invalid piece].',
+      10: '1st field (piece positions) is invalid [row too large].',
+      11: 'Illegal en-passant square'
+    }
+
+    /* 1st criterion: 6 space-seperated fields? */
+    var tokens = fen.split(/\s+/)
+    if (tokens.length !== 6) {
+      return { valid: false, error_number: 1, error: errors[1] }
+    }
+
+    /* 2nd criterion: move number field is a integer value > 0? */
+    if (isNaN(tokens[5]) || parseInt(tokens[5], 10) <= 0) {
+      return { valid: false, error_number: 2, error: errors[2] }
+    }
+
+    /* 3rd criterion: half move counter is an integer >= 0? */
+    if (isNaN(tokens[4]) || parseInt(tokens[4], 10) < 0) {
+      return { valid: false, error_number: 3, error: errors[3] }
+    }
+
+    /* 4th criterion: 4th field is a valid e.p.-string? */
+    if (!/^(-|[abcdefgh][36])$/.test(tokens[3])) {
+      return { valid: false, error_number: 4, error: errors[4] }
+    }
+
+    /* 5th criterion: 3th field is a valid castle-string? */
+    if (!/^(KQ?k?q?|Qk?q?|kq?|q|-)$/.test(tokens[2])) {
+      return { valid: false, error_number: 5, error: errors[5] }
+    }
+
+    /* 6th criterion: 2nd field is "w" (white) or "b" (black)? */
+    if (!/^(w|b)$/.test(tokens[1])) {
+      return { valid: false, error_number: 6, error: errors[6] }
+    }
+
+    /* 7th criterion: 1st field contains 8 rows? */
+    var rows = tokens[0].split('/')
+    if (rows.length !== 8) {
+      return { valid: false, error_number: 7, error: errors[7] }
+    }
+
+    /* 8th criterion: every row is valid? */
+    for (var i = 0; i < rows.length; i++) {
+      /* check for right sum of fields AND not two numbers in succession */
+      var sum_fields = 0
+      var previous_was_number = false
+
+      for (var k = 0; k < rows[i].length; k++) {
+        if (!isNaN(rows[i][k])) {
+          if (previous_was_number) {
+            return { valid: false, error_number: 8, error: errors[8] }
+          }
+          sum_fields += parseInt(rows[i][k], 10)
+          previous_was_number = true
+        } else {
+          if (!/^[prnbqkPRNBQK]$/.test(rows[i][k])) {
+            return { valid: false, error_number: 9, error: errors[9] }
+          }
+          sum_fields += 1
+          previous_was_number = false
+        }
+      }
+      if (sum_fields !== 8) {
+        return { valid: false, error_number: 10, error: errors[10] }
+      }
+    }
+
+    if (
+      (tokens[3][1] == '3' && tokens[1] == 'w') ||
+      (tokens[3][1] == '6' && tokens[1] == 'b')
+    ) {
+      return { valid: false, error_number: 11, error: errors[11] }
+    }
+
+    /* everything's okay! */
+    return { valid: true, error_number: 0, error: errors[0] }
+  }
+
+  function generate_fen() {
+    var empty = 0
+    var fen = ''
+
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      if (board[i] == null) {
+        empty++
+      } else {
+        if (empty > 0) {
+          fen += empty
+          empty = 0
+        }
+        var color = board[i].color
+        var piece = board[i].type
+
+        fen += color === WHITE ? piece.toUpperCase() : piece.toLowerCase()
+      }
+
+      if ((i + 1) & 0x88) {
+        if (empty > 0) {
+          fen += empty
+        }
+
+        if (i !== SQUARES.h1) {
+          fen += '/'
+        }
+
+        empty = 0
+        i += 8
+      }
+    }
+
+    var cflags = ''
+    if (castling[WHITE] & BITS.KSIDE_CASTLE) {
+      cflags += 'K'
+    }
+    if (castling[WHITE] & BITS.QSIDE_CASTLE) {
+      cflags += 'Q'
+    }
+    if (castling[BLACK] & BITS.KSIDE_CASTLE) {
+      cflags += 'k'
+    }
+    if (castling[BLACK] & BITS.QSIDE_CASTLE) {
+      cflags += 'q'
+    }
+
+    /* do we have an empty castling flag? */
+    cflags = cflags || '-'
+    var epflags = ep_square === EMPTY ? '-' : algebraic(ep_square)
+
+    return [fen, turn, cflags, epflags, half_moves, move_number].join(' ')
+  }
+
+  function set_header(args) {
+    for (var i = 0; i < args.length; i += 2) {
+      if (typeof args[i] === 'string' && typeof args[i + 1] === 'string') {
+        header[args[i]] = args[i + 1]
+      }
+    }
+    return header
+  }
+
+  /* called when the initial board setup is changed with put() or remove().
+   * modifies the SetUp and FEN properties of the header object.  if the FEN is
+   * equal to the default position, the SetUp and FEN are deleted
+   * the setup is only updated if history.length is zero, ie moves haven't been
+   * made.
+   */
+  function update_setup(fen) {
+    if (history.length > 0) return
+
+    if (fen !== DEFAULT_POSITION) {
+      header['SetUp'] = '1'
+      header['FEN'] = fen
+    } else {
+      delete header['SetUp']
+      delete header['FEN']
+    }
+  }
+
+  function get(square) {
+    var piece = board[SQUARES[square]]
+    return piece ? { type: piece.type, color: piece.color } : null
+  }
+
+  function put(piece, square) {
+    /* check for valid piece object */
+    if (!('type' in piece && 'color' in piece)) {
+      return false
+    }
+
+    /* check for piece */
+    if (SYMBOLS.indexOf(piece.type.toLowerCase()) === -1) {
+      return false
+    }
+
+    /* check for valid square */
+    if (!(square in SQUARES)) {
+      return false
+    }
+
+    var sq = SQUARES[square]
+
+    /* don't let the user place more than one king */
+    if (
+      piece.type == KING &&
+      !(kings[piece.color] == EMPTY || kings[piece.color] == sq)
+    ) {
+      return false
+    }
+
+    board[sq] = { type: piece.type, color: piece.color }
+    if (piece.type === KING) {
+      kings[piece.color] = sq
+    }
+
+    update_setup(generate_fen())
+
+    return true
+  }
+
+  function remove(square) {
+    var piece = get(square)
+    board[SQUARES[square]] = null
+    if (piece && piece.type === KING) {
+      kings[piece.color] = EMPTY
+    }
+
+    update_setup(generate_fen())
+
+    return piece
+  }
+
+  function build_move(board, from, to, flags, promotion) {
+    var move = {
+      color: turn,
+      from: from,
+      to: to,
+      flags: flags,
+      piece: board[from].type
+    }
+
+    if (promotion) {
+      move.flags |= BITS.PROMOTION
+      move.promotion = promotion
+    }
+
+    if (board[to]) {
+      move.captured = board[to].type
+    } else if (flags & BITS.EP_CAPTURE) {
+      move.captured = PAWN
+    }
+    return move
+  }
+
+  function generate_moves(options) {
+    function add_move(board, moves, from, to, flags) {
+      /* if pawn promotion */
+      if (
+        board[from].type === PAWN &&
+        (rank(to) === RANK_8 || rank(to) === RANK_1)
+      ) {
+        var pieces = [QUEEN, ROOK, BISHOP, KNIGHT]
+        for (var i = 0, len = pieces.length; i < len; i++) {
+          moves.push(build_move(board, from, to, flags, pieces[i]))
+        }
+      } else {
+        moves.push(build_move(board, from, to, flags))
+      }
+    }
+
+    var moves = []
+    var us = turn
+    var them = swap_color(us)
+    var second_rank = { b: RANK_7, w: RANK_2 }
+
+    var first_sq = SQUARES.a8
+    var last_sq = SQUARES.h1
+    var single_square = false
+
+    /* do we want legal moves? */
+    var legal =
+      typeof options !== 'undefined' && 'legal' in options
+        ? options.legal
+        : true
+
+    /* are we generating moves for a single square? */
+    if (typeof options !== 'undefined' && 'square' in options) {
+      if (options.square in SQUARES) {
+        first_sq = last_sq = SQUARES[options.square]
+        single_square = true
+      } else {
+        /* invalid square */
+        return []
+      }
+    }
+
+    for (var i = first_sq; i <= last_sq; i++) {
+      /* did we run off the end of the board */
+      if (i & 0x88) {
+        i += 7
+        continue
+      }
+
+      var piece = board[i]
+      if (piece == null || piece.color !== us) {
+        continue
+      }
+
+      if (piece.type === PAWN) {
+        /* single square, non-capturing */
+        var square = i + PAWN_OFFSETS[us][0]
+        if (board[square] == null) {
+          add_move(board, moves, i, square, BITS.NORMAL)
+
+          /* double square */
+          var square = i + PAWN_OFFSETS[us][1]
+          if (second_rank[us] === rank(i) && board[square] == null) {
+            add_move(board, moves, i, square, BITS.BIG_PAWN)
+          }
+        }
+
+        /* pawn captures */
+        for (j = 2; j < 4; j++) {
+          var square = i + PAWN_OFFSETS[us][j]
+          if (square & 0x88) continue
+
+          if (board[square] != null && board[square].color === them) {
+            add_move(board, moves, i, square, BITS.CAPTURE)
+          } else if (square === ep_square) {
+            add_move(board, moves, i, ep_square, BITS.EP_CAPTURE)
+          }
+        }
+      } else {
+        for (var j = 0, len = PIECE_OFFSETS[piece.type].length; j < len; j++) {
+          var offset = PIECE_OFFSETS[piece.type][j]
+          var square = i
+
+          while (true) {
+            square += offset
+            if (square & 0x88) break
+
+            if (board[square] == null) {
+              add_move(board, moves, i, square, BITS.NORMAL)
+            } else {
+              if (board[square].color === us) break
+              add_move(board, moves, i, square, BITS.CAPTURE)
+              break
+            }
+
+            /* break, if knight or king */
+            if (piece.type === 'n' || piece.type === 'k') break
+          }
+        }
+      }
+    }
+
+    /* check for castling if: a) we're generating all moves, or b) we're doing
+     * single square move generation on the king's square
+     */
+    if (!single_square || last_sq === kings[us]) {
+      /* king-side castling */
+      if (castling[us] & BITS.KSIDE_CASTLE) {
+        var castling_from = kings[us]
+        var castling_to = castling_from + 2
+
+        if (
+          board[castling_from + 1] == null &&
+          board[castling_to] == null &&
+          !attacked(them, kings[us]) &&
+          !attacked(them, castling_from + 1) &&
+          !attacked(them, castling_to)
+        ) {
+          add_move(board, moves, kings[us], castling_to, BITS.KSIDE_CASTLE)
+        }
+      }
+
+      /* queen-side castling */
+      if (castling[us] & BITS.QSIDE_CASTLE) {
+        var castling_from = kings[us]
+        var castling_to = castling_from - 2
+
+        if (
+          board[castling_from - 1] == null &&
+          board[castling_from - 2] == null &&
+          board[castling_from - 3] == null &&
+          !attacked(them, kings[us]) &&
+          !attacked(them, castling_from - 1) &&
+          !attacked(them, castling_to)
+        ) {
+          add_move(board, moves, kings[us], castling_to, BITS.QSIDE_CASTLE)
+        }
+      }
+    }
+
+    /* return all pseudo-legal moves (this includes moves that allow the king
+     * to be captured)
+     */
+    if (!legal) {
+      return moves
+    }
+
+    /* filter out illegal moves */
+    var legal_moves = []
+    for (var i = 0, len = moves.length; i < len; i++) {
+      make_move(moves[i])
+      if (!king_attacked(us)) {
+        legal_moves.push(moves[i])
+      }
+      undo_move()
+    }
+
+    return legal_moves
+  }
+
+  /* convert a move from 0x88 coordinates to Standard Algebraic Notation
+   * (SAN)
+   *
+   * @param {boolean} sloppy Use the sloppy SAN generator to work around over
+   * disambiguation bugs in Fritz and Chessbase.  See below:
+   *
+   * r1bqkbnr/ppp2ppp/2n5/1B1pP3/4P3/8/PPPP2PP/RNBQK1NR b KQkq - 2 4
+   * 4. ... Nge7 is overly disambiguated because the knight on c6 is pinned
+   * 4. ... Ne7 is technically the valid SAN
+   */
+  function move_to_san(move, sloppy) {
+    var output = ''
+
+    if (move.flags & BITS.KSIDE_CASTLE) {
+      output = 'O-O'
+    } else if (move.flags & BITS.QSIDE_CASTLE) {
+      output = 'O-O-O'
+    } else {
+      var disambiguator = get_disambiguator(move, sloppy)
+
+      if (move.piece !== PAWN) {
+        output += move.piece.toUpperCase() + disambiguator
+      }
+
+      if (move.flags & (BITS.CAPTURE | BITS.EP_CAPTURE)) {
+        if (move.piece === PAWN) {
+          output += algebraic(move.from)[0]
+        }
+        output += 'x'
+      }
+
+      output += algebraic(move.to)
+
+      if (move.flags & BITS.PROMOTION) {
+        output += '=' + move.promotion.toUpperCase()
+      }
+    }
+
+    make_move(move)
+    if (in_check()) {
+      if (in_checkmate()) {
+        output += '#'
+      } else {
+        output += '+'
+      }
+    }
+    undo_move()
+
+    return output
+  }
+
+  // parses all of the decorators out of a SAN string
+  function stripped_san(move) {
+    return move.replace(/=/, '').replace(/[+#]?[?!]*$/, '')
+  }
+
+  function attacked(color, square) {
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      /* did we run off the end of the board */
+      if (i & 0x88) {
+        i += 7
+        continue
+      }
+
+      /* if empty square or wrong color */
+      if (board[i] == null || board[i].color !== color) continue
+
+      var piece = board[i]
+      var difference = i - square
+      var index = difference + 119
+
+      if (ATTACKS[index] & (1 << SHIFTS[piece.type])) {
+        if (piece.type === PAWN) {
+          if (difference > 0) {
+            if (piece.color === WHITE) return true
+          } else {
+            if (piece.color === BLACK) return true
+          }
+          continue
+        }
+
+        /* if the piece is a knight or a king */
+        if (piece.type === 'n' || piece.type === 'k') return true
+
+        var offset = RAYS[index]
+        var j = i + offset
+
+        var blocked = false
+        while (j !== square) {
+          if (board[j] != null) {
+            blocked = true
+            break
+          }
+          j += offset
+        }
+
+        if (!blocked) return true
+      }
+    }
+
+    return false
+  }
+
+  function king_attacked(color) {
+    return attacked(swap_color(color), kings[color])
+  }
+
+  function in_check() {
+    return king_attacked(turn)
+  }
+
+  function in_checkmate() {
+    return in_check() && generate_moves().length === 0
+  }
+
+  function in_stalemate() {
+    return !in_check() && generate_moves().length === 0
+  }
+
+  function insufficient_material() {
+    var pieces = {}
+    var bishops = []
+    var num_pieces = 0
+    var sq_color = 0
+
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      sq_color = (sq_color + 1) % 2
+      if (i & 0x88) {
+        i += 7
+        continue
+      }
+
+      var piece = board[i]
+      if (piece) {
+        pieces[piece.type] = piece.type in pieces ? pieces[piece.type] + 1 : 1
+        if (piece.type === BISHOP) {
+          bishops.push(sq_color)
+        }
+        num_pieces++
+      }
+    }
+
+    /* k vs. k */
+    if (num_pieces === 2) {
+      return true
+    } else if (
+      /* k vs. kn .... or .... k vs. kb */
+      num_pieces === 3 &&
+      (pieces[BISHOP] === 1 || pieces[KNIGHT] === 1)
+    ) {
+      return true
+    } else if (num_pieces === pieces[BISHOP] + 2) {
+      /* kb vs. kb where any number of bishops are all on the same color */
+      var sum = 0
+      var len = bishops.length
+      for (var i = 0; i < len; i++) {
+        sum += bishops[i]
+      }
+      if (sum === 0 || sum === len) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  function in_threefold_repetition() {
+    /* TODO: while this function is fine for casual use, a better
+     * implementation would use a Zobrist key (instead of FEN). the
+     * Zobrist key would be maintained in the make_move/undo_move functions,
+     * avoiding the costly that we do below.
+     */
+    var moves = []
+    var positions = {}
+    var repetition = false
+
+    while (true) {
+      var move = undo_move()
+      if (!move) break
+      moves.push(move)
+    }
+
+    while (true) {
+      /* remove the last two fields in the FEN string, they're not needed
+       * when checking for draw by rep */
+      var fen = generate_fen()
+        .split(' ')
+        .slice(0, 4)
+        .join(' ')
+
+      /* has the position occurred three or move times */
+      positions[fen] = fen in positions ? positions[fen] + 1 : 1
+      if (positions[fen] >= 3) {
+        repetition = true
+      }
+
+      if (!moves.length) {
+        break
+      }
+      make_move(moves.pop())
+    }
+
+    return repetition
+  }
+
+  function push(move) {
+    history.push({
+      move: move,
+      kings: { b: kings.b, w: kings.w },
+      turn: turn,
+      castling: { b: castling.b, w: castling.w },
+      ep_square: ep_square,
+      half_moves: half_moves,
+      move_number: move_number
+    })
+  }
+
+  function make_move(move) {
+    var us = turn
+    var them = swap_color(us)
+    push(move)
+
+    board[move.to] = board[move.from]
+    board[move.from] = null
+
+    /* if ep capture, remove the captured pawn */
+    if (move.flags & BITS.EP_CAPTURE) {
+      if (turn === BLACK) {
+        board[move.to - 16] = null
+      } else {
+        board[move.to + 16] = null
+      }
+    }
+
+    /* if pawn promotion, replace with new piece */
+    if (move.flags & BITS.PROMOTION) {
+      board[move.to] = { type: move.promotion, color: us }
+    }
+
+    /* if we moved the king */
+    if (board[move.to].type === KING) {
+      kings[board[move.to].color] = move.to
+
+      /* if we castled, move the rook next to the king */
+      if (move.flags & BITS.KSIDE_CASTLE) {
+        var castling_to = move.to - 1
+        var castling_from = move.to + 1
+        board[castling_to] = board[castling_from]
+        board[castling_from] = null
+      } else if (move.flags & BITS.QSIDE_CASTLE) {
+        var castling_to = move.to + 1
+        var castling_from = move.to - 2
+        board[castling_to] = board[castling_from]
+        board[castling_from] = null
+      }
+
+      /* turn off castling */
+      castling[us] = ''
+    }
+
+    /* turn off castling if we move a rook */
+    if (castling[us]) {
+      for (var i = 0, len = ROOKS[us].length; i < len; i++) {
+        if (
+          move.from === ROOKS[us][i].square &&
+          castling[us] & ROOKS[us][i].flag
+        ) {
+          castling[us] ^= ROOKS[us][i].flag
+          break
+        }
+      }
+    }
+
+    /* turn off castling if we capture a rook */
+    if (castling[them]) {
+      for (var i = 0, len = ROOKS[them].length; i < len; i++) {
+        if (
+          move.to === ROOKS[them][i].square &&
+          castling[them] & ROOKS[them][i].flag
+        ) {
+          castling[them] ^= ROOKS[them][i].flag
+          break
+        }
+      }
+    }
+
+    /* if big pawn move, update the en passant square */
+    if (move.flags & BITS.BIG_PAWN) {
+      if (turn === 'b') {
+        ep_square = move.to - 16
+      } else {
+        ep_square = move.to + 16
+      }
+    } else {
+      ep_square = EMPTY
+    }
+
+    /* reset the 50 move counter if a pawn is moved or a piece is captured */
+    if (move.piece === PAWN) {
+      half_moves = 0
+    } else if (move.flags & (BITS.CAPTURE | BITS.EP_CAPTURE)) {
+      half_moves = 0
+    } else {
+      half_moves++
+    }
+
+    if (turn === BLACK) {
+      move_number++
+    }
+    turn = swap_color(turn)
+  }
+
+  function undo_move() {
+    var old = history.pop()
+    if (old == null) {
+      return null
+    }
+
+    var move = old.move
+    kings = old.kings
+    turn = old.turn
+    castling = old.castling
+    ep_square = old.ep_square
+    half_moves = old.half_moves
+    move_number = old.move_number
+
+    var us = turn
+    var them = swap_color(turn)
+
+    board[move.from] = board[move.to]
+    board[move.from].type = move.piece // to undo any promotions
+    board[move.to] = null
+
+    if (move.flags & BITS.CAPTURE) {
+      board[move.to] = { type: move.captured, color: them }
+    } else if (move.flags & BITS.EP_CAPTURE) {
+      var index
+      if (us === BLACK) {
+        index = move.to - 16
+      } else {
+        index = move.to + 16
+      }
+      board[index] = { type: PAWN, color: them }
+    }
+
+    if (move.flags & (BITS.KSIDE_CASTLE | BITS.QSIDE_CASTLE)) {
+      var castling_to, castling_from
+      if (move.flags & BITS.KSIDE_CASTLE) {
+        castling_to = move.to + 1
+        castling_from = move.to - 1
+      } else if (move.flags & BITS.QSIDE_CASTLE) {
+        castling_to = move.to - 2
+        castling_from = move.to + 1
+      }
+
+      board[castling_to] = board[castling_from]
+      board[castling_from] = null
+    }
+
+    return move
+  }
+
+  /* this function is used to uniquely identify ambiguous moves */
+  function get_disambiguator(move, sloppy) {
+    var moves = generate_moves({ legal: !sloppy })
+
+    var from = move.from
+    var to = move.to
+    var piece = move.piece
+
+    var ambiguities = 0
+    var same_rank = 0
+    var same_file = 0
+
+    for (var i = 0, len = moves.length; i < len; i++) {
+      var ambig_from = moves[i].from
+      var ambig_to = moves[i].to
+      var ambig_piece = moves[i].piece
+
+      /* if a move of the same piece type ends on the same to square, we'll
+       * need to add a disambiguator to the algebraic notation
+       */
+      if (piece === ambig_piece && from !== ambig_from && to === ambig_to) {
+        ambiguities++
+
+        if (rank(from) === rank(ambig_from)) {
+          same_rank++
+        }
+
+        if (file(from) === file(ambig_from)) {
+          same_file++
+        }
+      }
+    }
+
+    if (ambiguities > 0) {
+      /* if there exists a similar moving piece on the same rank and file as
+       * the move in question, use the square as the disambiguator
+       */
+      if (same_rank > 0 && same_file > 0) {
+        return algebraic(from)
+      } else if (same_file > 0) {
+        /* if the moving piece rests on the same file, use the rank symbol as the
+         * disambiguator
+         */
+        return algebraic(from).charAt(1)
+      } else {
+        /* else use the file symbol */
+        return algebraic(from).charAt(0)
+      }
+    }
+
+    return ''
+  }
+
+  function ascii() {
+    var s = '   +------------------------+\n'
+    for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+      /* display the rank */
+      if (file(i) === 0) {
+        s += ' ' + '87654321'[rank(i)] + ' |'
+      }
+
+      /* empty piece */
+      if (board[i] == null) {
+        s += ' . '
+      } else {
+        var piece = board[i].type
+        var color = board[i].color
+        var symbol = color === WHITE ? piece.toUpperCase() : piece.toLowerCase()
+        s += ' ' + symbol + ' '
+      }
+
+      if ((i + 1) & 0x88) {
+        s += '|\n'
+        i += 8
+      }
+    }
+    s += '   +------------------------+\n'
+    s += '     a  b  c  d  e  f  g  h\n'
+
+    return s
+  }
+
+  // convert a move from Standard Algebraic Notation (SAN) to 0x88 coordinates
+  function move_from_san(move, sloppy) {
+    // strip off any move decorations: e.g Nf3+?!
+    var clean_move = stripped_san(move)
+
+    // if we're using the sloppy parser run a regex to grab piece, to, and from
+    // this should parse invalid SAN like: Pe2-e4, Rc1c4, Qf3xf7
+    if (sloppy) {
+      var matches = clean_move.match(
+        /([pnbrqkPNBRQK])?([a-h][1-8])x?-?([a-h][1-8])([qrbnQRBN])?/
+      )
+      if (matches) {
+        var piece = matches[1]
+        var from = matches[2]
+        var to = matches[3]
+        var promotion = matches[4]
+      }
+    }
+
+    var moves = generate_moves()
+    for (var i = 0, len = moves.length; i < len; i++) {
+      // try the strict parser first, then the sloppy parser if requested
+      // by the user
+      if (
+        clean_move === stripped_san(move_to_san(moves[i])) ||
+        (sloppy && clean_move === stripped_san(move_to_san(moves[i], true)))
+      ) {
+        return moves[i]
+      } else {
+        if (
+          matches &&
+          (!piece || piece.toLowerCase() == moves[i].piece) &&
+          SQUARES[from] == moves[i].from &&
+          SQUARES[to] == moves[i].to &&
+          (!promotion || promotion.toLowerCase() == moves[i].promotion)
+        ) {
+          return moves[i]
+        }
+      }
+    }
+
+    return null
+  }
+
+  /*****************************************************************************
+   * UTILITY FUNCTIONS
+   ****************************************************************************/
+  function rank(i) {
+    return i >> 4
+  }
+
+  function file(i) {
+    return i & 15
+  }
+
+  function algebraic(i) {
+    var f = file(i),
+      r = rank(i)
+    return 'abcdefgh'.substring(f, f + 1) + '87654321'.substring(r, r + 1)
+  }
+
+  function swap_color(c) {
+    return c === WHITE ? BLACK : WHITE
+  }
+
+  function is_digit(c) {
+    return '0123456789'.indexOf(c) !== -1
+  }
+
+  /* pretty = external move object */
+  function make_pretty(ugly_move) {
+    var move = clone(ugly_move)
+    move.san = move_to_san(move, false)
+    move.to = algebraic(move.to)
+    move.from = algebraic(move.from)
+
+    var flags = ''
+
+    for (var flag in BITS) {
+      if (BITS[flag] & move.flags) {
+        flags += FLAGS[flag]
+      }
+    }
+    move.flags = flags
+
+    return move
+  }
+
+  function clone(obj) {
+    var dupe = obj instanceof Array ? [] : {}
+
+    for (var property in obj) {
+      if (typeof property === 'object') {
+        dupe[property] = clone(obj[property])
+      } else {
+        dupe[property] = obj[property]
+      }
+    }
+
+    return dupe
+  }
+
+  function trim(str) {
+    return str.replace(/^\s+|\s+$/g, '')
+  }
+
+  /*****************************************************************************
+   * DEBUGGING UTILITIES
+   ****************************************************************************/
+  function perft(depth) {
+    var moves = generate_moves({ legal: false })
+    var nodes = 0
+    var color = turn
+
+    for (var i = 0, len = moves.length; i < len; i++) {
+      make_move(moves[i])
+      if (!king_attacked(color)) {
+        if (depth - 1 > 0) {
+          var child_nodes = perft(depth - 1)
+          nodes += child_nodes
+        } else {
+          nodes++
+        }
+      }
+      undo_move()
+    }
+
+    return nodes
+  }
+
+  return {
+    /***************************************************************************
+     * PUBLIC CONSTANTS (is there a better way to do this?)
+     **************************************************************************/
+    WHITE: WHITE,
+    BLACK: BLACK,
+    PAWN: PAWN,
+    KNIGHT: KNIGHT,
+    BISHOP: BISHOP,
+    ROOK: ROOK,
+    QUEEN: QUEEN,
+    KING: KING,
+    SQUARES: (function() {
+      /* from the ECMA-262 spec (section 12.6.4):
+       * "The mechanics of enumerating the properties ... is
+       * implementation dependent"
+       * so: for (var sq in SQUARES) { keys.push(sq); } might not be
+       * ordered correctly
+       */
+      var keys = []
+      for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+        if (i & 0x88) {
+          i += 7
+          continue
+        }
+        keys.push(algebraic(i))
+      }
+      return keys
+    })(),
+    FLAGS: FLAGS,
+
+    /***************************************************************************
+     * PUBLIC API
+     **************************************************************************/
+    load: function(fen) {
+      return load(fen)
+    },
+
+    reset: function() {
+      return reset()
+    },
+
+    moves: function(options) {
+      /* The internal representation of a chess move is in 0x88 format, and
+       * not meant to be human-readable.  The code below converts the 0x88
+       * square coordinates to algebraic coordinates.  It also prunes an
+       * unnecessary move keys resulting from a verbose call.
+       */
+
+      var ugly_moves = generate_moves(options)
+      var moves = []
+
+      for (var i = 0, len = ugly_moves.length; i < len; i++) {
+        /* does the user want a full move object (most likely not), or just
+         * SAN
+         */
+        if (
+          typeof options !== 'undefined' &&
+          'verbose' in options &&
+          options.verbose
+        ) {
+          moves.push(make_pretty(ugly_moves[i]))
+        } else {
+          moves.push(move_to_san(ugly_moves[i], false))
+        }
+      }
+
+      return moves
+    },
+
+    in_check: function() {
+      return in_check()
+    },
+
+    in_checkmate: function() {
+      return in_checkmate()
+    },
+
+    in_stalemate: function() {
+      return in_stalemate()
+    },
+
+    in_draw: function() {
+      return (
+        half_moves >= 100 ||
+        in_stalemate() ||
+        insufficient_material() ||
+        in_threefold_repetition()
+      )
+    },
+
+    insufficient_material: function() {
+      return insufficient_material()
+    },
+
+    in_threefold_repetition: function() {
+      return in_threefold_repetition()
+    },
+
+    game_over: function() {
+      return (
+        half_moves >= 100 ||
+        in_checkmate() ||
+        in_stalemate() ||
+        insufficient_material() ||
+        in_threefold_repetition()
+      )
+    },
+
+    validate_fen: function(fen) {
+      return validate_fen(fen)
+    },
+
+    fen: function() {
+      return generate_fen()
+    },
+
+    board: function() {
+      var output = [],
+        row = []
+
+      for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
+        if (board[i] == null) {
+          row.push(null)
+        } else {
+          row.push({ type: board[i].type, color: board[i].color })
+        }
+        if ((i + 1) & 0x88) {
+          output.push(row)
+          row = []
+          i += 8
+        }
+      }
+
+      return output
+    },
+
+    pgn: function(options) {
+      /* using the specification from http://www.chessclub.com/help/PGN-spec
+       * example for html usage: .pgn({ max_width: 72, newline_char: "<br />" })
+       */
+      var newline =
+        typeof options === 'object' && typeof options.newline_char === 'string'
+          ? options.newline_char
+          : '\n'
+      var max_width =
+        typeof options === 'object' && typeof options.max_width === 'number'
+          ? options.max_width
+          : 0
+      var result = []
+      var header_exists = false
+
+      /* add the PGN header headerrmation */
+      for (var i in header) {
+        /* TODO: order of enumerated properties in header object is not
+         * guaranteed, see ECMA-262 spec (section 12.6.4)
+         */
+        result.push('[' + i + ' "' + header[i] + '"]' + newline)
+        header_exists = true
+      }
+
+      if (header_exists && history.length) {
+        result.push(newline)
+      }
+
+      /* pop all of history onto reversed_history */
+      var reversed_history = []
+      while (history.length > 0) {
+        reversed_history.push(undo_move())
+      }
+
+      var moves = []
+      var move_string = ''
+
+      /* build the list of moves.  a move_string looks like: "3. e3 e6" */
+      while (reversed_history.length > 0) {
+        var move = reversed_history.pop()
+
+        /* if the position started with black to move, start PGN with 1. ... */
+        if (!history.length && move.color === 'b') {
+          move_string = move_number + '. ...'
+        } else if (move.color === 'w') {
+          /* store the previous generated move_string if we have one */
+          if (move_string.length) {
+            moves.push(move_string)
+          }
+          move_string = move_number + '.'
+        }
+
+        move_string = move_string + ' ' + move_to_san(move, false)
+        make_move(move)
+      }
+
+      /* are there any other leftover moves? */
+      if (move_string.length) {
+        moves.push(move_string)
+      }
+
+      /* is there a result? */
+      if (typeof header.Result !== 'undefined') {
+        moves.push(header.Result)
+      }
+
+      /* history should be back to what is was before we started generating PGN,
+       * so join together moves
+       */
+      if (max_width === 0) {
+        return result.join('') + moves.join(' ')
+      }
+
+      /* wrap the PGN output at max_width */
+      var current_width = 0
+      for (var i = 0; i < moves.length; i++) {
+        /* if the current move will push past max_width */
+        if (current_width + moves[i].length > max_width && i !== 0) {
+          /* don't end the line with whitespace */
+          if (result[result.length - 1] === ' ') {
+            result.pop()
+          }
+
+          result.push(newline)
+          current_width = 0
+        } else if (i !== 0) {
+          result.push(' ')
+          current_width++
+        }
+        result.push(moves[i])
+        current_width += moves[i].length
+      }
+
+      return result.join('')
+    },
+
+    load_pgn: function(pgn, options) {
+      // allow the user to specify the sloppy move parser to work around over
+      // disambiguation bugs in Fritz and Chessbase
+      var sloppy =
+        typeof options !== 'undefined' && 'sloppy' in options
+          ? options.sloppy
+          : false
+
+      function mask(str) {
+        return str.replace(/\\/g, '\\')
+      }
+
+      function has_keys(object) {
+        for (var key in object) {
+          return true
+        }
+        return false
+      }
+
+      function parse_pgn_header(header, options) {
+        var newline_char =
+          typeof options === 'object' &&
+          typeof options.newline_char === 'string'
+            ? options.newline_char
+            : '\r?\n'
+        var header_obj = {}
+        var headers = header.split(new RegExp(mask(newline_char)))
+        var key = ''
+        var value = ''
+
+        for (var i = 0; i < headers.length; i++) {
+          key = headers[i].replace(/^\[([A-Z][A-Za-z]*)\s.*\]$/, '$1')
+          value = headers[i].replace(/^\[[A-Za-z]+\s"(.*)"\]$/, '$1')
+          if (trim(key).length > 0) {
+            header_obj[key] = value
+          }
+        }
+
+        return header_obj
+      }
+
+      var newline_char =
+        typeof options === 'object' && typeof options.newline_char === 'string'
+          ? options.newline_char
+          : '\r?\n'
+
+      // RegExp to split header. Takes advantage of the fact that header and movetext
+      // will always have a blank line between them (ie, two newline_char's).
+      // With default newline_char, will equal: /^(\[((?:\r?\n)|.)*\])(?:\r?\n){2}/
+      var header_regex = new RegExp(
+        '^(\\[((?:' +
+          mask(newline_char) +
+          ')|.)*\\])' +
+          '(?:' +
+          mask(newline_char) +
+          '){2}'
+      )
+
+      // If no header given, begin with moves.
+      var header_string = header_regex.test(pgn)
+        ? header_regex.exec(pgn)[1]
+        : ''
+
+      // Put the board in the starting position
+      reset()
+
+      /* parse PGN header */
+      var headers = parse_pgn_header(header_string, options)
+      for (var key in headers) {
+        set_header([key, headers[key]])
+      }
+
+      /* load the starting position indicated by [Setup '1'] and
+       * [FEN position] */
+      if (headers['SetUp'] === '1') {
+        if (!('FEN' in headers && load(headers['FEN'], true))) {
+          // second argument to load: don't clear the headers
+          return false
+        }
+      }
+
+      /* delete header to get the moves */
+      var ms = pgn
+        .replace(header_string, '')
+        .replace(new RegExp(mask(newline_char), 'g'), ' ')
+
+      /* delete comments */
+      ms = ms.replace(/(\{[^}]+\})+?/g, '')
+
+      /* delete recursive annotation variations */
+      var rav_regex = /(\([^\(\)]+\))+?/g
+      while (rav_regex.test(ms)) {
+        ms = ms.replace(rav_regex, '')
+      }
+
+      /* delete move numbers */
+      ms = ms.replace(/\d+\.(\.\.)?/g, '')
+
+      /* delete ... indicating black to move */
+      ms = ms.replace(/\.\.\./g, '')
+
+      /* delete numeric annotation glyphs */
+      ms = ms.replace(/\$\d+/g, '')
+
+      /* trim and get array of moves */
+      var moves = trim(ms).split(new RegExp(/\s+/))
+
+      /* delete empty entries */
+      moves = moves
+        .join(',')
+        .replace(/,,+/g, ',')
+        .split(',')
+      var move = ''
+
+      for (var half_move = 0; half_move < moves.length - 1; half_move++) {
+        move = move_from_san(moves[half_move], sloppy)
+
+        /* move not possible! (don't clear the board to examine to show the
+         * latest valid position)
+         */
+        if (move == null) {
+          return false
+        } else {
+          make_move(move)
+        }
+      }
+
+      /* examine last move */
+      move = moves[moves.length - 1]
+      if (POSSIBLE_RESULTS.indexOf(move) > -1) {
+        if (has_keys(header) && typeof header.Result === 'undefined') {
+          set_header(['Result', move])
+        }
+      } else {
+        move = move_from_san(move, sloppy)
+        if (move == null) {
+          return false
+        } else {
+          make_move(move)
+        }
+      }
+      return true
+    },
+
+    header: function() {
+      return set_header(arguments)
+    },
+
+    ascii: function() {
+      return ascii()
+    },
+
+    turn: function() {
+      return turn
+    },
+
+    move: function(move, options) {
+      /* The move function can be called with in the following parameters:
+       *
+       * .move('Nxb7')      <- where 'move' is a case-sensitive SAN string
+       *
+       * .move({ from: 'h7', <- where the 'move' is a move object (additional
+       *         to :'h8',      fields are ignored)
+       *         promotion: 'q',
+       *      })
+       */
+
+      // allow the user to specify the sloppy move parser to work around over
+      // disambiguation bugs in Fritz and Chessbase
+      var sloppy =
+        typeof options !== 'undefined' && 'sloppy' in options
+          ? options.sloppy
+          : false
+
+      var move_obj = null
+
+      if (typeof move === 'string') {
+        move_obj = move_from_san(move, sloppy)
+      } else if (typeof move === 'object') {
+        var moves = generate_moves()
+
+        /* convert the pretty move object to an ugly move object */
+        for (var i = 0, len = moves.length; i < len; i++) {
+          if (
+            move.from === algebraic(moves[i].from) &&
+            move.to === algebraic(moves[i].to) &&
+            (!('promotion' in moves[i]) ||
+              move.promotion === moves[i].promotion)
+          ) {
+            move_obj = moves[i]
+            break
+          }
+        }
+      }
+
+      /* failed to find move */
+      if (!move_obj) {
+        return null
+      }
+
+      /* need to make a copy of move because we can't generate SAN after the
+       * move is made
+       */
+      var pretty_move = make_pretty(move_obj)
+
+      make_move(move_obj)
+
+      return pretty_move
+    },
+
+    undo: function() {
+      var move = undo_move()
+      return move ? make_pretty(move) : null
+    },
+
+    clear: function() {
+      return clear()
+    },
+
+    put: function(piece, square) {
+      return put(piece, square)
+    },
+
+    get: function(square) {
+      return get(square)
+    },
+
+    remove: function(square) {
+      return remove(square)
+    },
+
+    perft: function(depth) {
+      return perft(depth)
+    },
+
+    square_color: function(square) {
+      if (square in SQUARES) {
+        var sq_0x88 = SQUARES[square]
+        return (rank(sq_0x88) + file(sq_0x88)) % 2 === 0 ? 'light' : 'dark'
+      }
+
+      return null
+    },
+
+    history: function(options) {
+      var reversed_history = []
+      var move_history = []
+      var verbose =
+        typeof options !== 'undefined' &&
+        'verbose' in options &&
+        options.verbose
+
+      while (history.length > 0) {
+        reversed_history.push(undo_move())
+      }
+
+      while (reversed_history.length > 0) {
+        var move = reversed_history.pop()
+        if (verbose) {
+          move_history.push(make_pretty(move))
+        } else {
+          move_history.push(move_to_san(move))
+        }
+        make_move(move)
+      }
+
+      return move_history
+    }
+  }
+}
+
+/* export Chess object if using node or any other CommonJS compatible
+ * environment */
+if (typeof exports !== 'undefined') exports.Chess = Chess
+/* export Chess object for any RequireJS compatible environment */
+if (typeof define !== 'undefined')
+  define(function() {
+    return Chess
+  })
+</script>
+<script>
+const DATA = {"games":[["2016.04.29","Ultimate Blitz Challenge","Saint Louis USA","18.1","Caruana, Fabiano","2795","2812","0-1","A05","King's Indian Attack: Symmetrical Defense","Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O c4 d6 b3 e5 Bb2 c5 e3 Nc6 Nc3 Bf5 d4 e4 Ne1 Re8 Nc2 h5 Qd2 h4 Ba3 b6 Rfd1 Bg4 Rdc1 Qd7 b4 Qf5 Bb2 Rad8 Nb5 Bf3 d5 Ne5 Bxe5 Rxe5 Ne1 hxg3 fxg3 Bh6 Rab1 Kg7 Rb3 Qh5 h3 Nh7 g4 Bxg4 hxg4 Qxg4 Qd1 Qg3 Qe2 Ng5 Kh1 Rh8 Nxd6 Kg8 bxc5 Bf8+ Kg1 Nh3+ Kf1 Bxd6 cxd6 Rf5+ Nf3 Rxf3+","King's Indian Attack"],["2001.03.25","World Cup of Rapid Chess KO","Cannes","3.1","Bareev, Evgeny","2709","2849","1/2-1/2","A34","English Opening: Symmetrical Variation, Three Knights Variation","Nf3 Nf6 c4 c5 Nc3 d5 cxd5 Nxd5 e3 Nxc3 bxc3 g6 Bb5+ Bd7 a4 Bg7 O-O O-O Ba3 b6 d4 a6 Be2 Nc6 Qc2 Qc7 dxc5 bxc5 Bxc5 Qa5 Ba3 Qxc3 Qxc3 Bxc3 Rab1 Rfb8 Rxb8+ Rxb8 Bxa6 Nb4 Bc4 Bxa4 Rc1 Bf6 Rb1 Nc6","English Opening"],["2000.03.08","Linares 17th","Linares","8","Kramnik, Vladimir","2758","2851","1/2-1/2","A15","English Opening: Anglo-Indian Defense, King's Knight Variation","Nf3 Nf6 c4 c5 g3 d5 d4 dxc4 Qa4+ Bd7 Qxc4 Bc6 dxc5 Bd5 Qa4+ Bc6 Qc4 Bd5 Qc2 e6 Bg2 Be4 Qc4 Bd5 Qh4 Bxc5 Nc3 Bc6 O-O Be7 Rd1 Qa5 Bd2 Nbd7 g4 h6 Qg3 Qa6 h4 Qc4 Bf4 Qb4 a3 Qxb2 Nd4 g5 Nxc6 gxf4 Qd3 bxc6 Bxc6 O-O Bxa8 Ne5 Qd4 Rxa8 Qxe5 Rc8 Rac1 Nd5 Nxd5 Qxe5 Nxe7+ Kg7 Rxc8 Qxe2 Rg8+ Kf6 Rd7 Qe1+ Kg2 Qe4+ Kh2 Qc2 Kg2 Qe4+ Kh2 Qc2 g5+ hxg5 Rxg5 Qxf2+","English Opening"],["2000.02.20","KasparovChess GP g/60","Internet","4.2","Piket, Jeroen","2633","2851","1-0","A34","English Opening: Symmetrical Variation, Rubinstein Variation","Nf3 Nf6 c4 c5 Nc3 d5 cxd5 Nxd5 g3 Nc6 Bg2 Nc7 d3 e5 O-O Be7 Nd2 Bd7 Nc4 O-O Bxc6 Bxc6 Nxe5 Be8 Qb3 Bf6 Ng4 Bd4 e3 Bxc3 Qxc3 b6 f3 Bb5 Nf2 Qd7 e4 Ne6 Be3 a5 Rad1 Rad8 Rd2 Qc6 Rc1 Qb7 a3 Nd4 Kg2 Rc8 Rb1 Rfd8 Bxd4 Rxd4 b4 axb4 axb4 Qd7 bxc5 bxc5 Rbb2 h6 Ra2 Kh7 Ra5 Rd8 Qxc5 Bxd3 Rxd3 Rxd3 Nxd3 Qxd3 Ra2 Qb3 Qc2 Qxc2+ Rxc2 h5 f4 g6 e5 Rd3 Kh3 Re3 Kh4 Kg7 Kg5 Re1 Rc7 Re2 Re7 Ra2 f5 gxf5 e6 h4 Rxf7+ Kg8 Kf6","English Opening"],["2000.06.23","Fujitsu Siemens Giants","Frankfurt","4","Kramnik, Vladimir","2758","2851","1/2-1/2","A15","English Opening: Anglo-Indian Defense, King's Knight Variation","Nf3 Nf6 c4 c5 g3 d5 cxd5 Nxd5 Bg2 Nc6 d4 cxd4 Nxd4 Ndb4 Nxc6 Qxd1+ Kxd1 Nxc6 Nc3 Bd7 Be3 O-O-O Ke1 e5 Rc1 Kb8 f4 f5 fxe5 Nxe5 Bf4 Re8 Rd1 Bc6 Bxc6 bxc6 Rd7 g5 Bxe5+ Rxe5 Rf1 Bb4 Rf7 Rhe8 Rf2 Ra5 Kf1 Ree5 Rxh7 g4 Rf7 Bxc3 bxc3 Rxa2 R7xf5 Raxe2 Rf8+ Re8 Rxe8+ Rxe8 Rf4 Rg8 Ke2","English Opening"],["2000.10.31","BGN World Chess Championship","London","14","Kramnik, Vladimir","2770","2849","1/2-1/2","A15","English Opening: Anglo-Indian Defense, Queen's Indian Formation","Nf3 Nf6 c4 b6 g3 c5 Bg2 Bb7 O-O g6 Nc3 Bg7 d4 cxd4 Qxd4 d6 Rd1 Nbd7 Be3 Rc8 Rac1 O-O Qh4 a6 Ne1 Bxg2 Nxg2 Re8 b3 Qc7 Bg5 Qb7 Ne3 b5 Ned5 bxc4 bxc4 h5 Qf4 Qc6 Bxf6 Nxf6 Nxf6+ Bxf6 Nd5 Bb2 Rb1 Bg7 Qg5 Kf8 Rdc1 e6 Nf6 Red8 h4 Qa8 c5 Rxc5 Rxc5 Bxf6 Qxf6 dxc5 Kh2 Kg8 Rb6 Re8 Qf3 Qxf3 exf3 Rc8 Rxa6 c4 Rd6 c3 Rd1 Ra8 Rc1 Rxa2 Rxc3 Rxf2+ Kg1 Ra2 Rc7 Kf8 Rb7 Ke8 Rb8+ Ke7 Rb7+ Kf6 Kf1 e5 Rb6+ Kf5 Rb7 Ke6 Rb6+ Kf5 Rb7 f6 Rg7 g5 hxg5 fxg5 Rg8 g4 Rf8+ Ke6 Re8+ Kf5 Rf8+ Kg6 Rg8+ Kf5","English Opening"],["1999.01.18","Hoogovens 5'","Wijk aan Zee","5","Topalov, Veselin","2700","2812","0-1","A15","English Opening: Anglo-Indian Defense, Queen's Indian Formation","Nf3 Nf6 c4 b6 g3 Bb7 Bg2 c5 O-O g6 d4 cxd4 Qxd4 Bg7 Nc3 d6 Rd1 Nbd7 Be3 O-O Qh4 Rc8 Bh3 Bxf3 exf3 Ne5 Kg2 Rxc4 Rd4 Rxc3 bxc3 Qa8 Kf1 Nxf3 Bg2 Nxh4 Bxa8 Nf5 Bb7 Nxd4 cxd4 Rb8 Ba6 Nd5 Rc1 h5 Ke2 e6 a3 b5 Rc8+ Rxc8 Bxc8 Nxe3 fxe3 d5 Ba6 Bf8 Bxb5 Bxa3 h3 f5 Ba6 g5 Kf3 g4+ hxg4 hxg4+ Kf2 Kf7 Ke2 Bd6 Kf2 Bb4 Kf1 Bd2 Ke2 Bb4 Kf1 Ke7 Kf2 Ba5 Kf1 Bb6 Kf2 Kf6 Ke2 e5 dxe5+ Kxe5 Kd3 Bc7 Ke2 Kf6 Kf2 Be5 Kg2 d4 exd4 Bxd4 Kf1 Kg5 Kg2 f4 gxf4+ Kxf4 Kf1 Ke3","English Opening"],["1999.01.18","Hoogovens 5'","Wijk aan Zee","11","Yermolinsky, Alex","2597","2812","1/2-1/2","A15","English Opening: Anglo-Indian Defense, Queen's Indian Formation","Nf3 Nf6 c4 b6 g3 c5 Bg2 Bb7 O-O g6 Nc3 Bg7 d4 cxd4 Qxd4 d6 Be3 Nbd7 Rac1 O-O Qh4 Rc8 b3 a6 Bh6 Rc5 Bxg7 Kxg7 Qd4 Qa8 Rfd1 b5 cxb5 axb5 b4 Rc4 Qe3 Qa3 Nd2 Rc7 Bxb7 Rxb7 Qxe7 Qxb4 Nb3 Re8 Qxd6 Qxd6 Rxd6 b4 Nd5 Nxd5 Rxd5 Rxe2 Rd2 Rxd2 Nxd2 Ne5 Rb1 Rd7 Nf1 Nc6 Ne3 Rd2 Rc1 Ne5 Rc2 Nf3+ Kf1 Rxc2 Nxc2 b3","English Opening"],["1998.11.27","Kosmos m 5'","Moscow","6","Kramnik, Vladimir","2780","2815","1-0","E97","King's Indian Defense: Orthodox Variation, Bayonet Attack","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 O-O Nc6 d5 Ne7 b4 a5 Ba3 axb4 Bxb4 Nd7 a4 f5 Ng5 Nc5 Bxc5 dxc5 Bf3 Ra6 a5 Kh8 Ne6 Bxe6 dxe6 f4 Qxd8 Rxd8 Rfb1 Rb8 Nd5 Nxd5 cxd5 Bf8 Be2 Ra7 a6 Bd6 h4 Kg7 Bc4 b6 Bb5 h6 Kf1 Rf8 Ke2 Rf6 Rb3 Kf8 Rh3 Ke7 Kd3 Kf8 Kc4 Kg7 Bc6 Kf8 Kb5 Kg7 Bb7 Kf8 Rg1 Ke7 g3 f3 Rc1 Kd8 Rc3 h5 Rh1 Ke7 Rd1","King's Indian Defense"],["1998.11.28","Kosmos m 5'","Moscow","19","Kramnik, Vladimir","2780","2815","1-0","D85","Grünfeld Defense: Exchange Variation, Modern Exchange Variation","Nf3 Nf6 c4 c5 Nc3 d5 cxd5 Nxd5 d4 Nxc3 bxc3 g6 e4 Bg7 Bb5+ Nc6 O-O O-O Be3 cxd4 cxd4 Bg4 Bxc6 bxc6 Rc1 Bxf3 Qxf3 Bxd4 Rfd1 c5 Rxc5 Bxe3 Rxd8 Bxc5 Rxa8 Rxa8 Qc3 Bb6 Kf1 Rd8 a4 e6 a5 Bd4 Qc7 Rf8 e5 h5 Ke2 Kg7 f4 Rh8 Kf3 Bg1 Qc1 Bd4 Ke4 Rd8 Qc7 Rd5 g3 Bg1 h3 Rd1 g4 hxg4 hxg4 Rd4+ Kf3 Rd5 Ke2 Bd4 Kf3 g5 f5 exf5 e6",""],["1997.06.16","Novgorod","Novgorod","5","Kramnik, Vladimir","2740","2795","1-0","E97","King's Indian Defense: Orthodox Variation, Bayonet Attack, Sokolov's Line","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 O-O Nc6 d5 Ne7 b4 Nh5 Re1 Nf4 Bf1 a5 bxa5 Rxa5 Nd2 c5 a4 Ra6 Ra3 g5 g3 Nh3+ Bxh3 Bxh3 Qh5 Qd7 Qxg5 h6 Qe3 f5 Qe2 f4 Nb5 Kh7 gxf4 exf4 Kh1 Bg4 Nf3 Ng6 Rg1 Bxf3+ Qxf3 Ne5 Qh5 Qf7 Qh3 Nxc4 Rf3 Be5 Nc7 Rxa4 Bxf4","King's Indian Defense"],["1996.12.19","Las Palmas","Las Palmas","8","Kramnik, Vladimir","2765","2785","1/2-1/2","D56","Queen's Gambit Declined: Lasker Defense","Nf3 Nf6 c4 e6 Nc3 d5 d4 Be7 Bg5 O-O e3 h6 Bh4 Ne4 Bxe7 Qxe7 Rc1 c6 Bd3 Nxc3 Rxc3 dxc4 Bxc4 Nd7 O-O b6 Bd3 c5 Be4 Rb8 Qa4 Bb7 Bxb7 Rxb7 Qc2 Rc8 Rc1 Rbc7 b4 e5 dxc5 bxc5 Rc4 e4 Qxe4 Qxe4 Rxe4 cxb4 Re8+ Rxe8 Rxc7 Ne5 Nxe5 Rxe5 Rxa7 h5 h3 Rb5 g4 hxg4 hxg4 g6 Kg2 b3 axb3 Rxb3 g5 Kg7 Kg3 Rc3 Re7 Ra3 Rd7 Kf8 Rc7 Kg7 Rc8 Kh7 Rc7 Kg7 Re7 Kf8 Re5 Kg7 f4 Rd3 Kf3 Rd2 Ke4 Rd1 Rd5 Re1 Rd3 Kf8 Ke5 Kg7 e4 Re2 Rd7 Re1 Rc7 Re2 Ra7 Re1 Ra4 Re2 Kd6 Rd2+ Ke7 Rf2 e5 Rf1 Ra6 Rxf4 e6","Queen's Gambit Declined"],["1995.??.??","Tal mem","Riga","7","Vaganian, Rafael A","2640","2805","0-1","A15","English Opening: Anglo-Indian Defense, King's Indian Formation","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 O-O e5 d3 Re8 Rb1 a5 a3 c6 b4 axb4 axb4 d5 cxd5 cxd5 Bg5 Be6 e4 d4 Nd5 Nbd7 Nxf6+ Bxf6 Bxf6 Qxf6 Qd2 Kg7 Ne1 g5 f4 gxf4 gxf4 Qh6 Qf2 f6 Rc1 Kh8 Rc7 Ra2 Rc2 Ra1 Rc7 exf4 Rxd7 f3 Qxd4 fxg2 Nxg2 Rxf1+ Kxf1 Qc1+ Kf2 Bxd7 Qxd7 Rg8 Qh3 Qd2+ Kf1 Qxb4 Qe3 Qb2","English Opening"],["1995.12.01","EUCup final","Ljubljana","2","Akopian, Vladimir","2625","2795","1/2-1/2","D77","Neo-Grünfeld Defense: Classical Variation, Modern Defense","Nf3 Nf6 g3 d5 Bg2 g6 O-O Bg7 d4 O-O c4 dxc4 Na3 c3 bxc3 c5 e3 Nc6 Qe2 Qa5 Bb2 Nd5 Rfc1 Bg4 h3 Bxf3 Bxf3 Rfd8 Nc4 Qa4 Nd2 Rac8 Ne4 b6 c4 Nxe3 Qxe3 Nxd4 Kg2 Nc2 Rxc2 Qxc2 Bxg7 Kxg7 Ng5 h6 Qe5+ Kg8 Ne6 fxe6 Qxe6+ Kg7 Qe5+ Kg8 Bd5+ Rxd5 Qe6+ Kg7 Qxe7+ Kg8 Qe6+ Kg7","Neo-Grünfeld Defense"],["1995.11.12","PCA/Intel-GP","Paris","4.2","Kramnik, Vladimir","2730","2795","0-1","E92","King's Indian Defense: Petrosian Variation, Stein Defense","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 d5 a5 Bg5 h6 Bh4 Na6 O-O Qe8 Nd2 Nh7 a3 f5 f3 Bd7 b4 axb4 axb4 Nxb4 Qb3 c5 dxc6 Nxc6 c5+ Kh8 cxd6 Nd4 Qxb7 Rb8 Qa6 Rc8 Bc4 Rc6 Qa2 Rxd6 Bd5 g5 Bf2 g4 exf5 gxf3 Nxf3 Bxf5 Ne4 Bxe4 Bxe4 Nf6 Bb7 Ng4 Rae1 Qh5 Bg3 Nf5 Nxe5 Nxg3 Rxf8+ Bxf8 Nxg4 Rd1 Rxd1 Bc5+ Qf2 Bxf2+ Nxf2 Ne2+ Kh1 Nc3 Rd8+ Kg7 Bf3 Qb5 Rd3 Qb1+ Bd1 Qb2 Kg1 Qc1 h3 h5 Kh2 h4 Bf3 Qc2 Rd7+ Kf8 Ng4 Qc1 Rd4 Nb5 Rd5 Qf4+ Kh1 Nd4 Ne5 Qc1+ Kh2 Qc7 Rc5 Nxf3+ gxf3 Qb8 Kg1 Qb4 Nd3 Qd4+ Kg2 Qxd3 Rc8+ Kf7 Kf2 Qd7 Rc2 Qxh3 Ke3 Qg3 Rc4 h3 Rf4+ Qxf4+","King's Indian Defense"],["1995.11.12","PCA/Intel-GP","Paris","4.4","Kramnik, Vladimir","2730","2795","0-1","E92","King's Indian Defense: Petrosian Variation, Stein Defense","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 d5 a5 Bg5 h6 Bh4 Na6 O-O Qe8 Nd2 Nh7 a3 h5 f3 Bd7 b3 f5 Rb1 Nc5 Nb5 Bxb5 cxb5 Bh6 exf5 gxf5 b6 cxb6 Nc4 Qg6 Be7 Rf7 Bxd6 Rg7 Rf2 e4 Bxc5 bxc5 fxe4 fxe4 d6 Nf6 Qf1 Nd7 Rd1 b5 Rd5 bxc4 Bxh5 Qe6 bxc4 Be3","King's Indian Defense"],["1994.??.??","Linares 12th","Linares","10","Kramnik, Vladimir","2710","2805","1-0","E93","King's Indian Defense: Petrosian Variation, Keres Defense","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 d5 Nbd7 Bg5 h6 Bh4 g5 Bg3 Nh5 h4 g4 Nh2 Nxg3 fxg3 h5 O-O f5 exf5 Nc5 b4 e4 Rc1 Nd3 Bxd3 exd3 f6 Rxf6 Qxd3 Qf8 Nb5 Bf5 Rxf5 Rxf5 Nxc7 Rc8 Ne6 Qf6 Nf1 Re5 Rd1 Qf5 Qxf5 Rxf5 c5 Bf8 Ne3 Rf6 Nc4 dxc5 b5 Bh6 Re1 Re8 Re5 Re7 Rxh5 Ref7 Kh2 Bc1 Re5 Rf1 Re4 Rd1 Rxg4+ Kh7 Ne5 Re7 Nf8+","King's Indian Defense"],["1994.??.??","PCA/Intel-GP","Moscow","2","Kramnik, Vladimir","2710","2805","1-0","E93","King's Indian Defense: Petrosian Variation, Normal Defense","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 d5 Nbd7 Be3 Ng4 Bg5 f6 Bh4 h5 Nd2 Nh6 f3 Nf7 Qc2 Bh6 O-O-O c5 dxc6 bxc6 Kb1 a5 Na4 c5 Nc3 Be3 Nd5 Bd4 Nb3 Bb7 Nxd4 cxd4 f4 Rb8 Rhf1 Nh6 c5 Bxd5 exd5 Nf5 fxe5 Nxh4 exd6 Ne5 Rxd4 Nf5 Rxf5 gxf5 Qxf5 Kg7 Bxh5 Rh8 Rg4+ Kf8 Qe6 Rb7 c6 Rxb2+ Kxb2 Qb6+ Ka3 Qc5+ Ka4 Qc2+ Kb5 Qb2+ Ka6 Qe2+ Kb7 Rh7+ d7","King's Indian Defense"],["1994.??.??","Munich Intel Express blitz '5","Munich","?","Cvitan, Ognjen","2570","2815","1-0","A05","King's Indian Attack: Symmetrical Defense","Nf3 Nf6 g3 g6 b3 Bg7 Bb2 c5 c4 d6 Bg2 e5 O-O Nc6 Nc3 O-O d3 Ne8 Ne1 Nc7 Nc2 Bd7 Ne3 Rb8 Ned5 Nxd5 Nxd5 b5 Bc3 Be6 Qd2 Qd7 e3 Ne7 Nxe7+ Qxe7 f4 Rfd8 Rac1 d5 cxd5 Bxd5 Bxd5 Rxd5 fxe5 Bxe5 Bxe5 Rxe5 e4 Rd8 Qe3 f5 Rf4 Qd6 Qf2 fxe4 dxe4 Qd4 Re1 Qxf2+ Kxf2 Rd2+ Re2 Rd4 h4 c4 bxc4 Rxc4 g4 b4 g5 Re7 Kf3 Rf7 Rd2 a5 Rf6 Rxf6+ gxf6 Kf7 Rd6 a4 e5 b3 axb3 axb3 Rd7+ Ke6","King's Indian Attack"],["1994.??.??","Novgorod","Novgorod","10","Kramnik, Vladimir","2725","2805","1/2-1/2","D85","Grünfeld Defense: Exchange Variation, Modern Exchange Variation","Nf3 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 c5 d4 Bg7 Rb1 O-O Be2 cxd4 cxd4 Qa5+ Bd2 Qxa2 O-O Bg4 Bg5 h6 Bxe7 Re8 Rxb7 Nc6 Bc5 Rxe4 Bd3 Rxd4 Bxd4 Nxd4 Be4 Rd8 Qb1 Ne2+ Kh1 Qc4 Bxg6 Nc3 Bxf7+ Qxf7 Rxf7 Nxb1 Rxa7 Nc3 h3",""],["1994.??.??","Horgen CS","Horgen","8","Korchnoi, Viktor","2615","2805","1/2-1/2","A33","English Opening: Symmetrical Variation, Anti-Benoni Variation, Spielmann Defense","Nf3 Nf6 c4 c5 Nc3 Nc6 d4 cxd4 Nxd4 e6 a3 Be7 e4 O-O Be2 d5 exd5 exd5 O-O Nxd4 Qxd4 Be6 cxd5 Nxd5 Nxd5 Bxd5","English Opening"],["1994.??.??","PCA/Intel-GP","Paris","2.4","Hjartarson, Johann","2585","2810","0-1","E90","King's Indian Defense: Normal Variation, Rare Defenses","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O h3 Na6 Bg5 c6 Be2 e5 d5 h6 Be3 cxd5 cxd5 Nh5 Nd2 Nf4 Bf1 Nc5 Nb3 b6 g3 Nh5 Qd2 Kh7 Be2 Nf6 Nxc5 bxc5 g4 Rb8 f3 Bd7 h4 h5 Bg5 Qa5 Rg1 Rb4 Bxf6 Bxf6 gxh5 Bxh4+ Kf1 Bh3+ Rg2 gxh5 Kg1 Bxg2 Kxg2 Rg8+ Kh1 Bg5 f4 Bxf4 Qc2 Qd8","King's Indian Defense"],["1992.??.??","Manila ol (Men)","Manila","?","Vaganian, Rafael A","2590","2780","1/2-1/2","E97","King's Indian Defense: Orthodox Variation, Modern System","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 O-O Nc6 d5 Ne7 Nd2 a5 a3 Nd7 Rb1 f5 b4 Kh8 Qc2 axb4 axb4 Nf6 f3 g5 c5 Ng6 Nc4 Nf4 cxd6 cxd6 Be3 g4 Bb6 Qe7 exf5 Nxe2+ Nxe2 gxf3 Rxf3 Nxd5 Qd2 e4 Rff1 Rxf5 Rxf5 Nxb6 Qxd6 Qxd6 Nxd6 Bxf5 Nxf5 Nd5 Nxg7 Kxg7 Rd1 e3 g3","King's Indian Defense"],["1992.??.??","Buenos Aires sim","Buenos Aires","1","Ricardi, Pablo","2465","2780","1-0","E97","King's Indian Defense: Orthodox Variation, Aronin-Taimanov Defense","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 O-O Nc6 Be3 Ng4 Bg5 f6 Bc1 f5 Bg5 Bf6 Bxf6 Qxf6 h3 Nh6 d5 Nd8 c5 Ndf7 cxd6 Nxd6 Nd2 Bd7 Rc1 Nhf7 exf5 Bxf5 Nb3 Ng5 Bg4 b6 Bxf5 gxf5 Qh5 e4 Ne2 f4 h4 Ngf7 Qg4+ Kh8 Qxf4 Qe7 Nbd4 Rg8 Rxc7 Qxc7 Qf6+ Rg7 Ne6 Ne8 Qxg7+ Nxg7 Nxc7 Rc8 Ne6","King's Indian Defense"],["1991.??.??","Euwe mem","Amsterdam","7","Korchnoi, Viktor","2615","2800","0-1","E98","King's Indian Defense: Orthodox Variation, Classical System, Neo-Classical Line","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4 Bf2 g5 a4 Ng6 Nd3 Nf6 c5 h5 h3 Rf7 c6 a5 cxb7 Bxb7 b4 Bc8 bxa5 Bh6 Nb4 g4 Nc6 Qf8 fxg4 hxg4 hxg4 Bg5 Bf3 Qh6 Re1 Nh4 Bxh4 Bxh4 g5 Qxg5 Re2 Ng4 Rb1 Bg3 Qd3 Qh4","King's Indian Defense"],["1991.??.??","Tilburg","Tilburg","9","Korchnoi, Viktor","2610","2770","1/2-1/2","E92","King's Indian Defense: Exchange Variation","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 dxe5 dxe5 Qxd8 Rxd8 Bg5 c6 Nxe5 Re8 O-O-O Na6 Rd6 Be6 f4 h6 Bxf6 Bxf6 Rhd1 Bxe5 fxe5 Rac8 Kd2 Re7 Ke3 Rce8 Rd8 Kf8 h4 Nc5 Rxe8+ Rxe8 b4 Nd7 Kf4 Ke7 Nd5+ cxd5 cxd5 Rc8 dxe6 fxe6 Rd2 Rf8+","King's Indian Defense"],["1990.??.??","Linares 8th","Linares","5","Jussupow, Artur","2615","2800","0-1","E69","King's Indian Defense: Fianchetto Variation, Classical Main Line","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O d4 d6 O-O Nbd7 Nc3 e5 h3 c6 e4 Qb6 c5 dxc5 dxe5 Ne8 Na4 Qa6 Bf4 Nc7 Qc2 Ne6 Rfd1 Re8 Rd6 Qa5 Rad1 Nb6 Nxb6 axb6 a3 Qa4 Qe2 b5 Qe3 b4 axb4 Qxb4 R6d2 Ra2 Rb1 c4 Rc2 b5 Bh6 Qc5 Qc1 Nd4 Bxg7 Kxg7 Nxd4 Qxd4 b3 Rxc2 Qxc2 c3 Rd1 Qc5 b4 Qxb4 Rd3 c5 Rxc3 c4 f4 Qc5+ Kh2 Qd4 Rf3 b4 Qa4 c3 Rxc3 Bd7 Rc4 Bxa4 Rxd4 Rb8 Bf1 Bc2 Bc4 b3 Bxb3 Rxb3 g4 Re3 f5 gxf5 exf5 Rxe5 Rd2 Ba4 Kg3 Re3+ Kh4 Bb5 Rd5 Bd3 Rc5 h6 Rc3 Rf3 Rb3 Be2 Rb2 Bf1 Rh2 Kf6 Rh1 Ke5 Rh2 f6 Rh1 Ke4 Rh2 Kf4 Rh1 Bg2 Rh2 Rg3","King's Indian Defense"],["1990.11.??","Paris Immopar rapid","Paris","2","Korchnoi, Viktor","2625","2800","1/2-1/2","A15","English Opening: Anglo-Indian Defense, King's Indian Formation","Nf3 Nf6 c4 g6 b3 Bg7 Bb2 c5 g3 d6 d4 Ne4 Qc1 Qa5+ Nbd2 Nxd2 Qxd2 Qxd2+ Kxd2 Nc6 e3 Bg4 Be2 Rb8 Kc1 cxd4 Nxd4 h5 f3 Bd7 Nxc6 Bxb2+ Kxb2 bxc6 Kc3 c5 h4 a5 a3 Bc6 Rhb1 Kd7 b4 axb4+ axb4 cxb4+ Rxb4 Rxb4 Kxb4 Rb8+ Kc3","English Opening"],["1990.11.??","Paris Immopar rapid","Paris","2","Korchnoi, Viktor","2625","2800","1/2-1/2","A15","English Opening: Anglo-Indian Defense, King's Indian Formation","Nf3 Nf6 c4 g6 b3 Bg7 Bb2 d6 d4 O-O e3 Nbd7 Be2 e5 O-O e4 Nfd2 Re8 Nc3 Nf8 b4 h5 b5 N8h7 Rc1 Bf5 a4 c6 Ba3 h4 Rb1 Ng5 Kh1 h3 g3 Bf8 Nb3 Qd7 a5 cxb5 Nxb5 Bg4 Nd2 b6 Nc3 bxa5 Rb5 Bf5 Nd5 Nxd5 Rxd5 Nh7 Rxa5 Nf6 Ra6 Reb8 c5 Nd5 Qc2 dxc5 dxc5 Nc7 c6 Qe6 Ra5 Bxa3 Rxa3 Rb6 Rc1 a6 Nb3 Bg4 Nd4 Qe7 Raa1 Bxe2 Qxe2 Ne6 Qg4 Nxd4 exd4 Qe6","English Opening"],["1989.03.??","World Cup","Barcelona","3","Jussupow, Artur","2610","2775","1-0","E92","King's Indian Defense: Petrosian Variation, Stein Defense","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 d5 a5 Bg5 h6 Bh4 Na6 Nd2 Qe8 O-O Nh7 a3 Bd7 b3 f5 exf5 gxf5 Bh5 Qc8 Be7 Re8 Bxe8 Qxe8 Bh4 e4 Qc2 Qh5 Bg3 Rf8 Bf4 Qg4 g3 Ng5 Kh1 Nf3 Rac1 Nc5 Nxf3 Qxf3+ Kg1 Nd3 Qd2 Bd4 Rc2 Kh7 h3 Rg8 Kh2 Qh5 Nd1 Ne5 f3 Nd3 Ne3 Nxf4 gxf4 Bb6 Qf2 Qg6 Re2 Bc5 fxe4 fxe4 f5 Qh5 Rd2 Rg5 Qf4 Qe8 Ng4","King's Indian Defense"],["1989.03.??","World Cup","Barcelona","5","Korchnoi, Viktor","2610","2775","0-1","E97","King's Indian Defense: Orthodox Variation, Aronin-Taimanov Defense","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 Nc6 O-O e5 d5 Ne7 a4 a5 Ne1 Nd7 Be3 f5 f3 Nc5 Nd3 b6 b4 Nxd3 Qxd3 axb4 Nb5 Kh8 Qb3 Ng8 Qxb4 Nf6 exf5 gxf5 Bg5 h6 Bh4 Bd7 Ra3 Qb8 Bf2 Rg8 Rb1 Nh5 Kh1 Qd8 a5 Bxb5 Qxb5 bxa5 g3 f4 g4 e4 fxe4 Nf6 Bh4 Qe7 Bf3 Qe5 Re1 Nh7 Qd7 Bf6 Bxf6+ Nxf6 Qf5 Qxf5 exf5 Nxg4 Bxg4 Rxg4 Rh3 Kg7 Re7+ Kf6 Re6+ Kxf5 Rhxh6 Rf8 Rh5+ Rg5 Rxg5+ Kxg5 c5 a4 cxd6 cxd6 Rxd6 Ra8 Re6 a3 Re1 Kf5 h4 f3 d6 a2 Ra1 Kf4 Kh2 f2 d7 Kf3 Rc1 a1=Q Rxa1 Rxa1 d8=Q Rh1+ Kxh1 f1=Q+ Kh2 Qg2#","King's Indian Defense"],["1989.03.??","World Cup","Barcelona","13","Vaganian, Rafael A","2600","2775","1/2-1/2","A15","English Opening: Anglo-Indian Defense, King's Indian Formation","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d5 cxd5 Nxd5 O-O Nc6 d4 Nb6 e3 e5 d5 Na5 e4 c6 Bg5 f6 Be3 cxd5 exd5 Bg4 Bc5 Rf7 b3 f5 Bb4 Nac4 bxc4 e4 Rc1 Qd7 Nb1 exf3 Bxf3 Bxf3 Qxf3 f4 g4 Qa4 Qb3 Qd7 f3 h5 h3 Re8 Qd3 hxg4 hxg4 Re3 Qxg6 Rf6 Qg5 Qf7 Bc3 Rg6 Qd8+ Re8 Qh4 Bxc3 Rxc3 Qg7 Re1 Qd4+ Kg2 Rxe1 Qxe1 Nxc4 Qe8+ Kg7 Qe7+ Kh6 Qh4+ Kg7 Qe7+ Kh6 Qf8+ Kh7 Qf7+ Kh6","English Opening"],["1989.09.18","Tilburg","Tilburg","4","Korchnoi, Viktor","2655","2775","1/2-1/2","D76","Neo-Grünfeld Defense: Delayed Exchange Variation","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O O-O d5 cxd5 Nxd5 d4 Nb6 Nc3 Nc6 e3 Re8 d5 Na5 Nd4 Bd7 Qe2 c6 dxc6 Nxc6 Nxc6 Bxc6 Bxc6 bxc6 Rd1 Qc8 Bd2 Qe6 Be1 h5 Rac1 h4 b3 Rad8 gxh4 Nd7 Kg2 Nc5 Rxd8 Rxd8 Rd1 Rxd1 Qxd1 Qf5 f3 Nd3 Ne4 Qd5","Neo-Grünfeld Defense"],["1988.??.??","Wch-blitz","Saint John","3","Georgiev, Kiril","2595","2750","1-0","A15","English Opening: Anglo-Indian Defense, King's Knight Variation","Nf3 Nf6 c4 c5 g3 g6 Bg2 Bg7 O-O O-O Nc3 Nc6 Rb1 d5 cxd5 Nxd5 Nxd5 Qxd5 b3 Qd6 d3 e5 a3 Bd7 b4 cxb4 axb4 Nxb4 Ba3 a5 Qb3 b5 Ng5 Rac8 Bxb4 axb4 Qxb4 Qxb4 Rxb4 Rc2 Re1 h6 Ne4 Rfc8 Nd6 R8c5 Rbb1 Ra2 Bf3 h5 Rec1 Rxc1+ Rxc1 Ra6 Ne4 Bf8 h4 b4 Rc7 Be6 Rb7 Ra1+ Kg2 Rc1 Ng5 Ba2 Ra7 Rc2 Rb7 Bc5 Ne4 Bf8 Ng5 Kg7 Ra7 Bc5 Rb7 Bf8 Ra7 Bb3 Nxf7 Bc5 Rb7 Bxf7 Bd5 Rxe2 Rxf7+ Kh6 Kf1 Rd2 Bc4 Rb2 f4 exf4 gxf4 b3 Rb7 Rf2+ Ke1 b2 Bg8 g5 hxg5+ Kg6 Bh7#","English Opening"],["1988.??.??","Wch-blitz","Saint John","3","Georgiev, Kiril","2595","2750","1-0","A15","English Opening: Anglo-Indian Defense, King's Knight Variation","Nf3 Nf6 c4 c5 g3 b6 Bg2 Bb7 O-O g6 Nc3 Bg7 d4 cxd4 Qxd4 d6 b3 Nbd7 Bb2 O-O Rfd1 Rc8 Nd5 a6 Rac1 b5 Ne1 Nc5 Qd2 Nfe4 Qc2 Bxb2 Qxb2 bxc4 Rxc4 Bxd5 Rxd5 Nf6 Rd1 Qb6 Qc2 a5 Nd3 Nxd3 exd3 Rxc4 dxc4 Rc8 Qe2 e6 h3 Qc5 Qd2 Rd8 Qb2 Nd7 Qd4 Qxd4 Rxd4 Nc5 Bc6 f5 Kf1 Kf7 Ke2 Ke7 Bb5 h5 h4 Rg8 Rd1 g5 hxg5 Rxg5 Rh1 e5 Bc6 Ne6 Bd5 Nd4+ Kd3 Kf6 Rb1 Rg4 b4 axb4 Rxb4 h4 gxh4 Rxh4 Rb6 Rh3+ Kd2 Ra3 Rxd6+ Ke7 Rb6 Rxa2+ Ke1 e4 c5 Nf3+ Kf1 Ra1+ Kg2 Rg1+ Kh3 Ng5+ Kh2 Nf3+ Kh3 Ng5+ Kh4 Nf3+ Kh5 Rg2 c6 Rxf2 c7 Rh2+ Kg6 Rg2+ Kxf5 Rg5+ Kxe4 Kd7 Rc6 Nd2+ Kf4","English Opening"],["1988.07.??","URS-ch55","Moscow","16","Vaganian, Rafael A","2625","2760","1/2-1/2","E92","King's Indian Defense: Orthodox Variation, Gligoric-Taimanov System","Nf3 Nf6 c4 g6 Nc3 Bg7 d4 d6 e4 O-O Be2 e5 Be3 Qe7 dxe5 dxe5 O-O c6 Nd2 Na6 Qa4 Ng4 Bxg4 Bxg4 f3 Be6 Rfd1 Rfc8 a3 Nc5 Qb4 Bf8 Na4 Nd3 Qc3 b5 Qxd3 bxa4 Qc2 Qb7 Rab1 Qa6 Qc3 Re8 b4 axb3 Rxb3 Rad8 Rdb1 h6 a4 Kh7 Rb7 Rd7 Rxd7 Bxd7 Nb3 Be6 Bc5 Qxc4 Qxc4 Bxc4 Bxf8 Bxb3 Rxb3 Rxf8 Rb7 Kg7","King's Indian Defense"],["1988.??.??","Thessaloniki ol (Men)","Thessaloniki","10","Portisch, Lajos","2630","2760","1/2-1/2","D76","Neo-Grünfeld Defense: Delayed Exchange Variation","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O d4 d5 cxd5 Nxd5 O-O Nb6 Nc3 Nc6 e3 Re8 d5 Na5 Nd4 Bd7 Qe2 c6 dxc6 Nxc6 Nxc6 Bxc6 Bxc6 bxc6 Rd1 Qc8 Bd2 Qe6 Be1 a5 Rac1 a4 Qc2 Rec8 b3 axb3 Qxb3 Qxb3 axb3","Neo-Grünfeld Defense"],["1988.??.??","Thessaloniki ol (Men)","Thessaloniki","12","Hansen, Curt","2520","2760","1/2-1/2","D76","Neo-Grünfeld Defense: Delayed Exchange Variation","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O d4 d5 cxd5 Nxd5 O-O Nb6 Nc3 Nc6 d5 Na5 e4 c6 Bg5 Bg4 h3 Bxf3 Qxf3 cxd5 Nxd5 Nxd5 Rad1 Qc7 exd5 Bxb2 Rfe1 Rfe8 Rxe7 Rxe7 d6 Re1+ Rxe1 Qxd6 Re7 Rf8 Qd5 Qb6 Be3 Qf6 Rc7 b6 Rxa7 Kg7 Rd7 Re8 Kh2 h5 Bxb6 Re5 Bd4 Bxd4 Qxd4 Re2 Qxf6+ Kxf6 Ra7 Rxa2 Bd5 Rxf2+ Kg1 Rf5 Rxa5 Kg5 h4+ Kh6 Rb5 f6 Kg2 g5 hxg5+ Kxg5 Kh3 Re5","Neo-Grünfeld Defense"],["1988.??.??","Madrid rapid","Madrid","4","Portisch, Lajos","2610","2750","1/2-1/2","A34","English Opening: Symmetrical Variation, Three Knights Variation","Nf3 Nf6 c4 c5 Nc3 d5 cxd5 Nxd5 d4 Nxc3 bxc3 g6 e3 Bg7 Bd3 O-O O-O Qc7 Qe2 Rd8 Rd1 b6 Bb2 Nc6 Rac1 Bb7 e4 e6 Qe3 Rac8 h4 h6 Be2 Qe7 h5 g5 Ba3 Bf8 dxc5 Qf6 e5 Qf4 Qxf4 gxf4 Rxd8 Rxd8 Rd1 Rxd1+ Bxd1 Nb8 Bc1 bxc5 Bxf4 Bd5 Bb3 Bxf3 gxf3 Nd7 Ba4 Nb6 Bb5 Nd5 Bd2 Bg7 f4 f6 c4 Nb6 Be3 Bf8 f5 Kf7 fxe6+ Kxe6 exf6 Kxf6 Kg2 Ke5 Kf3 Nc8 Ba6 Nb6 Ke2 Nd7 f4+ Kd6 Bb7 Nf6 Bf3 Ke6 Kd3 Kf5 a4 Bd6 a5 Bc7 Bxc5 Bxa5 Bxa7 Kxf4 Be2 Ng4 c5 Ne5+ Kc2 Nc6 Bb6 Ke5 Kd3 Bxb6 cxb6 Kd6 Bf3 Nb8 b7 Kc7 Ke4 Kxb7 Kf5+ Kc7 Kg6 Nd7 Bg2 Nf8+ Kxh6 Ne6 Kh7 Kd6 h6 Ke7 Bh3 Nf4 Kg7 Nh5+ Kg6 Nf4+ Kf5 Kf7","English Opening"],["1987.??.??","Moscow TV","Moscow","?","Tal, Mikhail","2605","2735","1/2-1/2","E65","King's Indian Defense: Fianchetto Variation, Yugoslav Variation, Exchange Line","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O O-O c5 d4 d6 Nc3 Nc6 dxc5 dxc5 Bf4 Be6 Ne5 Na5 Nd3 Nh5 Nxc5 Nxf4 gxf4 Bxc4 Rc1 Qc7 Nxb7 Qxf4 e3 Qe5 Nxa5 Qxa5 Bxa8 Bxf1 Qd5 Qxd5 Nxd5 Rxa8 Kxf1 Bxb2 Nxe7+ Kf8 Rc8+ Rxc8 Nxc8 a6 Nb6 Ke7 Ke2 Ke6 Nc4 Be5 h3 f5 f4 Bc7 Kd3 h6 Nd2 g5 fxg5 hxg5 e4 Kf6 exf5 Kxf5 Kd4 Kf4 Ne4 Bd8 Kd5","King's Indian Defense"],["1987.??.??","Brussels blitz","Brussels","?","Korchnoi, Viktor","2625","2735","1/2-1/2","A16","English Opening: Anglo-Indian Defense, Anglo-Grünfeld Variation","Nf3 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 dxc3 Qxd1+ Kxd1 Nd7 Bf4 c6 Bd3 f6 e5 Nc5 Bc2 Bg4 Ke2 Bg7 Be3 Nd7 exf6 exf6 h3 Be6 Bb3 Bxb3 axb3 a6 Rhe1 Kf7 Rad1 Rhd8 Rd3 Nf8 Red1 Rxd3 Rxd3 Re8 Kd2 Ne6 Rd7+ Re7 Rxe7+ Kxe7 b4 f5 Kd3 Kd6 Nd2 b5 Nb3 Kd5 Nc5 Nxc5+ Bxc5 a5 b3 axb4 Bxb4 h5 c4+ Ke6 Bd2","English Opening"],["1987.04.17","Brussels","Brussels","7","Korchnoi, Viktor","2625","2735","1/2-1/2","A16","English Opening: Anglo-Indian Defense, Anglo-Grünfeld Variation","Nf3 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 Qa4+ Bd7 Qh4 Bc6 g3 Bg7 Bg2 Nd7 Nd4 Bxd4 Nxd5 Bg7 O-O e6 Qxd8+ Kxd8 Nc3 Bxg2 Kxg2 Ke7 d3 Rhc8 Bg5+ Kf8 Rac1","English Opening"],["1987.04.20","Brussels","Brussels","8","Larsen, Bent","2565","2735","0-1","D34","Tarrasch Defense: Classical Variation","Nf3 Nf6 c4 c5 Nc3 e6 g3 d5 cxd5 exd5 d4 Nc6 Bg2 Be7 O-O O-O Be3 c4 Ne5 h6 Qa4 a6 Nxc6 bxc6 b3 Rb8 bxc4 Rb4 Qd1 Rxc4 Na4 Bf5 Nb2 Rc3 Rc1 Rxc1 Qxc1 Qa5 Qxc6 Qxa2 Nd3 Be4 Bf3 a5 Nc5 Bxf3 exf3 Re8 Nd7 Rd8 Nxf6+ Bxf6 Qb6 a4 Bxh6 a3 Bc1 Rc8 h4 Rc3 Be3 Qc2 Qa5 a2 h5 Be7 Qa8+ Bf8 h6 Ra3 Qxd5 a1=Q hxg7 Bxg7 Qd8+ Bf8 Rxa1 Rxa1+ Kg2 Qh7 Qg5+ Qg6 Qh4 Rd1 g4 f6",""],["1987.11.25","World Championship 34th-KK4","Sevilla","17","Karpov, Anatoly","2700","2740","1/2-1/2","E97","King's Indian Defense: Orthodox Variation, Modern System","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 e5 O-O Nc6 d5 Ne7 Nd2 a5 b3 c5 a3 Ne8 Rb1 f5 b4 axb4 axb4 b6 Qb3 Nf6 Bd3 Bh6 Rb2 Ra1 Qc2 Bf4 Nf3 fxe4 Nxe4 Nxe4 Bxe4 Rxc1 Rxc1 Bxc1 Qxc1 Nf5 Qg5 Nd4 Qxd8 Nxf3+ Bxf3 Rxd8 bxc5 bxc5 Rb8 Rf8 Rb6 Rf6 Rb8 Rf8 Rb6 Rf6 Be4 Bf5 Bxf5 Rxf5 g3 Rf6 h4 h6 Kg2 Kg7 f3 Kg8 Kf2 g5 hxg5 hxg5 Ke3 Kg7 Rb8 Kh7 Rd8 Kg7 Ra8 Kf7 Ke4 Kg7 Ra7+ Kg6 Re7 g4","King's Indian Defense"],["1986.10.06","World Championship 33th-KK3","London/Leningrad","23","Karpov, Anatoly","2705","2740","1/2-1/2","A15","English Opening: Anglo-Indian Defense, Queen's Indian Formation","Nf3 Nf6 c4 b6 g3 c5 Bg2 Bb7 O-O g6 d4 cxd4 Qxd4 Bg7 Nc3 d6 Rd1 Nbd7 b3 Rc8 Bb2 O-O Qe3 Re8 Rac1 a6 Ba1 Rc5 a4 Qa8 Ne1 Rf5 Bxb7 Qxb7 f3 h5 Ng2 Rc5 Bb2 Rcc8 Ba3 Nc5 Rb1 Ne6 Qd3 Nc7 Nf4 b5 cxb5 axb5 Nxb5 Nxb5 Qxb5 Qxb5 axb5 Rb8 Bb2 Rb7 b6 Reb8 b4 Nd7 Bxg7 Kxg7","English Opening"],["1985.01.30","World Championship 31th-KK1","Moscow","47","Karpov, Anatoly","2705","2715","0-1","D52","Queen's Gambit Declined: Cambridge Springs Defense, Yugoslav Variation","Nf3 Nf6 c4 e6 d4 d5 Nc3 c6 Bg5 Nbd7 e3 Qa5 cxd5 Nxd5 Qd2 N7b6 Nxd5 Qxd2+ Nxd2 exd5 Bd3 a5 a4 Bb4 Ke2 Bg4+ f3 Bh5 h4 O-O g4 Bg6 b3 Bxd3+ Kxd3 Rfe8 Rac1 c5 Bf4 Rac8 dxc5 Nd7 c6 bxc6 Rhd1 Nc5+ Kc2 f6 Nf1 Ne6 Bg3 Red8 Bf2 c5 Nd2 c4 bxc4 Nc5 e4 d4 Nb1 d3+ Kb2 d2","Queen's Gambit Declined"],["1985.??.??","Belgrade m","Belgrade","4","Andersson, Ulf","2575","2715","1/2-1/2","A15","English Opening: Anglo-Indian Defense, Queen's Indian Formation","Nf3 Nf6 c4 b6 g3 c5 Bg2 Bb7 O-O g6 b3 Bg7 Bb2 O-O Nc3 Na6 d4 d5 cxd5 Nxd5 Nxd5 Qxd5 Nh4 Qd7 dxc5 Qxd1 Rfxd1 Bxb2 Bxb7 Nxc5 Bxa8 Bxa1 Rxa1 Rxa8 Rd1 a5 Nf3 a4 bxa4 Rxa4 Rd2 Ne4 Rc2 b5 Nd2 Nd6 Kf1","English Opening"],["1984.10.10","World Championship 31th-KK1","Moscow","11","Karpov, Anatoly","2705","2715","1/2-1/2","A15","English Opening: Anglo-Indian Defense, Queen's Indian Formation","Nf3 Nf6 c4 b6 g3 c5 Bg2 Bb7 O-O g6 b3 Bg7 Bb2 O-O e3 e6 d4 Qe7 Nc3 Na6 Qe2 d5 Rfd1 Rfd8 Rac1 dxc4 bxc4 Rac8 Nb5 Be4 a3 Nb8 dxc5 bxc5 Be5 Ne8 Bxg7 Kxg7 Ne5 Bxg2 Kxg2 f6 Nd3 Nc6 Nc3 Nd6 Na4 Ne5 Nxe5 fxe5 Nc3 Qb7+ Qf3 Qxf3+ Kxf3 Rb8 Rb1 e4+ Ke2 Rxb1 Rxb1 Kf6 Rd1 Ke5 Nb5 Rd7 g4 h6 a4 a6 Nxd6 Rxd6 Rb1 Rd3 f4+ Kf6 Rb6 Rc3 Rxa6 Rc2+ Kd1","English Opening"],["1984.10.15","World Championship 31th-KK1","Moscow","13","Karpov, Anatoly","2705","2715","1/2-1/2","A15","English Opening: Anglo-Indian Defense, Queen's Indian Formation","Nf3 Nf6 c4 b6 g3 c5 Bg2 Bb7 O-O g6 Nc3 Bg7 d4 cxd4 Nxd4 Bxg2 Kxg2 O-O e4 Qc7 b3 Nxe4 Nxe4 Qe5 Qf3 Qxd4 Ba3 Nc6 Rad1 Qe5 Rxd7 Qa5 Bxe7 Ne5 Qd1 Nxd7 Qxd7 Qxa2 Bxf8 Rxf8 Re1 Qxb3 Nd6 Qc3 Re7 Qf6 Ne4 Qd4 Qxd4 Bxd4 Rd7 Bg7 Rxa7 h6 Rb7 Bd4 Rd7 Bg7 h4 f5 Nd2 Rf6 Rc7 Re6 Nf3 Bf6","English Opening"],["1984.10.19","World Championship 31th-KK1","Moscow","15","Karpov, Anatoly","2705","2715","1/2-1/2","E15","Queen's Indian Defense: Fianchetto Variation, Check Variation, Intermezzo Line","Nf3 Nf6 c4 b6 d4 e6 g3 Ba6 b3 Bb4+ Bd2 Be7 Bg2 O-O O-O d5 cxd5 Nxd5 Nc3 Nd7 Nxd5 exd5 Rc1 Re8 Rc2 c5 Re1 Bb7 Be3 a5 Qc1 a4 Rd1 axb3 axb3 Bf6 Ne1 h6 Bf3 Qe7 Qd2 Ra3 Rb1 Rd8 dxc5 Nxc5 Qb4 d4 Bxd4 Rxb3 Rxb3 Rxd4 Qxb6 Nxb3 Rc7 Rd7 Rxb7 Rxb7 Qxb7 Nd4 Kf1 Qxb7 Bxb7 Nf5 Nd3 Bc3 e3 g5 g4 Nd6 Bf3 Kg7 Ke2 Kf6 h3 Ke7 Bd5 Kf6 Nc5 Ke7 Na4 Ba5 Nc5 Bb6 Na6 Ba5 Nb8 Bc3 Nc6+ Kd7 Kd3 Be1 Ne5+ Ke7 Ke2 Bc3 Nf3 Ba5 Bb3 Bb6 Ne5 Bc5 Kd3 Bb6 Bd5 Bc5 Kc3 Ke8 Kb3 Ke7 Ka4 Bb6 Kb4 Ke8 Nc6 Kd7 Kc3 Ke8 Kd3 Bc5 Ke2 Kf8 Kf3 Ba3 Bb3 Bc5 Ne5 Ke7 Nd3 Bb6 Nb4 Bc5 Nd5+ Kf8 Bc2 Ba7 h4 Kg7 h5 Bc5 Ke2 Nc4 Bf5 Nb6 Nc3 Bb4 Nb5 Kf6 Bc2 Nc4 Nd4 Bc5 Nf5 Nd6 Ng3 Ke5 Nf1 Bb4 Nh2 Kf6 Bb3 Bc5 Nf3 Bb6 Kd3 Bc5 Bc2 Ke6 Ng1 Ke5 Ne2 Bb6 Bb3 Bc5 Nc3 Kf6 Nd5+ Ke6 f4 gxf4 g5 fxe3 gxh6 e2 Nf4+ Ke7","Queen's Indian Defense"],["1982.??.??","Moscow Interzonal","Moscow","9","Andersson, Ulf","2610","2675","1/2-1/2","E95","King's Indian Defense: Orthodox Variation","Nf3 Nf6 c4 g6 Nc3 Bg7 e4 d6 d4 O-O Be2 Nbd7 O-O e5 Re1 h6 Qc2 Nh7 dxe5 dxe5 Be3 Re8 Rad1 Nhf8 c5 Ne6 c6 bxc6 Na4 g5 Qxc6 Rb8 h3 h5 Qc1 g4 hxg4 hxg4 Nh2 g3 fxg3 Nd4 Bc4 Nb6 Nxb6 Rxb6 Nf3 Be6 Bxd4 exd4 e5 c5 Bxe6 Rbxe6 Qxc5 d3","King's Indian Defense"],["1982.??.??","Luzern ol (Men)","Luzern","5","Smejkal, Jan","2565","2675","1/2-1/2","A30","English Opening: Symmetrical Variation, Hedgehog Defense","Nf3 Nf6 c4 c5 Nc3 e6 g3 b6 Bg2 Bb7 O-O Be7 d4 cxd4 Qxd4 d6 Bg5 a6 Bxf6 Bxf6 Qd3 Ra7 Rad1 Be7 Ne4 Bxe4 Qxe4 O-O Nd4 Qc8 b3 Re8","English Opening"],["1981.??.??","Moscow1","Moscow","?","Grigorian, Karen Ashotovich","2435","2630","1/2-1/2","E65","King's Indian Defense: Fianchetto Variation, Yugoslav Variation, Exchange Line","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O O-O c5 d4 d6 Nc3 Nc6 dxc5 dxc5 Be3 Be6 Qa4 Nd4 Rad1 Bd7 Qa3 Nc2 Qxc5 b6 Qg5 h6 Qf4 g5 Qe5 Rc8 Nd5 Nxd5 Qxd5 Be6 Qb7 Qc7 Qxc7 Rxc7 b3","King's Indian Defense"],["1981.??.??","Moscow1","Moscow","?","Rashkovsky, Nukhim N","2535","2625","1/2-1/2","A32","English Opening: Symmetrical Variation, Anti-Benoni Variation, Spielmann Defense","Nf3 Nf6 c4 c5 d4 cxd4 Nxd4 e6 g3 Qc7 Nd2 Bc5 N2b3 O-O Bg2 Be7 Qd3 a6 O-O d6 Bd2 Nc6 Nxc6 bxc6 Ba5 Qb7 Bc3 d5 Rac1 Bd7 Rc2 Rac8 Rfc1 Qa7 cxd5 cxd5 Bd4 Qa8 Bc5 Bxc5 Nxc5 Bb5 Qd4 Qb8 b3 Nd7 e3 Nxc5 Rxc5 Rxc5 Qxc5 Qe5 Qc3 Qf5 Qd4 h5 h4 Be2 e4 dxe4 Qxe4 Qxe4 Bxe4 Rd8","English Opening"],["1981.04.??","Moscow","Moscow","9","Smejkal, Jan","2535","2625","1/2-1/2","A30","English Opening: Symmetrical Variation, Hedgehog Defense","Nf3 Nf6 c4 c5 Nc3 e6 g3 b6 Bg2 Bb7 O-O Be7 b3 O-O Bb2 d6 e3 Nbd7 Qe2 a6 Rfd1 Re8 d4 Ne4 Nxe4 Bxe4 Nd2 Bxg2 Kxg2 Nf6 Rac1 Ra7","English Opening"],["1981.??.??","WchT U26","Graz","?","Schussler, Harry","0","2630","0-1","D77","Neo-Grünfeld Defense: Classical Variation, Modern Defense","Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d5 c4 dxc4 Na3 c3 bxc3 c5 Nc4 Nc6 Nce5 Bf5 Bb2 Be4 e3 Qc7 Qe2 Nxe5 Nxe5 Bxg2 Kxg2 Ne4 f3 Nd6 Rac1 Rfd8 Rfd1 Qa5 Ba1 Rac8 c4 cxd4 exd4 e6 Kh1 Bxe5 dxe5 Nxc4 Rxd8+ Qxd8 Rxc4 Rxc4 Qxc4 Qd1+ Kg2 Qxa1 Qc8+ Kg7 Qxb7 Qxa2+ Kh3 Qd5 Qxa7 Qxf3 Qa1 g5","Neo-Grünfeld Defense"],["1981.??.??","WchT U26","Graz","?","Speelman, Jonathan S","0","2630","0-1","A30","English Opening: Symmetrical Variation, Hedgehog Defense","Nf3 Nf6 c4 c5 Nc3 e6 g3 b6 Bg2 Bb7 O-O Be7 b3 O-O Bb2 d6 e3 Nbd7 d4 a6 Rc1 b5 d5 exd5 Nxd5 Nxd5 cxd5 Bf6 Bxf6 Nxf6 Nh4 a5 e4 Re8 Re1 g6 Qd2 b4 a3 bxa3 Ra1 Qe7 h3 Qe5 Rxa3 Qd4 Qxd4 cxd4 Ra4 d3 Rd1 Nd7 b4 axb4 Rxb4 Nc5 Nf3 Ra2 e5 dxe5 Rc1 Rc2 Rxc2 dxc2 Rc4 Nb3 Rxc2 Bxd5 Rc7 e4 Ne1 Nd4 Rd7 Re5 Nd3 exd3 Bxd5 Kf8 Bc4 d2 Rxd4 Re1+ Kg2 d1=Q Rxd1 Rxd1 h4 Rc1 Bd5 Rc5 Bb3 Ke7 Ba2 h6 Bb3 Rc7 Ba2 Kd6 Kh3 Ke5 Kg4 Ra7 Bb3 Rb7 Bd1 Rb2 Kf3 Kd4 Be2 Rb3+ Kg2 Kc3 Bf3 Rb5 Bc6 Rc5 Be8 Rc7 Kf1 Kd2 Ba4 Rc1+ Kg2 Ke1 Bb3 Rc7 f4 Ke2 Bd5 Ke3 Ba8 f6 Kg1 Rg7 Kg2 g5 hxg5 hxg5 fxg5 Rxg5","English Opening"],["1981.??.??","WchT U26","Graz","?","Sunye Neto, Jaime","0","2630","0-1","D32","Tarrasch Defense: Symmetrical Variation","Nf3 Nf6 c4 c5 Nc3 e6 e3 Nc6 d4 d5 cxd5 exd5 Bb5 Bd6 dxc5 Bxc5 O-O O-O b3 Bg4 Bb2 Rc8 Rc1 Bd6 Be2 Bb8 Nb5 Ne4 Nbd4 Re8 h3 Bxf3 Nxf3 Qd6 Qd3 Ng5 Rfd1 Rcd8 Kf1 Ne4 a3 a6 Qc2 Ba7 Bd3 Qe7 Re1 Rd6 b4 Re6 b5 axb5 Bxb5 h6 Rcd1 Rd8 Qb3 Qd6 a4 Bc5 Re2 b6 Kg1 Ne7 Nd4 Rg6 Bd3 Qd7 Kh1 Nf5 Bxe4 dxe4 Red2 Nh4 Ne6 Qxd2 Rxd2 Rxd2 Nf4 Rg5 Kg1 Nf3+ Kf1 Bxe3 fxe3 Rdxg2 Qc3 Rh2 Ne2 Kh7 Qc8 Rh1+ Kf2 Nd2",""],["1980.??.??","Baku","Baku","6","Magerramov, Elmar","2435","2595","1/2-1/2","E18","Queen's Indian Defense: Classical Variation, Traditional Variation","Nf3 Nf6 c4 e6 d4 b6 g3 Bb7 Bg2 Be7 O-O O-O Nc3 Ne4 Nxe4 Bxe4 Ne1 Bxg2 Nxg2 d5 Qa4 dxc4 Qxc4 c5 dxc5 Bxc5 Be3 Nd7 Rfd1 Qe7 Bxc5 Nxc5 Rac1 Rfd8 Ne3","Queen's Indian Defense"],["1980.??.??","Baku","Baku","14","Padevsky, Nikola","2415","2595","1/2-1/2","E68","King's Indian Defense: Fianchetto Variation, Classical Variation","Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 c4 Nbd7 Nc3 e5 e4 c6 Re1 exd4 Nxd4 Re8 h3 a5 Be3 Nc5 Qc2 a4 Rab1 Qe7 Rbd1 Nfd7 b4 axb3 axb3 Na6 Na2 Ndc5 b4 Nxe4 Bxe4 Qxe4 Bd2 Qxe1+ Bxe1 Bxd4 Rxd4 Rxe1+ Kh2 Bf5 Qd2 Rae8 Nc3 Nxb4 Rxd6 h5 Rd8 Kh7 Rxe8 Rxe8 Qb2 c5 Nd5 Nxd5 cxd5 c4 Qxb7 Kg8 d6 c3 d7 Rd8 Qc7 Rxd7 Qxc3 Be6 f3 Rd5 g4 hxg4 fxg4 Rb5 Qd4 Rd5","King's Indian Defense"],["1980.??.??","Wch U20","Dortmund","4","Negulescu, Adrian","0","2595","1/2-1/2","A15","English Opening: Anglo-Indian Defense, King's Indian Formation","Nf3 Nf6 c4 g6 Nc3 Bg7 g3 O-O Bg2 d6 O-O e5 d3 Nc6 Rb1 a5 a3 Nd4 b4 axb4 axb4 c6 b5 Bg4 bxc6 bxc6 e3 Nxf3+ Bxf3 Bxf3 Qxf3 d5 cxd5 cxd5 e4 d4 Nd1 Nd7 Bd2 Nc5 Rb5 Ne6 Nb2 Rb8 Rd5 Rxb2 Rxd8 Rxd8 Rd1 Ra8 h4 Raa2 Bg5 Bf8 Bf6 Bh6 Bxe5 Rxf2 Qxf2 Be3 Qxe3 dxe3 Re1 e2 d4 Rd2 Kf2 Nxd4 Bxd4","English Opening"],["1980.??.??","Wch U20","Dortmund","7","Tempone, Marcelo","2235","2595","0-1","A05","King's Indian Attack: Symmetrical Defense","Nf3 Nf6 g3 g6 b3 Bg7 Bb2 c5 c4 d6 Bg2 e5 O-O Nc6 Nc3 O-O d3 Ne8 Nd2 Nc7 e3 Be6 Rc1 Qd7 Re1 Rad8 Nde4 h6 f4 f5 Nf2 exf4 gxf4 Qf7 Qd2 g5 Ne2 d5 Bxg7 Qxg7 Kh1 dxc4 bxc4 Ne8 Qc3 Nf6 d4 Bc8 Rcd1 cxd4 exd4 Ne7 d5 Ng6 Nd3 Nh4 Rg1 b5 Ne5 bxc4 Qxc4 Bb7 d6+ Kh7 Bxb7 Qxb7+ Qc6 Qxc6+ Nxc6 Ne4 Rgf1 Rxd6 Rxd6 Nxd6 fxg5 hxg5 Rd1 Re8 Ned4 Re3 Kg1 Ne4 Rb1 Rd3 a4 Rd2","King's Indian Attack"],["1980.??.??","EU-chT (Men)","Skara","1","Webb, Simon","2425","2595","0-1","A05","King's Indian Attack: Symmetrical Defense","Nf3 Nf6 g3 g6 b3 Bg7 Bb2 c5 c4 d6 Bg2 e5 O-O O-O e3 Nc6 Nc3 Bf5 d4 e4 Ng5 Re8 dxc5 dxc5 Nb5 Re7 Qxd8+ Rxd8 Rad1 Rxd1 Rxd1 h6 Nh3 g5 Nd6 Bg4 Rd2 Ne8 Bxg7 Kxg7 Kf1 Nxd6 Rxd6 Nb4 a3 Nd3 Ng1 Nc1 h3 Bc8 Ne2 Nxb3 Nc3 Be6 Bxe4 Na5 Bd5 Nxc4 Bxc4 Bxc4+ Ke1 Be6 e4 Bxh3 f4 gxf4 gxf4 Rd7 e5 Rxd6 exd6 f6 Nd5 Kf7 Nc7 Bd7","King's Indian Attack"],["1980.??.??","EU-chT (Men)","Skara","3","Renman, Nils Gustaf","2425","2595","0-1","A30","English Opening: Symmetrical, Hedgehog, Flexible Formation","Nf3 Nf6 c4 c5 g3 b6 Bg2 Bb7 O-O e6 d4 cxd4 Qxd4 Be7 Nc3 d6 Rd1 a6 b3 Nbd7 Bb2 O-O h3 Qc7 e4 Rad8 Rac1 Rfe8 Nh2 Bf8 Nf1 Qb8 Kh1 Nc5 Re1 Qa8 b4 Ncd7 a3 Rc8 Ne3 Red8 Kh2 Qb8 Kh1 Nc5 Rc2 e5 Qd1 Ncxe4 Nxe4 Bxe4 Bxe4 Nxe4 Qf3 Nf6 Rd1 Qa7 g4 b5 g5 Ne8 Rdc1 bxc4 Rxc4 Rxc4 Rxc4 Nc7 Qc6 Ne6 h4 d5 Rc2 Nd4 Qc7 Qa8 Bxd4 exd4 Nf5 d3 Rd2 d4+ Kh2 Re8 Qg3 Re1 Qxd3 Qh1+ Kg3 g6","English Opening"],["1980.11.??","Malta ol (Men)","La Valetta","?","Csom, Istvan","2510","2595","1/2-1/2","E69","King's Indian Defense: Fianchetto Variation, Classical Main Line","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O O-O d6 Nc3 e5 d4 Nbd7 h3 c6 e4 Qb6 dxe5 Nxe5 Nxe5 dxe5 Qc2 Nh5 Be3 Qc7 Qe2 Be6 Rfd1 Rfd8 Na4 Rxd1+ Rxd1 Rd8 b3 Rxd1+ Qxd1 Bf8 Qd2 Nf6 Nc5 Bc8 Qc3 Nd7 Nd3","King's Indian Defense"],["1979.12.??","URS-ch47","Minsk","7","Makarichev, Sergey","2500","2545","1/2-1/2","A05","Zukertort Opening: Nimzo-Larsen Variation","Nf3 Nf6 b3 g6 Bb2 Bg7 c4 O-O e3 c5 Be2 b6 O-O Bb7 d4 cxd4 Nxd4 d5 Nc3 Nc6 Nxd5 Nxd5 cxd5 Nxd4 Bxd4 Bxd4 Qxd4 Qxd5 Qxd5 Bxd5 Rfd1 Rfd8 f3",""],["1978.??.??","Sokolsky mem","Minsk","?","Mochalov, Evgeny V","2450","0","1-0","A15","English Opening: Anglo-Indian Defense, King's Indian Formation","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O O-O d6 d4 Nbd7 Qc2 e5 Rd1 Re8 dxe5 dxe5 e4 c6 b3 Qc7 Ba3 Bf8 c5 b5 cxb6 axb6 Bxf8 Nxf8 Nc3 Qb8 h3 Ne6 b4 Ra7 a4 Rd7 Rxd7 Bxd7 a5 b5 Qd2 Rd8 Qe3 c5 Nd5 Nxd5 exd5 Nd4 bxc5 Nc2 Qh6 f6 Rc1 Bf5 Nh4 Nd4 Nxf5 Nxf5 Qd2 Nd4 Rb1 Qc8 Qb4 Qf5 Rb2 Qd3 d6 Kg7 a6 e4 Rd2 Nf3+ Bxf3 Qxf3 Qd4 Ra8 d7","English Opening"],["1978.06.??","URS-ch sf","Daugavpils","4","Nikolaevsky, Yuri V","2200","2200","1/2-1/2","A05","Zukertort Opening: Nimzo-Larsen Variation","Nf3 Nf6 b3 g6 Bb2 Bg7 c4 O-O g3 d6 d4 Nbd7 Bg2 e5 e3 Re8 O-O e4 Nfd2 Nf8 Nc3 Bf5 f3 exf3 Qxf3 c6 e4 Bg4 Qf2 Qa5 c5 Be6 h3 dxc5 e5 cxd4 exf6 Bh6 Qxd4 Rad8 Nc4 Bxc4 Qxc4 Qb6+ Kh1 Rd4 Na4 Rxc4 Nxb6 Rc2 Nc4 Ree2 Bf3 Rh2+ Kg1 b5 Be4 Rce2 Bf3 Rc2 Be4",""],["1978.??.??","Azerbaijan tt","Baku","14","Butnorius, Algimantas","0","0","1/2-1/2","D78","Neo-Grünfeld Defense: Classical Variation, Original Defense","Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d5 c4 c6 Nbd2 a5 b3 Na6 Bb2 Bf5 Ne5 Ng4 Nxg4 Bxg4 cxd5 cxd5 Nf3 Bf5 Qd2 Be4 Rfc1 Qb6 Ne5 Bxg2 Kxg2 Rfc8 e3 h5 Rxc8+ Rxc8 Rc1 Rxc1 Qxc1 Qe6 a3 h4 f3 h3+ Kf2 Bxe5 dxe5 b6 Bd4 Nc5 Bxc5 bxc5 Qxc5 Qxe5 Qd4 Qf5 Qd1 Qf6 Qd4 e5 Qxd5 e4 Qxe4 Qb2+ Ke1 Qxh2 Qe8+ Kg7 Qe5+ Kh7 Qf4 Qg1+ Kd2 Qa1 Qxf7+ Qg7 Qe6 h2 Qh3+ Qh6 Qd7+","Neo-Grünfeld Defense"],["1977.??.??","Leningrad","Leningrad","?","Jussupow, Artur","0","0","1/2-1/2","A05","King's Indian Attack: Symmetrical Defense","Nf3 Nf6 g3 g6 b3 Bg7 Bb2 d6 d4 O-O Bg2 e5 dxe5 Nfd7 Nc3 Nxe5 Nxe5 Bxe5 O-O Nc6 Rb1 Be6 Qd2 Re8 Nd5 Bxd5 Bxd5 Qf6 c3 Qe7 Rbe1 Bg7 Bg2 a5 a4 Ne5 c4 Nc6 Bxg7 Kxg7 e3 Qf6 f4 Rab8 h3 Nb4 Kh2 b6 e4 Rbd8 Re3 Kg8 h4 c6 Rd1 Qe7 Rde1 Qf6 Bf3 Qg7 R3e2 Qf6 Qe3 d5 Qxb6 dxc4 e5 Qe6 bxc4 Qxc4 e6 fxe6 Bg4 Kg7 Qc7+ Kh6 Bxe6 Rxe6 Rxe6 Rd2+ Kh3","King's Indian Attack"],["1977.??.??","Leningrad","Leningrad","?","Kharitonov, Andrey M","0","0","1-0","A15","English Opening: Anglo-Indian Defense, King's Indian Formation","Nf3 Nf6 c4 g6 g3 Bg7 Bg2 O-O O-O d6 Nc3 Nc6 d4 Rb8 h3 a6 e4 b5 cxb5 axb5 Re1 e6 d5 b4 Ne2 Na5 dxe6 fxe6 e5 Ne4 exd6 cxd6 Nf4 d5 Qe2 Nc4 Nh2 Ncd6 Be3 Bd7 Nf1 Qf6 Rab1 Ra8 Qd1 Rxa2 f3 Ng5 Nxd5 exd5 Qxd5+ Ndf7 Bxg5 Qd4+ Qxd4 Bxd4+ Be3 Bxb2 Re2 b3 Rexb2 Bf5 Rxb3 Bxb1 Rxb1 Re8 f4 Ra3 Rb7 Raxe3 Nxe3 Rxe3 Bd5 Rxg3+ Kh2 Rd3 Bxf7+ Kh8 Kg2 Rd8 Be6 Re8 Bd5 Rd8 Bf3","English Opening"],["1977.12.??","Baku training3","Baku","?","Magerramov, Elmar","0","0","0-1","D58","Queen's Gambit Declined: Tartakower Defense","Nf3 Nf6 d4 e6 c4 d5 Nc3 Be7 Bg5 O-O e3 h6 Bh4 b6 Qb3 Bb7 Bxf6 Bxf6 cxd5 exd5 Rd1 c5 dxc5 Nd7 c6 Bxc6 Nd4 Bxd4 Rxd4 Nc5 Qd1 Ne6 Rd2 d4 exd4 Re8 f3 Bxf3 gxf3 Qh4+ Rf2 Nxd4+ Be2 Nxf3+ Kf1 Qh3+ Rg2 Nh4 Rg1 Rad8 Qe1 Rd3 Qf2 Nf3 Rh1 Rde3 Rg1 Kh8 Rh1 b5","Queen's Gambit Declined"],["1976.??.??","Moscow","Moscow","9","Nikolaevsky, Yuri V","0","0","1-0","A05","King's Indian Attack: Symmetrical Defense","Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 b3 c5 Bb2 Nc6 d5 Na5 Re1 Bf5 Nbd2 Qc8 e4 Bg4 c4 Nd7 Bxg7 Kxg7 Qc2 Bxf3 Nxf3 Qc7 Qc3+ Kg8 Bh3 b6 e5 dxe5 Bxd7 Qxd7 Nxe5 Qd6 Ng4 h5 Ne5 Qf6 Re3 Rad8 Rf3 Qg7 Re1 Rd6 b4 Nb7 Qa3 a5 bxa5 Nxa5 Qa4 Qh6 Ree3 h4 gxh4 Qxh4 Nxf7 Rf6 Rxf6 Qxf6 Nh6+ Kg7 Ng4 Qd4 Rxe7+ Kh8 h3 Qc3 Qd7 Qxh3 Re8 Qf3 Re7 Qh3 Qe6 Qh5 Re8 Kg7 Qd7+ Rf7 Qc8 Qh7 d6 g5 d7 Qb1+ Kg2","King's Indian Attack"],["1975.??.??","URS-ch U18","Vilnius","5","Vladimirov, Yevgeniy","0","0","1/2-1/2","E18","Queen's Indian Defense: Classical Variation, Traditional Variation","Nf3 Nf6 c4 e6 g3 b6 Bg2 Bb7 O-O Be7 Nc3 O-O d4 Ne4 Nxe4 Bxe4 Ne1 Bxg2 Nxg2 d6 b3 Bf6 Bb2 Nd7 Qd2 c6 Rac1 Qe7 Rfd1 Rac8 Ne3 Rfd8 d5 Bxb2 Qxb2 exd5 Nf5 Qf8 Qa3 g6 Nxd6 Nf6 c5 Rb8 b4 a5 Qf3 Qe7 a3 axb4 axb4 bxc5 bxc5 Ne8 Nxe8 Rxe8 Rc2 Rb5 Rdc1 Qe4","Queen's Indian Defense"]],"chips":[["English Opening",29],["King's Indian Defense",21],["King's Indian Attack",6],["Neo-Grünfeld Defense",6],["Queen's Gambit Declined",3],["Queen's Indian Defense",3]],"trees":{"English Opening":{"slug":"nf3-nf6--english-opening","moves":"1.Nf3 Nf6 2.c4","n":29},"King's Indian Defense":{"slug":"nf3-nf6--king-s-indian-defense","moves":"1.Nf3 Nf6","n":21},"King's Indian Attack":{"slug":"nf3-nf6--king-s-indian-attack","moves":"1.Nf3 Nf6 2.g3 g6","n":6},"Neo-Grünfeld Defense":{"slug":"nf3-nf6--neo-gr-nfeld-defense","moves":"1.Nf3 Nf6","n":6},"Queen's Gambit Declined":{"slug":"nf3-nf6--queen-s-gambit-declined","moves":"1.Nf3 Nf6","n":3},"Queen's Indian Defense":{"slug":"nf3-nf6--queen-s-indian-defense","moves":"1.Nf3 Nf6 2.c4","n":3}},"player":"Kasparov","playerShort":"Kasparov, G","side":"black"};
+const ME=DATA.player, MESHORT=DATA.playerShort, SIDE=DATA.side, WIN=SIDE==='white'?'1-0':'0-1', LOSS=SIDE==='white'?'0-1':'1-0';
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={get(k){try{return localStorage.getItem('cw_'+DATA.side+'_'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('cw_'+DATA.side+'_'+k,v)}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const files='abcdefgh';
+const G=DATA.games.map((r,i)=>({i,date:r[0],event:r[1],site:r[2],round:r[3],opp:r[4],welo:r[5],belo:r[6],res:r[7],eco:r[8],opn:r[9],moves:r[10].split(' '),fam:r[11]||''}));
+const last=n=>n.split(',')[0].trim();
+const short=n=>{const p=n.split(',');return p.length>1?p[0].trim()+', '+p[1].trim()[0]:n};
+const yr=g=>g.date.slice(0,4).replace(/\?/g,'');
+let view=[], shown=0, fam='', q='', sortk='new', cur={k:null,p:0}, flipped=(store.get('flip')===null?SIDE==='black':store.get('flip')==='1');
+const PAGE=25;
+let hashOK=false; addEventListener('load',()=>{hashOK=true});
+
+/* ---------- list, filter, sort ---------- */
+function applyFilter(){
+  const terms=q.toLowerCase().split(/\s+/).filter(Boolean);
+  view=G.filter(g=>{
+    if(fam&&g.fam!==fam) return false;
+    if(!terms.length) return true;
+    const hay=(g.opp+' '+g.event+' '+g.site+' '+g.date+' '+g.opn+' '+g.eco+' '+g.res).toLowerCase();
+    return terms.every(t=>hay.includes(t));
+  });
+  const num=v=>parseInt(v)||0;
+  const cmp={new:(a,b)=>b.date.localeCompare(a.date)||b.i-a.i, old:(a,b)=>a.date.localeCompare(b.date)||a.i-b.i,
+    elo:(a,b)=>num(SIDE==='white'?b.belo:b.welo)-num(SIDE==='white'?a.belo:a.welo), long:(a,b)=>b.moves.length-a.moves.length}[sortk];
+  view.sort(cmp);
+  shown=0; $('#games').innerHTML=''; renderMore(); renderToc(); renderStats();
+}
+function renderStats(){
+  let w=0,d=0,l=0; view.forEach(g=>{if(g.res===WIN)w++;else if(g.res===LOSS)l++;else d++});
+  const n=view.length, sc=n?Math.round((w+d/2)/n*100):0;
+  $('#stats').innerHTML=n?`<b>${n}</b> game${n==1?'':'s'} · ${ME} <b>+${w} =${d} −${l}</b> · score <b>${sc}%</b>`:'';
+}
+function renderToc(){
+  $('#tocn').textContent='('+view.length+')';
+  $('#toc').innerHTML=view.map(g=>`<a data-k="${g.i}" title="${esc(g.event)} ${esc(g.date)}">${yr(g)} · ${esc(last(g.opp))} <span class="r">${g.res.replace('1/2-1/2','½')}</span></a>`).join('');
+  markToc();
+}
+function markToc(){ $$('#toc a').forEach(a=>a.classList.toggle('on',cur.k!==null&&+a.dataset.k===cur.k)); const on=$('#toc a.on'), box=$('nav.toc'); if(on&&box.offsetParent!==null){ const t=on.offsetTop, h=box.clientHeight; if(t<box.scrollTop+30||t>box.scrollTop+h-60) box.scrollTop=Math.max(0,t-h/2) } }
+function movesHTML(g){
+  return g.moves.map((s,i)=>`<a class="mv" data-k="${g.i}" data-p="${i+1}">${i%2?'':(i/2+1)+'.'}${esc(s)}</a>`).join(' ');
+}
+function blockHTML(g){
+  const ev=[g.event,g.site&&g.site!=='?'?g.site:''].filter(Boolean).join(', ');
+  const rd=g.round&&g.round!=='?'&&g.round!=='-'?' · rd '+esc(g.round):'';
+  return `<section class="game" id="g${g.i}" data-k="${g.i}">
+  <h2 data-k="${g.i}">${SIDE==="white"?ME+" – "+esc(last(g.opp)):esc(last(g.opp))+" – "+ME}</h2>
+  <div class="gamehead">${SIDE==='white'?`<b>${esc(MESHORT)}</b>${g.welo?' ('+esc(g.welo)+')':''} – <b>${esc(short(g.opp))}</b>${g.belo?' ('+esc(g.belo)+')':''}`:`<b>${esc(short(g.opp))}</b>${g.welo?' ('+esc(g.welo)+')':''} – <b>${esc(MESHORT)}</b>${g.belo?' ('+esc(g.belo)+')':''}`}</div>
+  <div class="gamehead">${esc(ev)} · ${esc(g.date.replace(/\.\?\?/g,''))}${rd} · ${esc(g.res)}</div>
+  ${g.opn?`<div class="opn">${esc(g.eco)} · ${esc(g.opn)}</div>`:''}
+  <p class="ml">${movesHTML(g)} <span class="res">${esc(g.res)}</span></p>
+</section>`;
+}
+function renderMore(){
+  const next=view.slice(shown,shown+PAGE);
+  $('#games').insertAdjacentHTML('beforeend',next.map(blockHTML).join(''));
+  shown+=next.length;
+  $('#more').hidden=shown>=view.length;
+  $('#more').textContent='Show more games ('+(view.length-shown)+' left)';
+  if(!view.length) $('#games').innerHTML='<p class="empty">No games match.</p>';
+  paintCur();
+}
+function ensureShown(k){ let idx=view.findIndex(g=>g.i===k); if(idx<0) return false; while(shown<=idx) renderMore(); return true }
+
+/* ---------- board ---------- */
+function boardHTML(fen,lm){
+  const rows=fen.split(' ')[0].split('/'); const grid=[];
+  rows.forEach((r,ri)=>{let c=0;for(const ch of r){if(/\d/.test(ch))c+=+ch;else{grid[ri*8+c]=ch;c++}}});
+  let sq='';
+  for(let i=0;i<64;i++){
+    const r=flipped?7-Math.floor(i/8):Math.floor(i/8), c=flipped?7-i%8:i%8;
+    const name=files[c]+(8-r), p=grid[r*8+c];
+    sq+=`<div class="sq ${(r+c)%2?'d':'l'}${lm.includes(name)?' lm':''}">${p?`<div class="pc ${p===p.toUpperCase()?'w':'b'}${p.toUpperCase()}"></div>`:''}</div>`;
+  }
+  const rk=[...Array(8)].map((_,i)=>`<span>${flipped?i+1:8-i}</span>`).join('');
+  const fs=[...Array(8)].map((_,i)=>`<span>${files[flipped?7-i:i]}</span>`).join('');
+  return `<div class="bwrap"><div class="rk">${rk}</div><div class="bd">${sq}</div><div class="fl">${fs}</div></div>`;
+}
+function render(){
+  const g=cur.k===null?null:G[cur.k];
+  const c=new Chess(); let lastMv=null;
+  if(g) for(let i=0;i<cur.p;i++) lastMv=c.move(g.moves[i],{sloppy:true});
+  $('#live').innerHTML=boardHTML(c.fen(),lastMv?[lastMv.from,lastMv.to]:[]);
+  if(!g){ $('#who').textContent='Pick a game'; $('#cur').textContent=''; return }
+  $('#who').textContent=(SIDE==='white'?ME+' – '+last(g.opp):last(g.opp)+' – '+ME)+' · '+yr(g);
+  const lab=cur.p===0?'Start':(cur.p%2?((cur.p+1)/2)+'.':(cur.p/2)+'...')+g.moves[cur.p-1];
+  $('#cur').textContent=lab;
+  let m=c.in_checkmate()?'Checkmate.':c.in_stalemate()?'Stalemate.':'';
+  if(!m&&cur.p===g.moves.length) m='End of game · '+g.res.replace('1/2-1/2','draw');
+  $('#msg').textContent=m||((c.turn()==='w'?'White':'Black')+' to move');
+  $('#bPrev').disabled=$('#bStart').disabled=cur.p===0;
+  $('#bNext').disabled=$('#bEnd').disabled=cur.p>=g.moves.length;
+  const gi=view.findIndex(x=>x.i===cur.k);
+  $('#gPrev').disabled=gi<=0; $('#gNext').disabled=gi<0||gi>=view.length-1;
+}
+function paintCur(){
+  $$('main a.mv.cur').forEach(a=>a.classList.remove('cur'));
+  if(cur.k===null||cur.p===0) return null;
+  const a=document.querySelector(`main a.mv[data-k="${cur.k}"][data-p="${cur.p}"]`);
+  if(a) a.classList.add('cur');
+  return a;
+}
+function go(k,p,fromText){
+  cur={k,p}; render(); markToc();
+  const a=paintCur();
+  if(a&&!fromText){const r=a.getBoundingClientRect(), bp=document.querySelector('aside.bp').getBoundingClientRect(), pb=(bp.width>innerWidth*0.9)?bp.bottom:80;
+    if(r.top<pb+8||r.bottom>innerHeight-20) scrollBy({top:r.top-(pb+innerHeight)/2+r.height/2,behavior:'smooth'})}
+  if(hashOK){try{history.replaceState(null,'','#g'+k)}catch(e){}}
+}
+function gotoGame(k,scroll){
+  if(!ensureShown(k)) return;
+  go(k,0,true);
+  if(scroll){const el=document.getElementById('g'+k); if(el){const bp=document.querySelector('aside.bp').getBoundingClientRect(); const off=(bp.width>innerWidth*0.9)?bp.bottom+10:70; scrollTo({top:el.getBoundingClientRect().top+scrollY-off,behavior:'smooth'})}}
+}
+const L=()=>cur.k===null?0:G[cur.k].moves.length;
+const next=()=>{if(cur.k!==null&&cur.p<L())go(cur.k,cur.p+1)};
+const prev=()=>{if(cur.k!==null&&cur.p>0)go(cur.k,cur.p-1)};
+const start=()=>{if(cur.k!==null)go(cur.k,0)};
+const end=()=>{if(cur.k!==null)go(cur.k,L())};
+function gstep(d){const gi=view.findIndex(x=>x.i===cur.k); const n=view[gi+d]; if(n) gotoGame(n.i,true)}
+const flip=()=>{flipped=!flipped;store.set('flip',flipped?'1':'0');render()};
+$('#bNext').onclick=next;$('#bPrev').onclick=prev;$('#bStart').onclick=start;$('#bEnd').onclick=end;$('#bFlip').onclick=flip;
+$('#gPrev').onclick=()=>gstep(-1);$('#gNext').onclick=()=>gstep(1);
+$('#more').onclick=renderMore;
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a.mv'); if(a){go(+a.dataset.k,+a.dataset.p,true);return}
+  const h=e.target.closest('h2[data-k]'); if(h){go(+h.dataset.k,0,true);return}
+  const t=e.target.closest('#toc a'); if(t){gotoGame(+t.dataset.k,true)}
+});
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey||e.metaKey||e.altKey||/^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName))return;
+  const k=e.key;
+  if(k==='ArrowRight'){next();e.preventDefault()}else if(k==='ArrowLeft'){prev();e.preventDefault()}
+  else if(k==='Home'){start();e.preventDefault()}else if(k==='End'){end();e.preventDefault()}
+  else if(k==='['){gstep(-1)}else if(k===']'){gstep(1)}
+  else if(k==='f'||k==='F')flip();
+});
+/* chips: opening names in this line; each one also swaps the tree above the games */
+(function(){
+  const el=$('#chips'), top=DATA.chips||[];
+  const link=$('#treeLink'), img=$('#treeImg'), cap=$('#treeCap'), note=$('#treeNote');
+  const base=link?{href:link.getAttribute('href'),src:img.getAttribute('src'),cap:cap.textContent}:null;
+  function setTree(f){
+    if(!base) return;
+    const t=f&&DATA.trees&&DATA.trees[f];
+    if(t){
+      link.setAttribute('href','../../trees/'+t.slug+'/'); img.setAttribute('src','../../trees/'+t.slug+'/preview.jpg');
+      img.alt='Opening tree for '+f; cap.textContent='Open the zoomable tree for '+f+' \u2192';
+      note.innerHTML='Tree of the <b>'+t.n+'</b> '+esc(f)+' games. They all start <b>'+esc(t.moves)+'</b> and differ after that.';
+    } else {
+      link.setAttribute('href',base.href); img.setAttribute('src',base.src); img.alt='Opening tree'; cap.textContent=base.cap;
+      note.textContent=f?'No separate tree for '+f+' (too few games).':'';
+    }
+  }
+  if(top.length<2){el.remove();return}
+  const draw=()=>{el.innerHTML=`<button class="${fam?'':'on'}" data-f="">All <small>${G.length}</small></button>`+top.map(([f,n])=>`<button class="${fam===f?'on':''}" data-f="${esc(f)}">${esc(f)} <small>${n}</small></button>`).join('')};
+  el.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return; fam=b.dataset.f; draw(); setTree(fam); applyFilter()});
+  draw();
+})();
+$('#q').addEventListener('input',e=>{q=e.target.value; applyFilter()});
+$('#sort').addEventListener('change',e=>{sortk=e.target.value; applyFilter()});
+/* text size & dark mode */
+let fs=+store.get('fs')||21;
+const setFs=v=>{fs=Math.max(15,Math.min(34,v));document.documentElement.style.setProperty('--fs',fs+'px');store.set('fs',fs)};
+$('#fplus').onclick=()=>setFs(fs+2);$('#fminus').onclick=()=>setFs(fs-2);setFs(fs);
+const setDark=d=>{document.documentElement.dataset.theme=d?'dark':'light';$('#dark').textContent=d?'Light':'Dark';store.set('dark',d?'1':'0')};
+let dk=store.get('dark')==='1';setDark(dk);$('#dark').onclick=()=>{dk=!dk;setDark(dk)};
+(function(){var b=$('#bTog');b.onclick=function(){var h=document.body.classList.toggle('hideb');b.textContent=h?'Show board':'Hide board'}})();
+/* go */
+applyFilter();
+const hash=location.hash.match(/^#g(\d+)$/);
+if(hash&&G[+hash[1]]){ gotoGame(+hash[1],true) } else if(view.length){ go(view[0].i,0,true) } else render();
+})();
+</script>
+</body>
+</html>
